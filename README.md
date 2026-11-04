@@ -1,6 +1,6 @@
 # AUT2201 eksamensøving
 
-Øvingsapp for AUT2201 Audiologisk grunnkurs 2, bygget på eksamen høst 2025.
+Øvingsapp for AUT2201 Audiologisk grunnkurs 2, bygget på eksamen høst 2025 og eksamensarket (120 spørsmål).
 
 ## Slik bruker du den
 
@@ -24,8 +24,10 @@ Fremgang og endringer lagres i nettleseren (localStorage). PC og mobil har derfo
 | `index.html` | Siden som åpnes |
 | `app.js` | All logikk |
 | `style.css` | Utseende |
-| `data/oppgaver.js` | De 100 eksamensoppgavene med fasit og forklaring |
-| `data/kort.js` | 93 flashcards |
+| `data/oppgaver.js` | De 100 oppgavene fra eksamen høst 2025 med fasit og forklaring |
+| `data/oppgaver-eksamensark.js` | De 120 spørsmålene fra eksamensarket |
+| `data/kort.js` | 93 flashcards fra høsteksamenen |
+| `data/kort-eksamensark.js` | 38 flashcards med nye begreper fra eksamensarket |
 | `figurer/` | Figurene til figuroppgavene |
 
 Fasiten er **generert** (det fantes ingen offisiell fasit). Spørsmål og kort merket «Usikker fasit» bør sjekkes i pensum.
