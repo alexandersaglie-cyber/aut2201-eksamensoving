@@ -330,6 +330,7 @@ function visHjem() {
     <section class="panel">
       <h2>Innstillinger</h2>
       <div class="knapperad">
+        <button data-handling="tilbakemelding">Send tilbakemelding eller meld feil</button>
         <button data-handling="vis-skjulte">Skjulte kort og spørsmål${antallSkjulte ? ` (${antallSkjulte})` : ""}</button>
         <button data-handling="eksporter">Last ned sikkerhetskopi</button>
         <label class="knapp" style="margin:0;font-weight:normal">Hent sikkerhetskopi
@@ -777,7 +778,7 @@ function adminFaner(aktiv) {
   return `
     <section class="panel">
       <h2>Adminpanel</h2>
-      <div class="faner">${fane("brukere", "Brukere")}${fane("innhold", "Innhold")}${fane("feil", "Feilmeldinger")}</div>
+      <div class="faner">${fane("brukere", "Brukere")}${fane("innhold", "Innhold")}${fane("feil", "Meldinger")}</div>
     </section>`;
 }
 
@@ -812,7 +813,7 @@ async function visAdminBrukere() {
         </div>
         <div class="dempet">Registrert ${esc(datoTekst(b.opprettet))} · Sist aktiv ${esc(datoTekst(b.sist_aktiv || b.sist_innlogget))}</div>
         <div class="dempet">${b.antall_runder} runder${b.snitt_prosent !== null ? ` · snitt ${b.snitt_prosent} % (${karakterFor(Number(b.snitt_prosent))})` : ""}
-          · ${b.kort_ovd} kort øvd · ${b.antall_feilmeldinger} feilmeldinger</div>
+          · ${b.kort_ovd} kort øvd · ${b.antall_feilmeldinger} meldinger</div>
         ${erMeg ? "" : `
           <div class="knapperad liten">
             ${b.rolle === "admin" ? knapp("fjern-admin", "Fjern admin") : knapp("gjor-admin", "Gjør til admin")}
@@ -1065,10 +1066,13 @@ async function visAdminFeil() {
 
   meldinger.sort((a, b) => a.lost - b.lost); // uløste først
   const rad = m => {
-    const x = finnElement(m.element_id);
+    const erGenerell = m.element_id === TILBAKEMELDING;
+    const x = erGenerell ? null : finnElement(m.element_id);
+    const gjelder = erGenerell ? "<b>Tilbakemelding</b>"
+      : x ? esc(x.forside ? kildeKort(x) : kildeOppgave(x)) : "Slettet element";
     return `
       <li class="${m.lost ? "lost" : ""}">
-        <span class="dempet">${x ? esc(x.forside ? kildeKort(x) : kildeOppgave(x)) : "Slettet element"}
+        <span class="dempet">${gjelder}
           · fra ${esc(m.profiler?.epost || "slettet bruker")} · ${esc(formaterDato(m.opprettet))}
           ${m.lost ? " · <b>løst</b>" : ""}</span><br>
         ${x ? `<i>${esc((x.forside || x.tekst).slice(0, 120))}</i><br>` : ""}
@@ -1084,7 +1088,7 @@ async function visAdminFeil() {
   vis("admin-feil", adminFaner("feil") + `
     <section class="panel">
       <p class="dempet">${meldinger.filter(m => !m.lost).length} uløste av ${meldinger.length}.</p>
-      <ul class="liste">${meldinger.length ? meldinger.map(rad).join("") : `<li class="dempet">Ingen feilmeldinger.</li>`}</ul>
+      <ul class="liste">${meldinger.length ? meldinger.map(rad).join("") : `<li class="dempet">Ingen meldinger.</li>`}</ul>
     </section>`);
 }
 
@@ -1298,6 +1302,42 @@ async function sendMeldFeil(skjema) {
   feilmeldingTilbake();
 }
 
+// Generell tilbakemelding (ikke om ett bestemt kort/spørsmål). Lagres i samme tabell som
+// «Meld feil», med element-id TILBAKEMELDING og kategorien foran teksten.
+const TILBAKEMELDING = "tilbakemelding";
+const KATEGORIER = ["Feil i appen", "Feil i et spørsmål eller kort", "Forslag til forbedring", "Annet"];
+
+function visTilbakemelding() {
+  vis("tilbakemelding", `
+    <form class="panel" id="tilbakemeldingskjema">
+      <h2>Send tilbakemelding</h2>
+      <p class="dempet">Meld fra om feil, eller kom med forslag til hvordan appen kan bli bedre.
+        Administrator får se meldingen og hvem den er fra.</p>
+      <label>Hva gjelder det?
+        <select name="kategori">${KATEGORIER.map(k => `<option>${esc(k)}</option>`).join("")}</select>
+      </label>
+      <label>Melding<textarea name="melding" rows="5" maxlength="1900" required
+        placeholder="Beskriv hva som er feil, eller hva du ønsker deg."></textarea></label>
+      <p class="dempet">Gjelder det ett bestemt kort eller spørsmål? Da er det enklest å trykke
+        «Meld feil» under det, så ser administrator hvilket det er.</p>
+      <p class="skjemamelding" role="status"></p>
+      <button class="hoved" type="submit">Send</button>
+    </form>
+  `);
+}
+
+async function sendTilbakemelding(skjema) {
+  const data = new FormData(skjema);
+  const knapp = skjema.querySelector("button[type=submit]");
+  knapp.disabled = true;
+  skjemaMelding(skjema, "Sender …");
+  const feil = await sendFeilmelding(TILBAKEMELDING, `[${data.get("kategori")}] ${data.get("melding").trim()}`);
+  knapp.disabled = false;
+  if (feil) return skjemaMelding(skjema, feil, true);
+  await melding("Takk for tilbakemeldingen! Administrator får se den.");
+  visHjem();
+}
+
 // =====================================================================
 // 8. Sikkerhetskopi
 // =====================================================================
@@ -1410,6 +1450,7 @@ const HANDLINGER = {
     visMeldFeil(el.dataset.id);
   },
   "avbryt-melding": () => feilmeldingTilbake(),
+  "tilbakemelding": () => visTilbakemelding(),
   "vis-logg-inn": () => { innloggingFane = "logg-inn"; visLoggInn(); },
   "last-pa-nytt": () => location.reload(),
   "innlogging-fane": el => { innloggingFane = el.dataset.fane; visLoggInn(); },
@@ -1462,6 +1503,7 @@ app.addEventListener("submit", hendelse => {
   const skjema = hendelse.target;
   if (skjema.id === "redigerskjema") lagreRedigering(skjema);
   else if (skjema.id === "meldskjema") sendMeldFeil(skjema);
+  else if (skjema.id === "tilbakemeldingskjema") sendTilbakemelding(skjema);
   else sendKontoskjema(skjema);
 });
 
