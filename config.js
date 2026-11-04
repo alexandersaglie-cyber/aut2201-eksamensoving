@@ -12,5 +12,5 @@
 //
 // Står feltene tomme, virker appen som før, bare uten innlogging.
 
-const SUPABASE_URL = "";
-const SUPABASE_NOKKEL = "";
+const SUPABASE_URL = "https://nqmenbuiywqzxidwpdiy.supabase.co";
+const SUPABASE_NOKKEL = "sb_publishable_fe-SarX_7N_HYw-d9jT1lA_kUtHM2lE";
