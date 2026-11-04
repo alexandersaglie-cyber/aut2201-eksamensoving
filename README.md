@@ -7,7 +7,8 @@
 Dobbeltklikk på `index.html`, så åpnes appen i nettleseren. Den trenger ingen installasjon, innlogging eller internett.
 
 - **Flashcards:** Snu kortet og svar «Kunne», «Usikker» eller «Kunne ikke». Kort du ikke kan, kommer oftere igjen.
-- **Flervalg:** Ekte eksamensspørsmål med stokkede alternativer, forklaring etter hvert svar, og poengsum og svake tema til slutt.
+- **Flervalg:** Eksamensspørsmål med stokkede alternativer, forklaring etter hvert svar, og karakter (A–F) og svake tema til slutt.
+- **Mine resultater:** Alle fullførte flervalgsrunder lagres med karakter. Siden viser utvikling over tid, snitt, beste karakter og svake tema samlet. Karakteren følger NTNUs prosentskala: A ≥ 89 %, B ≥ 77 %, C ≥ 65 %, D ≥ 53 %, E ≥ 41 %, F under 41 %.
 - **Filter:** Velg tema eller eksamen på forsiden. Filteret gjelder begge modusene.
 - **Rediger:** Endre eller slett kort og spørsmål, enten underveis eller fra «Rediger kort og spørsmål».
 

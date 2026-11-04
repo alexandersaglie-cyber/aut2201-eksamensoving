@@ -1,6 +1,6 @@
 // AUT2201 eksamensøving – hele appen ligger i denne fila.
 //
-// Dataene kommer fra data/oppgaver.js (OPPGAVER) og data/kort.js (KORT).
+// Dataene kommer fra data/oppgaver*.js (OPPGAVER) og data/kort*.js (KORT).
 // Fremgang og egne endringer lagres i nettleserens localStorage, så det trengs
 // ingen innlogging eller server. Hver nettleser (PC, mobil) har sin egen lagring.
 //
@@ -9,7 +9,7 @@
 //   2. Data           – kort og spørsmål med egne endringer, filter, hjelpefunksjoner
 //   3. Forside
 //   4. Flashcards     – bokssystem: kort du ikke kan, kommer oftere
-//   5. Flervalg       – runde med poengsum og svake tema
+//   5. Flervalg       – runde med poengsum, karakter og svake tema, og «Mine resultater»
 //   6. Redigering     – endre/slette kort og spørsmål
 //   7. Sikkerhetskopi – laste ned / hente inn fremgang og endringer
 //   8. Hendelser      – kobler knapper og taster til funksjonene over
@@ -22,10 +22,11 @@
 
 const LAGRINGSNOKKEL = "aut2201-eksamensoving";
 
-// bokser:    hvilken boks (1–5) hvert flashcard ligger i. Mangler = nytt kort.
-// endringer: redigerte kort/spørsmål, lagret som hele objekter under sin id.
-// slettet:   id-er til kort/spørsmål som er slettet.
-let lagret = { bokser: {}, endringer: {}, slettet: [] };
+// bokser:     hvilken boks (1–5) hvert flashcard ligger i. Mangler = nytt kort.
+// endringer:  redigerte kort/spørsmål, lagret som hele objekter under sin id.
+// slettet:    id-er til kort/spørsmål som er slettet.
+// resultater: fullførte flervalgsrunder med karakter (se lagreRunde()).
+let lagret = { bokser: {}, endringer: {}, slettet: [], resultater: [] };
 
 function lastInn() {
   try {
@@ -122,6 +123,7 @@ function visHjem() {
   const iBoks = [0, 0, 0, 0, 0, 0]; // plass 0 = nye kort, 1–5 = boksene
   kort.forEach(k => iBoks[boks(k.id)]++);
   const boksnavn = ["Nye", "Boks 1", "Boks 2", "Boks 3", "Boks 4", "Boks 5"];
+  const sisteRunde = lagret.resultater[lagret.resultater.length - 1];
 
   const temaValg = TEMAER.map(t =>
     `<option ${t === filter.tema ? "selected" : ""}>${esc(t)}</option>`).join("");
@@ -156,10 +158,12 @@ function visHjem() {
 
     <section class="panel">
       <h2>Flervalg</h2>
-      <p class="dempet">Ekte eksamensspørsmål med stokkede alternativer. Du får forklaring etter hvert svar,
-        og poengsum og svake tema etter runden.</p>
+      <p class="dempet">Eksamensspørsmål med stokkede alternativer. Du får forklaring etter hvert svar,
+        og karakter og svake tema etter runden.</p>
       <label>Antall spørsmål <select id="antall">${antallValg}</select></label>
       <button class="hoved" data-handling="start-flervalg" ${oppgaver.length ? "" : "disabled"}>Start runde</button>
+      ${sisteRunde ? `<p class="dempet">Siste runde: <b>${sisteRunde.karakter}</b> (${sisteRunde.prosent} %) · ${esc(formaterDato(sisteRunde.dato))}</p>` : ""}
+      <div class="knapperad liten"><button data-handling="mine-resultater">Mine resultater${lagret.resultater.length ? ` (${lagret.resultater.length})` : ""}</button></div>
     </section>
 
     <section class="panel">
@@ -277,15 +281,22 @@ function fortsettKort() {
 // hvor langt vi har kommet, hva som er valgt nå, og resultatene så langt.
 let runde = null;
 
-function startFlervalg(liste, antall) {
+// beskrivelse: hva runden besto av, f.eks. «Statistikk · Alle eksamener». Lagres i historikken.
+function startFlervalg(liste, antall, beskrivelse) {
   const utvalg = stokk(liste).slice(0, antall);
   runde = {
     sporsmal: utvalg.map(o => ({ o, rekkefolge: stokk([0, 1, 2, 3]) })),
     i: 0,
     valgt: null,
-    resultater: []
+    resultater: [],
+    beskrivelse,
+    lagret: false
   };
   visSporsmal();
+}
+
+function beskrivFilter() {
+  return `${filter.tema || "Alle tema"} · ${filter.eksamen || "Alle eksamener"}`;
 }
 
 function visSporsmal() {
@@ -371,30 +382,93 @@ function fortsettFlervalg() {
 
 const SVAK_GRENSE = 0.7; // tema med under 70 % riktige regnes som svake
 
+// NTNUs prosentvurderingsmetode: laveste prosent som gir hver karakter.
+const KARAKTERSKALA = [
+  { karakter: "A", fra: 89 },
+  { karakter: "B", fra: 77 },
+  { karakter: "C", fra: 65 },
+  { karakter: "D", fra: 53 },
+  { karakter: "E", fra: 41 },
+  { karakter: "F", fra: 0 }
+];
+
+function karakterFor(prosent) {
+  return KARAKTERSKALA.find(k => prosent >= k.fra).karakter;
+}
+
+function erBestatt(karakter) { return karakter !== "F"; }
+
+// Gjør { tema: { riktig, totalt } } om til en liste sortert med svakeste tema først.
+function temaOversikt(perTema) {
+  return Object.entries(perTema)
+    .map(([tema, t]) => ({ tema, ...t, andel: t.riktig / t.totalt }))
+    .sort((a, b) => a.andel - b.andel);
+}
+
+// Stolper med andel riktige per tema. Med klikkbar = true kan man trykke for å øve på temaet.
+function temaStolper(temaListe, klikkbar) {
+  return temaListe.map(t => `
+    <div class="temarad">
+      <div class="navn">
+        ${klikkbar
+          ? `<button class="lenkeknapp" data-handling="ov-tema" data-tema="${esc(t.tema)}">${esc(t.tema)}</button>`
+          : `<span>${esc(t.tema)}</span>`}
+        <span>${t.riktig} / ${t.totalt}</span>
+      </div>
+      <div class="stolpe ${t.andel < SVAK_GRENSE ? "svak" : ""}"><div style="width:${Math.round(t.andel * 100)}%"></div></div>
+    </div>`).join("");
+}
+
+// Lagrer den fullførte runden i historikken (bare én gang, selv om resultatsiden tegnes på nytt).
+function lagreRunde(antallRiktig, prosent, karakter, perTema) {
+  if (runde.lagret) return;
+  runde.lagret = true;
+  lagret.resultater.push({
+    dato: new Date().toISOString(),
+    beskrivelse: runde.beskrivelse,
+    antall: runde.resultater.length,
+    riktige: antallRiktig,
+    prosent,
+    karakter,
+    perTema,
+    feil: runde.feil.map(o => o.id)
+  });
+  lagre();
+}
+
 function visResultat() {
   const resultater = runde.resultater;
-  const antallRiktig = resultater.filter(r => r.riktig).length;
-  const prosent = resultater.length ? Math.round(100 * antallRiktig / resultater.length) : 0;
+  if (resultater.length === 0) return visHjem(); // alle spørsmålene ble slettet underveis
 
-  // Regn ut riktige per tema, svakeste tema først.
+  const antallRiktig = resultater.filter(r => r.riktig).length;
+  const prosent = Math.round(100 * antallRiktig / resultater.length);
+  const karakter = karakterFor(prosent);
+
+  // Tell riktige per tema.
   const perTema = {};
   resultater.forEach(r => {
     perTema[r.o.tema] = perTema[r.o.tema] || { riktig: 0, totalt: 0 };
     perTema[r.o.tema].totalt++;
     if (r.riktig) perTema[r.o.tema].riktig++;
   });
-  const temaListe = Object.entries(perTema)
-    .map(([tema, t]) => ({ tema, ...t, andel: t.riktig / t.totalt }))
-    .sort((a, b) => a.andel - b.andel);
+  const temaListe = temaOversikt(perTema);
   const svake = temaListe.filter(t => t.andel < SVAK_GRENSE);
 
   runde.feil = resultater.filter(r => !r.riktig).map(r => r.o);
+  lagreRunde(antallRiktig, prosent, karakter, perTema);
 
   vis("resultat", `
-    <section class="panel">
+    <section class="panel resultat">
       <h2>Resultat</h2>
-      <p class="poengsum">${antallRiktig} / ${resultater.length}</p>
-      <p class="dempet">${prosent} % riktig</p>
+      <div class="karakterlinje">
+        <span class="karakter karakter-${karakter}">${karakter}</span>
+        <div>
+          <p class="poengsum">${antallRiktig} / ${resultater.length}</p>
+          <p class="dempet">${prosent} % riktig · <b class="${erBestatt(karakter) ? "bestatt" : "ikke-bestatt"}">${erBestatt(karakter) ? "Bestått" : "Ikke bestått"}</b></p>
+        </div>
+      </div>
+      <p class="dempet">Karakter etter NTNUs prosentskala: A ≥ 89 %, B ≥ 77 %, C ≥ 65 %, D ≥ 53 %, E ≥ 41 %.</p>
+      <div class="knapperad liten"><button data-handling="mine-resultater">Se alle resultatene dine</button></div>
     </section>
 
     <section class="panel">
@@ -402,11 +476,7 @@ function visResultat() {
       ${svake.length
         ? `<p>Du bør øve mer på: <b>${svake.map(t => esc(t.tema)).join(", ")}</b></p>`
         : `<p>Ingen svake tema i denne runden. Bra!</p>`}
-      ${temaListe.map(t => `
-        <div class="temarad">
-          <div class="navn"><span>${esc(t.tema)}</span><span>${t.riktig} / ${t.totalt}</span></div>
-          <div class="stolpe ${t.andel < SVAK_GRENSE ? "svak" : ""}"><div style="width:${Math.round(t.andel * 100)}%"></div></div>
-        </div>`).join("")}
+      ${temaStolper(temaListe, false)}
     </section>
 
     ${runde.feil.length ? `
@@ -419,6 +489,92 @@ function visResultat() {
 
     ${runde.feil.length ? `<button class="hoved" data-handling="ov-feil">Øv på feilene (${runde.feil.length})</button>` : ""}
     <button class="hoved" data-handling="start-flervalg">Ny runde</button>
+  `);
+}
+
+// ---------- Mine resultater: historikk over fullførte runder ----------
+
+function formaterDato(iso) {
+  return new Date(iso).toLocaleString("nb-NO",
+    { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+}
+
+function visMineResultater() {
+  const liste = lagret.resultater;
+  if (liste.length === 0) {
+    return vis("historikk", `
+      <section class="panel">
+        <h2>Mine resultater</h2>
+        <p>Du har ikke fullført noen flervalgsrunder ennå. Når du kommer til slutten av en runde,
+          lagres resultatet og karakteren her.</p>
+        <button class="hoved" data-handling="hjem">Til forsiden</button>
+      </section>`);
+  }
+
+  const snitt = Math.round(liste.reduce((sum, r) => sum + r.prosent, 0) / liste.length);
+  const beste = liste.reduce((best, r) => (r.prosent > best.prosent ? r : best));
+  const antallBestatt = liste.filter(r => erBestatt(r.karakter)).length;
+
+  // Legg sammen riktige per tema fra alle rundene.
+  const perTema = {};
+  liste.forEach(r => Object.entries(r.perTema).forEach(([tema, t]) => {
+    perTema[tema] = perTema[tema] || { riktig: 0, totalt: 0 };
+    perTema[tema].riktig += t.riktig;
+    perTema[tema].totalt += t.totalt;
+  }));
+  const temaListe = temaOversikt(perTema);
+  const svake = temaListe.filter(t => t.andel < SVAK_GRENSE);
+
+  const siste = liste.slice(-20); // grafen viser de 20 siste rundene
+
+  vis("historikk", `
+    <section class="panel">
+      <h2>Mine resultater</h2>
+      <div class="nokkeltall">
+        <div><b>${liste.length}</b><span>runder</span></div>
+        <div><b>${karakterFor(snitt)}</b><span>snitt (${snitt} %)</span></div>
+        <div><b>${beste.karakter}</b><span>beste (${beste.prosent} %)</span></div>
+        <div><b>${antallBestatt}</b><span>bestått</span></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Utvikling</h2>
+      <p class="dempet">Prosent riktig i de ${siste.length} siste rundene, eldste til venstre.
+        Den stiplede linjen er grensen for bestått (41 %).</p>
+      <div class="graf">
+        <div class="bestattlinje"></div>
+        ${siste.map(r => `
+          <div class="soyle" title="${esc(formaterDato(r.dato))}: ${r.prosent} %">
+            <div class="fyll karakter-${r.karakter}" style="height:${Math.max(r.prosent, 2)}%"></div>
+          </div>`).join("")}
+      </div>
+      <div class="graf-etiketter">${siste.map(r => `<span>${r.karakter}</span>`).join("")}</div>
+    </section>
+
+    <section class="panel">
+      <h2>Svake tema totalt</h2>
+      ${svake.length
+        ? `<p>Over alle rundene bør du øve mer på: <b>${svake.map(t => esc(t.tema)).join(", ")}</b></p>`
+        : `<p>Ingen svake tema så langt. Bra!</p>`}
+      <p class="dempet">Trykk på et tema for å starte en runde med bare det temaet.</p>
+      ${temaStolper(temaListe, true)}
+    </section>
+
+    <section class="panel">
+      <h2>Alle runder</h2>
+      <ul class="liste">
+        ${[...liste].reverse().map(r => `
+          <li class="runde">
+            <span class="karakter liten karakter-${r.karakter}">${r.karakter}</span>
+            <div>
+              <b>${r.riktige} / ${r.antall}</b> (${r.prosent} %)<br>
+              <span class="dempet">${esc(formaterDato(r.dato))} · ${esc(r.beskrivelse)}</span>
+            </div>
+          </li>`).join("")}
+      </ul>
+      <div class="knapperad liten"><button data-handling="slett-historikk">Slett resultathistorikken</button></div>
+    </section>
   `);
 }
 
@@ -557,7 +713,12 @@ function importer(fil) {
     .then(tekst => {
       const data = JSON.parse(tekst);
       if (typeof data !== "object" || !data.bokser) throw new Error("Feil format");
-      lagret = { bokser: data.bokser || {}, endringer: data.endringer || {}, slettet: data.slettet || [] };
+      lagret = {
+        bokser: data.bokser || {},
+        endringer: data.endringer || {},
+        slettet: data.slettet || [],
+        resultater: data.resultater || []
+      };
       lagre();
       alert("Sikkerhetskopien er hentet inn.");
       visHjem();
@@ -577,11 +738,22 @@ const HANDLINGER = {
   "svar-kort": el => svarKort(el.dataset.svar),
   "start-flervalg": () => {
     const liste = filtrert(alleOppgaver());
-    startFlervalg(liste, antallValgt === "alle" ? liste.length : Number(antallValgt));
+    startFlervalg(liste, antallValgt === "alle" ? liste.length : Number(antallValgt), beskrivFilter());
+  },
+  "ov-tema": el => {
+    filter = { tema: el.dataset.tema, eksamen: "" };
+    HANDLINGER["start-flervalg"]();
+  },
+  "mine-resultater": () => visMineResultater(),
+  "slett-historikk": () => {
+    if (!confirm("Vil du slette alle lagrede resultater? Dette kan ikke angres.")) return;
+    lagret.resultater = [];
+    lagre();
+    visMineResultater();
   },
   "velg": el => velgAlternativ(Number(el.dataset.nr)),
   "neste": () => nesteSporsmal(),
-  "ov-feil": () => startFlervalg(runde.feil, runde.feil.length),
+  "ov-feil": () => startFlervalg(runde.feil, runde.feil.length, "Øv på feilene"),
   "rediger-liste": () => visRedigerListe(),
   "fane": el => { listeValg.type = el.dataset.type; visRedigerListe(); },
   "rediger": el => {

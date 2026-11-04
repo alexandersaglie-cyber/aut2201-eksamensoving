@@ -208,6 +208,66 @@ textarea { resize: vertical; }
 
 .poengsum { font-size: 2.2rem; font-weight: 700; margin: 4px 0; }
 
+.karakterlinje { display: flex; align-items: center; gap: 16px; }
+.karakterlinje .poengsum { margin: 0; }
+.karakterlinje p { margin: 2px 0; }
+
+/* Karakterbokstaven i en farget firkant. A–B grønn, C–D blå, E gul, F rød. */
+.karakter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 72px;
+  height: 72px;
+  flex: none;
+  border-radius: 14px;
+  font-size: 2.4rem;
+  font-weight: 800;
+}
+.karakter.liten { width: 38px; height: 38px; font-size: 1.2rem; border-radius: 8px; }
+.karakter-A, .karakter-B { background: var(--riktig-bg); color: var(--riktig); }
+.karakter-C, .karakter-D { background: var(--bakgrunn); color: var(--aksent); border: 1px solid var(--kant); }
+.karakter-E { background: var(--usikker-bg); color: var(--usikker); }
+.karakter-F { background: var(--feil-bg); color: var(--feil); }
+.bestatt { color: var(--riktig); }
+.ikke-bestatt { color: var(--feil); }
+
+/* Nøkkeltall øverst på «Mine resultater» */
+.nokkeltall { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.nokkeltall div { text-align: center; background: var(--bakgrunn); border-radius: 8px; padding: 8px 4px; }
+.nokkeltall b { display: block; font-size: 1.4rem; }
+.nokkeltall span { font-size: 0.78rem; color: var(--dempet); }
+
+/* Søylediagram over prosent riktig per runde */
+.graf {
+  position: relative;
+  height: 160px;
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  border-bottom: 1px solid var(--kant);
+  margin-top: 10px;
+}
+.soyle { flex: 1; max-width: 40px; height: 100%; display: flex; align-items: flex-end; }
+.soyle .fyll { width: 100%; border-radius: 4px 4px 0 0; border: none; }
+.soyle .fyll.karakter-A, .soyle .fyll.karakter-B { background: var(--riktig); }
+.soyle .fyll.karakter-C, .soyle .fyll.karakter-D { background: var(--aksent); }
+.soyle .fyll.karakter-E { background: var(--usikker); }
+.soyle .fyll.karakter-F { background: var(--feil); }
+.bestattlinje {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 41%;
+  border-top: 2px dashed var(--dempet);
+  opacity: 0.6;
+  pointer-events: none;
+}
+.graf-etiketter { display: flex; gap: 4px; margin-top: 4px; }
+.graf-etiketter span { flex: 1; max-width: 40px; text-align: center; font-size: 0.75rem; color: var(--dempet); }
+
+.liste li.runde { display: flex; align-items: center; gap: 12px; }
+
 .temarad { margin: 10px 0; }
 .temarad .navn { display: flex; justify-content: space-between; font-size: 0.92rem; }
 .stolpe { height: 8px; background: var(--bakgrunn); border-radius: 4px; overflow: hidden; margin-top: 4px; }
