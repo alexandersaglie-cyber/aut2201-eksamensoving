@@ -82,12 +82,12 @@ async function behandleInnlogging(hendelse, sesjon) {
       // Kontoen er slettet av admin.
       await sky.auth.signOut();
       tomLokalFremgang();
-      alert("Kontoen din finnes ikke lenger.");
+      melding("Kontoen din finnes ikke lenger.");
       return;
     }
     if (data.blokkert) {
       await sky.auth.signOut();
-      alert("Kontoen din er blokkert. Ta kontakt med administrator.");
+      melding("Kontoen din er blokkert. Ta kontakt med administrator.");
       return;
     }
     bruker = { id: sesjon.user.id, ...data };
@@ -160,7 +160,7 @@ async function settNyttPassord(passord) {
 async function loggUt() {
   await synk();
   if (lagret.usynket &&
-      !confirm("Noe av fremgangen er ikke lagret i skyen ennå (ingen nett?). Logge ut likevel?")) {
+      !await bekreft("Noe av fremgangen er ikke lagret i skyen ennå (ingen nett?). Logge ut likevel?")) {
     return;
   }
   await sky.auth.signOut();

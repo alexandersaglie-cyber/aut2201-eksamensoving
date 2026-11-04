@@ -187,6 +187,46 @@ function merker(x) {
 const app = document.getElementById("app");
 const hjemKnapp = document.getElementById("hjem-knapp");
 
+// Egne dialogvinduer i stedet for nettleserens confirm() og alert(). Noen nettlesere
+// (f.eks. de som åpnes inne i Messenger og Snapchat) stopper de innebygde vinduene uten
+// å vise dem, og da ville knapper som «Slett» sett ut som de ikke virker.
+// Svarer med true (OK) eller false (Avbryt / Esc).
+function dialog(tekst, { avbryt = true, okTekst = "OK" } = {}) {
+  return new Promise(svar => {
+    const bakgrunn = document.createElement("div");
+    bakgrunn.className = "dialog-bakgrunn";
+    bakgrunn.innerHTML = `
+      <div class="dialog" role="dialog" aria-modal="true">
+        <p>${esc(tekst).replace(/\n/g, "<br>")}</p>
+        <div class="knapperad">
+          ${avbryt ? `<button data-svar="nei">Avbryt</button>` : ""}
+          <button class="hoved" data-svar="ja">${esc(okTekst)}</button>
+        </div>
+      </div>`;
+    const lukk = ja => {
+      bakgrunn.remove();
+      document.removeEventListener("keydown", tast, true);
+      svar(ja);
+    };
+    const tast = e => {
+      if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); lukk(false); }
+    };
+    bakgrunn.addEventListener("click", e => {
+      const knapp = e.target.closest("[data-svar]");
+      if (knapp) lukk(knapp.dataset.svar === "ja");
+    });
+    document.addEventListener("keydown", tast, true);
+    document.body.appendChild(bakgrunn);
+    bakgrunn.querySelector(".hoved").focus();
+  });
+}
+
+// Spør om noe skal gjøres. Brukes med await: if (!await bekreft("Slette?")) return;
+function bekreft(tekst) { return dialog(tekst); }
+
+// Viser en melding med bare en OK-knapp.
+function melding(tekst) { return dialog(tekst, { avbryt: false }); }
+
 // Hvilken skjerm som vises nå: "hjem", "kort", "flervalg", "resultat", "liste" eller "rediger".
 let skjerm = "hjem";
 
@@ -779,10 +819,10 @@ const ADMIN_SPORSMAL = {
 
 async function utforAdminHandling(el) {
   const { hva, id, epost } = el.dataset;
-  if (!confirm(ADMIN_SPORSMAL[hva](epost))) return;
+  if (!await bekreft(ADMIN_SPORSMAL[hva](epost))) return;
   el.disabled = true;
   const feil = await adminHandling(hva, id);
-  if (feil) alert(feil);
+  if (feil) melding(feil);
   visAdminBrukere();
 }
 
@@ -946,23 +986,23 @@ async function lagreRedigering(skjema) {
 
 async function slettForAlle(id) {
   const x = finnElement(id);
-  if (!confirm("Slette dette for alle brukere?\n\nDet kan gjenopprettes senere under «Slettede».")) return;
+  if (!await bekreft("Slette dette for alle brukere?\n\nDet kan gjenopprettes senere under «Slettede».")) return;
   const feil = await lagreInnhold(id, typeFor(x), x, true);
-  if (feil) return alert(feil);
+  if (feil) return melding(feil);
   etterRedigering();
 }
 
 async function gjenopprettInnhold(id) {
   const r = lagret.innhold[id];
   const feil = await lagreInnhold(id, r.type, r.data, false);
-  if (feil) return alert(feil);
+  if (feil) return melding(feil);
   visRedigerListe();
 }
 
 async function tilbakestill(id) {
-  if (!confirm("Fjerne endringene og gå tilbake til originalen fra eksamensfilene? Det gjelder for alle brukere.")) return;
+  if (!await bekreft("Fjerne endringene og gå tilbake til originalen fra eksamensfilene? Det gjelder for alle brukere.")) return;
   const feil = await fjernInnhold(id);
-  if (feil) return alert(feil);
+  if (feil) return melding(feil);
   etterRedigering();
 }
 
@@ -972,14 +1012,14 @@ async function publiserLokaleEndringer() {
   if (!erAdmin() || ider.length === 0 || lagret.spurtOmPublisering) return;
   lagret.spurtOmPublisering = true;
   lagreLokalt();
-  if (!confirm(`Du har ${ider.length} redigerte kort/spørsmål fra før, som bare ligger på denne enheten. Vil du lagre dem for alle brukere?`)) return;
+  if (!await bekreft(`Du har ${ider.length} redigerte kort/spørsmål fra før, som bare ligger på denne enheten. Vil du lagre dem for alle brukere?`)) return;
   for (const id of ider) {
     const feil = await lagreInnhold(id, typeFor(lagret.endringer[id]), lagret.endringer[id]);
-    if (feil) return alert("Stoppet: " + feil);
+    if (feil) return melding("Stoppet: " + feil);
     delete lagret.endringer[id];
   }
   lagreLokalt();
-  alert("Endringene er lagret for alle.");
+  melding("Endringene er lagret for alle.");
   visHjem();
 }
 
@@ -1129,7 +1169,7 @@ async function sendKontoskjema(skjema) {
     } else if (skjema.id === "nyttpassordskjema") {
       const feil = await settNyttPassord(passord);
       if (feil) skjemaMelding(skjema, feil, true);
-      else { alert("Passordet er endret."); visHjem(); }
+      else { melding("Passordet er endret."); visHjem(); }
     }
   } finally {
     knapp.disabled = false;
@@ -1215,7 +1255,7 @@ async function sendMeldFeil(skjema) {
   const feil = await sendFeilmelding(skjema.dataset.id, new FormData(skjema).get("melding").trim());
   knapp.disabled = false;
   if (feil) return skjemaMelding(skjema, feil, true);
-  alert("Takk! Administrator får se meldingen.");
+  melding("Takk! Administrator får se meldingen.");
   feilmeldingTilbake();
 }
 
@@ -1251,10 +1291,10 @@ function importer(fil) {
       Object.keys(lagret.bokser).forEach(id => { if (!lagret.boksTid[id]) lagret.boksTid[id] = naa(); });
       oppgraderLagring();
       lagre();
-      alert("Sikkerhetskopien er hentet inn.");
+      melding("Sikkerhetskopien er hentet inn.");
       visHjem();
     })
-    .catch(() => alert("Kunne ikke lese filen. Velg en sikkerhetskopi lastet ned fra denne appen."));
+    .catch(() => melding("Kunne ikke lese filen. Velg en sikkerhetskopi lastet ned fra denne appen."));
 }
 
 // =====================================================================
@@ -1277,10 +1317,10 @@ const HANDLINGER = {
   },
   "mine-resultater": () => visMineResultater(),
   "slett-historikk": async () => {
-    if (!confirm("Vil du slette alle lagrede resultater? Dette kan ikke angres.")) return;
+    if (!await bekreft("Vil du slette alle lagrede resultater? Dette kan ikke angres.")) return;
     if (bruker) {
       const feil = await slettSkyResultater();
-      if (feil) return alert("Fikk ikke slettet resultatene i skyen. " + feil);
+      if (feil) return melding("Fikk ikke slettet resultatene i skyen. " + feil);
     }
     lagret.resultater = [];
     lagre();
@@ -1304,13 +1344,13 @@ const HANDLINGER = {
   "gjenopprett-innhold": el => gjenopprettInnhold(el.dataset.id),
   "feil-lost": async el => {
     const feil = await settFeilmeldingLost(Number(el.dataset.id), el.dataset.lost === "true");
-    if (feil) alert(feil);
+    if (feil) melding(feil);
     visAdminFeil();
   },
   "slett-feilmelding": async el => {
-    if (!confirm("Slette denne feilmeldingen?")) return;
+    if (!await bekreft("Slette denne feilmeldingen?")) return;
     const feil = await slettFeilmelding(Number(el.dataset.id));
-    if (feil) alert(feil);
+    if (feil) melding(feil);
     visAdminFeil();
   },
   "rediger": el => {
@@ -1335,16 +1375,16 @@ const HANDLINGER = {
   "innlogging-fane": el => { innloggingFane = el.dataset.fane; visLoggInn(); },
   "glemt-passord": () => visGlemtPassord(),
   "logg-ut": async () => {
-    if (!confirm("Vil du logge ut? Fremgangen er lagret i kontoen din og hentes ned igjen når du logger inn.")) return;
+    if (!await bekreft("Vil du logge ut? Fremgangen er lagret i kontoen din og hentes ned igjen når du logger inn.")) return;
     await loggUt();
     visHjem();
   },
   "eksporter": () => eksporter(),
   "nullstill": async () => {
-    if (!confirm("Vil du nullstille fremgangen for flashcards?")) return;
+    if (!await bekreft("Vil du nullstille fremgangen for flashcards?")) return;
     if (bruker) {
       const feil = await slettSkyFremgang();
-      if (feil) return alert("Fikk ikke nullstilt fremgangen i skyen. " + feil);
+      if (feil) return melding("Fikk ikke nullstilt fremgangen i skyen. " + feil);
     }
     lagret.bokser = {};
     lagret.boksTid = {};
