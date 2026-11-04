@@ -25,6 +25,28 @@ Er du innlogget, synkroniseres fremgang, resultater og skjulte kort med Supabase
 - `supabase/01_innlogging.sql` setter opp tabeller og tilgangsregler. Den kjøres én gang i Supabases SQL Editor.
 - `sky.js` står for innlogging og synk.
 
+## Admin
+
+Kontoen alexandersaglie@gmail.com er admin. Admin får knappen «Adminpanel» på forsiden, med tre faner:
+
+- **Brukere:** e-post, registrert, sist aktiv og enkel statistikk. Her kan admin gjøre andre til admin, fjerne admin-rollen, blokkere, oppheve blokkering og slette brukere. Alt ber om bekreftelse først.
+- **Innhold:** redigere, legge til og slette flashcards og flervalgsspørsmål. Endringene gjelder for alle brukere, og slettede kan gjenopprettes.
+- **Feilmeldinger:** feil brukerne har meldt fra om, med knapper for å redigere elementet og merke meldingen som løst.
+
+Rollen sjekkes på serveren, ikke bare i appen:
+
+- `supabase/02_admin.sql` setter opp tilgangsregler som bare lar admin endre innhold og se brukeroversikten.
+- `supabase/functions/admin/index.ts` er serverfunksjonen som blokkerer, sletter og endrer roller. Den sjekker at den som spør er admin, og nekter handlinger på egen konto. Service role-nøkkelen finnes bare hos Supabase.
+
+## Publisering
+
+Appen ligger på GitHub Pages: https://alexandersaglie-cyber.github.io/aut2201-eksamensoving/
+
+- **Oppdatere appen:** `git push` til `main`. GitHub bygger siden på nytt på 1–2 minutter. Nettlesere kan bruke den gamle versjonen i opptil 10 minutter etterpå. Last inn siden på nytt.
+- **Endre serverfunksjonen:** lim inn den nye koden i Supabase → Edge Functions → admin → Code, og trykk Deploy. «Verify JWT» skal være av, fordi funksjonen sjekker innloggingen selv.
+- **Endre databasen:** lag en ny SQL-fil (`03_…sql`) og kjør den i SQL Editor.
+- **Ny adresse** (f.eks. Netlify eller eget domene): legg den nye adressen inn i Supabase → Authentication → URL Configuration (Site URL og Redirect URLs).
+
 ## Filer
 
 | Fil | Innhold |
