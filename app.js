@@ -32,9 +32,21 @@ function lastInn() {
   try {
     const tekst = localStorage.getItem(LAGRINGSNOKKEL);
     if (tekst) lagret = Object.assign(lagret, JSON.parse(tekst));
+    gammeltNavnTilNytt();
   } catch (feil) {
     // Lagring er ikke tilgjengelig (f.eks. privat vindu). Appen virker, men husker ingenting.
   }
+}
+
+// «Eksamensark» het tidligere det som nå er «Høst 2024». Oppdaterer redigerte kort/spørsmål
+// og resultathistorikk som ble lagret med det gamle navnet.
+function gammeltNavnTilNytt() {
+  Object.values(lagret.endringer).forEach(x => {
+    if (x.eksamen === "Eksamensark") x.eksamen = "Høst 2024";
+  });
+  lagret.resultater.forEach(r => {
+    r.beskrivelse = r.beskrivelse.replace("Eksamensark", "Høst 2024");
+  });
 }
 
 function lagre() {
@@ -725,6 +737,7 @@ function importer(fil) {
         slettet: data.slettet || [],
         resultater: data.resultater || []
       };
+      gammeltNavnTilNytt();
       lagre();
       alert("Sikkerhetskopien er hentet inn.");
       visHjem();

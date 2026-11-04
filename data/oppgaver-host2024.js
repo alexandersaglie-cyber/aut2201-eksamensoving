@@ -1,10 +1,10 @@
-// Oppgaver fra eksamensarket (eksamensark.docx): 120 flervalgsspørsmål i sju temadeler.
+// Oppgaver fra eksamen høst 2024 (eksamensark.docx): 120 flervalgsspørsmål i sju temadeler.
 // Samme felter som i data/oppgaver.js. Fasiten er generert, siden arket ikke hadde fasit.
 // Fila legger spørsmålene til i lista OPPGAVER, så den må lastes etter data/oppgaver.js.
 
 OPPGAVER.push(
   {
-    id: "EA-001", eksamen: "Eksamensark", nr: 1, tema: "Anatomi og hørselsfysiologi", poeng: 1,
+    id: "EA-001", eksamen: "Høst 2024", nr: 1, tema: "Anatomi og hørselsfysiologi", poeng: 1,
     tekst: "Hva er hovedfunksjonen til de ytre hårcellene i cochlea?",
     figur: null,
     alternativer: [
@@ -17,7 +17,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-002", eksamen: "Eksamensark", nr: 2, tema: "Anatomi og hørselsfysiologi", poeng: 1,
+    id: "EA-002", eksamen: "Høst 2024", nr: 2, tema: "Anatomi og hørselsfysiologi", poeng: 1,
     tekst: "Hvilket protein er spesielt viktig for elektromotiliteten i ytre hårceller?",
     figur: null,
     alternativer: [
@@ -30,7 +30,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-003", eksamen: "Eksamensark", nr: 3, tema: "Anatomi og hørselsfysiologi", poeng: 1,
+    id: "EA-003", eksamen: "Høst 2024", nr: 3, tema: "Anatomi og hørselsfysiologi", poeng: 1,
     tekst: "Hvilken struktur mottar hoveddelen av de afferente type I-fibrene?",
     figur: null,
     alternativer: [
@@ -43,7 +43,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-004", eksamen: "Eksamensark", nr: 4, tema: "Anatomi og hørselsfysiologi", poeng: 1,
+    id: "EA-004", eksamen: "Høst 2024", nr: 4, tema: "Anatomi og hørselsfysiologi", poeng: 1,
     tekst: "Type II-fibre i hørselsnerven er hovedsakelig forbundet med:",
     figur: null,
     alternativer: [
@@ -56,7 +56,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-005", eksamen: "Eksamensark", nr: 5, tema: "Diagnostikk og måling", poeng: 1,
+    id: "EA-005", eksamen: "Høst 2024", nr: 5, tema: "Diagnostikk og måling", poeng: 1,
     tekst: "Hva kjennetegner recruitment ved cochleært hørselstap?",
     figur: null,
     alternativer: [
@@ -69,7 +69,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-006", eksamen: "Eksamensark", nr: 6, tema: "Psykoakustikk", poeng: 1,
+    id: "EA-006", eksamen: "Høst 2024", nr: 6, tema: "Psykoakustikk", poeng: 1,
     tekst: "Hva skjer vanligvis med det auditive filteret ved skade på ytre hårceller?",
     figur: null,
     alternativer: [
@@ -82,7 +82,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-007", eksamen: "Eksamensark", nr: 7, tema: "Psykoakustikk", poeng: 1,
+    id: "EA-007", eksamen: "Høst 2024", nr: 7, tema: "Psykoakustikk", poeng: 1,
     tekst: "Hvorfor kan taleoppfattelse i støy bli dårligere ved redusert frekvensselektivitet?",
     figur: null,
     alternativer: [
@@ -95,7 +95,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-008", eksamen: "Eksamensark", nr: 8, tema: "Diagnostikk og måling", poeng: 1,
+    id: "EA-008", eksamen: "Høst 2024", nr: 8, tema: "Diagnostikk og måling", poeng: 1,
     tekst: "Hva menes med en cochleær død region?",
     figur: null,
     alternativer: [
@@ -108,7 +108,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-009", eksamen: "Eksamensark", nr: 9, tema: "Diagnostikk og måling", poeng: 1,
+    id: "EA-009", eksamen: "Høst 2024", nr: 9, tema: "Diagnostikk og måling", poeng: 1,
     tekst: "Hva brukes TEN-testen hovedsakelig til?",
     figur: null,
     alternativer: [
@@ -121,7 +121,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-010", eksamen: "Eksamensark", nr: 10, tema: "Diagnostikk og måling", poeng: 1,
+    id: "EA-010", eksamen: "Høst 2024", nr: 10, tema: "Diagnostikk og måling", poeng: 1,
     tekst: "Hvilket kriterium støtter funn av en død region ved TEN-test?",
     figur: null,
     alternativer: [
@@ -134,7 +134,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-011", eksamen: "Eksamensark", nr: 11, tema: "Diagnostikk og måling", poeng: 1,
+    id: "EA-011", eksamen: "Høst 2024", nr: 11, tema: "Diagnostikk og måling", poeng: 1,
     tekst: "Hva innebærer «off-frequency listening»?",
     figur: null,
     alternativer: [
@@ -147,7 +147,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-012", eksamen: "Eksamensark", nr: 12, tema: "Høreapparat og forsterkning", poeng: 1,
+    id: "EA-012", eksamen: "Høst 2024", nr: 12, tema: "Høreapparat og forsterkning", poeng: 1,
     tekst: "Hva er en viktig konsekvens av cochleære døde regioner ved høreapparattilpasning?",
     figur: null,
     alternativer: [
@@ -160,7 +160,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-013", eksamen: "Eksamensark", nr: 13, tema: "Diagnostikk og måling", poeng: 1,
+    id: "EA-013", eksamen: "Høst 2024", nr: 13, tema: "Diagnostikk og måling", poeng: 1,
     tekst: "Hva er otoakustiske emisjoner (OAE)?",
     figur: null,
     alternativer: [
@@ -173,7 +173,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-014", eksamen: "Eksamensark", nr: 14, tema: "Diagnostikk og måling", poeng: 1,
+    id: "EA-014", eksamen: "Høst 2024", nr: 14, tema: "Diagnostikk og måling", poeng: 1,
     tekst: "Hva gjenspeiler DPOAE hovedsakelig?",
     figur: null,
     alternativer: [
@@ -186,7 +186,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-015", eksamen: "Eksamensark", nr: 15, tema: "Diagnostikk og måling", poeng: 1,
+    id: "EA-015", eksamen: "Høst 2024", nr: 15, tema: "Diagnostikk og måling", poeng: 1,
     tekst: "Hvilken påstand om DPOAE er riktig?",
     figur: null,
     alternativer: [
@@ -199,7 +199,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-016", eksamen: "Eksamensark", nr: 16, tema: "Anatomi og hørselsfysiologi", poeng: 1,
+    id: "EA-016", eksamen: "Høst 2024", nr: 16, tema: "Anatomi og hørselsfysiologi", poeng: 1,
     tekst: "Hva er en viktig funksjon til ribbon-synapser i indre hårceller?",
     figur: null,
     alternativer: [
@@ -212,7 +212,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-017", eksamen: "Eksamensark", nr: 17, tema: "Anatomi og hørselsfysiologi", poeng: 1,
+    id: "EA-017", eksamen: "Høst 2024", nr: 17, tema: "Anatomi og hørselsfysiologi", poeng: 1,
     tekst: "Hvilken nevrotransmitter frigjøres hovedsakelig fra indre hårceller til afferente hørselsnervefibre?",
     figur: null,
     alternativer: [
@@ -225,7 +225,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-018", eksamen: "Eksamensark", nr: 18, tema: "Diagnostikk og måling", poeng: 1,
+    id: "EA-018", eksamen: "Høst 2024", nr: 18, tema: "Diagnostikk og måling", poeng: 1,
     tekst: "Hva kjennetegner en psykoakustisk tuningkurve?",
     figur: null,
     alternativer: [
@@ -238,7 +238,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-019", eksamen: "Eksamensark", nr: 19, tema: "Anatomi og hørselsfysiologi", poeng: 1,
+    id: "EA-019", eksamen: "Høst 2024", nr: 19, tema: "Anatomi og hørselsfysiologi", poeng: 1,
     tekst: "Hva innebærer det at cochlea er tonotopisk organisert?",
     figur: null,
     alternativer: [
@@ -251,7 +251,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-020", eksamen: "Eksamensark", nr: 20, tema: "Psykoakustikk", poeng: 1,
+    id: "EA-020", eksamen: "Høst 2024", nr: 20, tema: "Psykoakustikk", poeng: 1,
     tekst: "Hva skjer typisk med det dynamiske hørselsområdet ved cochleært hørselstap med recruitment?",
     figur: null,
     alternativer: [
@@ -264,7 +264,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-021", eksamen: "Eksamensark", nr: 21, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
+    id: "EA-021", eksamen: "Høst 2024", nr: 21, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
     tekst: "Hva er hovedforskjellen mellom afferente og efferente hørselsbaner?",
     figur: null,
     alternativer: [
@@ -277,7 +277,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-022", eksamen: "Eksamensark", nr: 22, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
+    id: "EA-022", eksamen: "Høst 2024", nr: 22, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
     tekst: "Hvilken struktur er første sentrale koblingsstasjon for hørselsnerven?",
     figur: null,
     alternativer: [
@@ -290,7 +290,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-023", eksamen: "Eksamensark", nr: 23, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
+    id: "EA-023", eksamen: "Høst 2024", nr: 23, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
     tekst: "Hvilken struktur i thalamus er en viktig koblingsstasjon for auditiv informasjon?",
     figur: null,
     alternativer: [
@@ -303,7 +303,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-024", eksamen: "Eksamensark", nr: 24, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
+    id: "EA-024", eksamen: "Høst 2024", nr: 24, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
     tekst: "Hvilken struktur ligger i midthjernen og er en sentral del av de auditive banene?",
     figur: null,
     alternativer: [
@@ -316,7 +316,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-025", eksamen: "Eksamensark", nr: 25, tema: "Binaural hørsel og lokalisering", poeng: 1,
+    id: "EA-025", eksamen: "Høst 2024", nr: 25, tema: "Binaural hørsel og lokalisering", poeng: 1,
     tekst: "Hvilken struktur er spesielt knyttet til prosessering av interaurale tidsforskjeller (ITD)?",
     figur: null,
     alternativer: [
@@ -329,7 +329,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-026", eksamen: "Eksamensark", nr: 26, tema: "Binaural hørsel og lokalisering", poeng: 1,
+    id: "EA-026", eksamen: "Høst 2024", nr: 26, tema: "Binaural hørsel og lokalisering", poeng: 1,
     tekst: "Hvilken struktur er spesielt knyttet til prosessering av interaurale nivåforskjeller (ILD)?",
     figur: null,
     alternativer: [
@@ -342,7 +342,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-027", eksamen: "Eksamensark", nr: 27, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
+    id: "EA-027", eksamen: "Høst 2024", nr: 27, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
     tekst: "Hva betyr nevroplastisitet?",
     figur: null,
     alternativer: [
@@ -355,7 +355,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-028", eksamen: "Eksamensark", nr: 28, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
+    id: "EA-028", eksamen: "Høst 2024", nr: 28, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
     tekst: "Hvor er nevroplastisitet særlig fremtredende i det auditive systemet?",
     figur: null,
     alternativer: [
@@ -368,7 +368,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-029", eksamen: "Eksamensark", nr: 29, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
+    id: "EA-029", eksamen: "Høst 2024", nr: 29, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
     tekst: "Hva er corpus callosums viktigste funksjon?",
     figur: null,
     alternativer: [
@@ -381,7 +381,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-030", eksamen: "Eksamensark", nr: 30, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
+    id: "EA-030", eksamen: "Høst 2024", nr: 30, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
     tekst: "Hva menes med myelinisering?",
     figur: null,
     alternativer: [
@@ -394,7 +394,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-031", eksamen: "Eksamensark", nr: 31, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
+    id: "EA-031", eksamen: "Høst 2024", nr: 31, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
     tekst: "Hva er en viktig funksjon av myelin?",
     figur: null,
     alternativer: [
@@ -407,7 +407,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-032", eksamen: "Eksamensark", nr: 32, tema: "Anatomi og hørselsfysiologi", poeng: 1,
+    id: "EA-032", eksamen: "Høst 2024", nr: 32, tema: "Anatomi og hørselsfysiologi", poeng: 1,
     tekst: "Hva innebærer temporal koding av lydfrekvens?",
     figur: null,
     alternativer: [
@@ -420,7 +420,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-033", eksamen: "Eksamensark", nr: 33, tema: "Anatomi og hørselsfysiologi", poeng: 1,
+    id: "EA-033", eksamen: "Høst 2024", nr: 33, tema: "Anatomi og hørselsfysiologi", poeng: 1,
     tekst: "Hva beskriver volley-prinsippet?",
     figur: null,
     alternativer: [
@@ -433,7 +433,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-034", eksamen: "Eksamensark", nr: 34, tema: "Anatomi og hørselsfysiologi", poeng: 1,
+    id: "EA-034", eksamen: "Høst 2024", nr: 34, tema: "Anatomi og hørselsfysiologi", poeng: 1,
     tekst: "Hva innebærer fasekobling (phase locking)?",
     figur: null,
     alternativer: [
@@ -446,7 +446,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-035", eksamen: "Eksamensark", nr: 35, tema: "Anatomi og hørselsfysiologi", poeng: 1,
+    id: "EA-035", eksamen: "Høst 2024", nr: 35, tema: "Anatomi og hørselsfysiologi", poeng: 1,
     tekst: "Hva er en viktig begrensning ved temporal frekvenskoding?",
     figur: null,
     alternativer: [
@@ -459,7 +459,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-036", eksamen: "Eksamensark", nr: 36, tema: "Aldring og kognisjon", poeng: 1,
+    id: "EA-036", eksamen: "Høst 2024", nr: 36, tema: "Aldring og kognisjon", poeng: 1,
     tekst: "Hva menes med top-down-prosessering?",
     figur: null,
     alternativer: [
@@ -472,7 +472,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-037", eksamen: "Eksamensark", nr: 37, tema: "Aldring og kognisjon", poeng: 1,
+    id: "EA-037", eksamen: "Høst 2024", nr: 37, tema: "Aldring og kognisjon", poeng: 1,
     tekst: "Hva er bottom-up-prosessering?",
     figur: null,
     alternativer: [
@@ -485,7 +485,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-038", eksamen: "Eksamensark", nr: 38, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
+    id: "EA-038", eksamen: "Høst 2024", nr: 38, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
     tekst: "Hva menes med endogen redundans i det auditive systemet?",
     figur: null,
     alternativer: [
@@ -498,7 +498,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-039", eksamen: "Eksamensark", nr: 39, tema: "Anatomi og hørselsfysiologi", poeng: 1,
+    id: "EA-039", eksamen: "Høst 2024", nr: 39, tema: "Anatomi og hørselsfysiologi", poeng: 1,
     tekst: "Hva er grå substans hovedsakelig sammensatt av?",
     figur: null,
     alternativer: [
@@ -511,7 +511,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-040", eksamen: "Eksamensark", nr: 40, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
+    id: "EA-040", eksamen: "Høst 2024", nr: 40, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
     tekst: "Hvilken funksjon er særlig avhengig av modning og plastisitet i det auditive systemet?",
     figur: null,
     alternativer: [
@@ -524,7 +524,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-041", eksamen: "Eksamensark", nr: 41, tema: "Tale og akustikk", poeng: 1,
+    id: "EA-041", eksamen: "Høst 2024", nr: 41, tema: "Tale og akustikk", poeng: 1,
     tekst: "Hva er formanter?",
     figur: null,
     alternativer: [
@@ -537,7 +537,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-042", eksamen: "Eksamensark", nr: 42, tema: "Tale og akustikk", poeng: 1,
+    id: "EA-042", eksamen: "Høst 2024", nr: 42, tema: "Tale og akustikk", poeng: 1,
     tekst: "Hva er særlig viktig for å skille mellom forskjellige vokaler?",
     figur: null,
     alternativer: [
@@ -550,7 +550,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-043", eksamen: "Eksamensark", nr: 43, tema: "Tale og akustikk", poeng: 1,
+    id: "EA-043", eksamen: "Høst 2024", nr: 43, tema: "Tale og akustikk", poeng: 1,
     tekst: "Hva er grunntonen (F0) hovedsakelig knyttet til?",
     figur: null,
     alternativer: [
@@ -563,7 +563,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-044", eksamen: "Eksamensark", nr: 44, tema: "Tale og akustikk", poeng: 1,
+    id: "EA-044", eksamen: "Høst 2024", nr: 44, tema: "Tale og akustikk", poeng: 1,
     tekst: "Hva beskriver LTASS?",
     figur: null,
     alternativer: [
@@ -576,7 +576,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-045", eksamen: "Eksamensark", nr: 45, tema: "Tale og akustikk", poeng: 1,
+    id: "EA-045", eksamen: "Høst 2024", nr: 45, tema: "Tale og akustikk", poeng: 1,
     tekst: "Hvor finner man vanligvis mye av taleenergien i LTASS?",
     figur: null,
     alternativer: [
@@ -589,7 +589,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-046", eksamen: "Eksamensark", nr: 46, tema: "Tale og akustikk", poeng: 1,
+    id: "EA-046", eksamen: "Høst 2024", nr: 46, tema: "Tale og akustikk", poeng: 1,
     tekst: "Hvilke talelyder inneholder typisk mye høyfrekvent energi?",
     figur: null,
     alternativer: [
@@ -602,7 +602,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-047", eksamen: "Eksamensark", nr: 47, tema: "Tale og akustikk", poeng: 1,
+    id: "EA-047", eksamen: "Høst 2024", nr: 47, tema: "Tale og akustikk", poeng: 1,
     tekst: "Hva vil en person med godt bevart basshørsel, men stort diskanttap, typisk ha størst problemer med?",
     figur: null,
     alternativer: [
@@ -615,7 +615,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-048", eksamen: "Eksamensark", nr: 48, tema: "Binaural hørsel og lokalisering", poeng: 1,
+    id: "EA-048", eksamen: "Høst 2024", nr: 48, tema: "Binaural hørsel og lokalisering", poeng: 1,
     tekst: "Hva er interaural tidsforskjell (ITD)?",
     figur: null,
     alternativer: [
@@ -628,7 +628,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-049", eksamen: "Eksamensark", nr: 49, tema: "Binaural hørsel og lokalisering", poeng: 1,
+    id: "EA-049", eksamen: "Høst 2024", nr: 49, tema: "Binaural hørsel og lokalisering", poeng: 1,
     tekst: "Hva er interaural nivåforskjell (ILD)?",
     figur: null,
     alternativer: [
@@ -641,7 +641,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-050", eksamen: "Eksamensark", nr: 50, tema: "Binaural hørsel og lokalisering", poeng: 1,
+    id: "EA-050", eksamen: "Høst 2024", nr: 50, tema: "Binaural hørsel og lokalisering", poeng: 1,
     tekst: "Hva er viktigst for lydlokalisering i vertikalplanet?",
     figur: null,
     alternativer: [
@@ -654,7 +654,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-051", eksamen: "Eksamensark", nr: 51, tema: "Binaural hørsel og lokalisering", poeng: 1,
+    id: "EA-051", eksamen: "Høst 2024", nr: 51, tema: "Binaural hørsel og lokalisering", poeng: 1,
     tekst: "Hva er en viktig årsak til at ILD vanligvis er tydeligere ved høye frekvenser?",
     figur: null,
     alternativer: [
@@ -667,7 +667,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-052", eksamen: "Eksamensark", nr: 52, tema: "Binaural hørsel og lokalisering", poeng: 1,
+    id: "EA-052", eksamen: "Høst 2024", nr: 52, tema: "Binaural hørsel og lokalisering", poeng: 1,
     tekst: "Hva beskriver binaural masking level difference (BMLD)?",
     figur: null,
     alternativer: [
@@ -680,7 +680,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-053", eksamen: "Eksamensark", nr: 53, tema: "Binaural hørsel og lokalisering", poeng: 1,
+    id: "EA-053", eksamen: "Høst 2024", nr: 53, tema: "Binaural hørsel og lokalisering", poeng: 1,
     tekst: "Hva er koinsidensdeteksjon i MSO?",
     figur: null,
     alternativer: [
@@ -693,7 +693,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-054", eksamen: "Eksamensark", nr: 54, tema: "Aldring og kognisjon", poeng: 1,
+    id: "EA-054", eksamen: "Høst 2024", nr: 54, tema: "Aldring og kognisjon", poeng: 1,
     tekst: "Hva er en viktig funksjon av arbeidsminnet ved taleoppfattelse?",
     figur: null,
     alternativer: [
@@ -706,7 +706,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-055", eksamen: "Eksamensark", nr: 55, tema: "Aldring og kognisjon", poeng: 1,
+    id: "EA-055", eksamen: "Høst 2024", nr: 55, tema: "Aldring og kognisjon", poeng: 1,
     tekst: "Hvorfor kan en person med hørselstap forstå tale bedre i en kjent samtalekontekst?",
     figur: null,
     alternativer: [
@@ -719,7 +719,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-056", eksamen: "Eksamensark", nr: 56, tema: "Aldring og kognisjon", poeng: 1,
+    id: "EA-056", eksamen: "Høst 2024", nr: 56, tema: "Aldring og kognisjon", poeng: 1,
     tekst: "Hva menes med primær aldring?",
     figur: null,
     alternativer: [
@@ -732,7 +732,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-057", eksamen: "Eksamensark", nr: 57, tema: "Aldring og kognisjon", poeng: 1,
+    id: "EA-057", eksamen: "Høst 2024", nr: 57, tema: "Aldring og kognisjon", poeng: 1,
     tekst: "Hva menes med sekundær aldring?",
     figur: null,
     alternativer: [
@@ -745,7 +745,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-058", eksamen: "Eksamensark", nr: 58, tema: "Aldring og kognisjon", poeng: 1,
+    id: "EA-058", eksamen: "Høst 2024", nr: 58, tema: "Aldring og kognisjon", poeng: 1,
     tekst: "Hva er presbyakusis?",
     figur: null,
     alternativer: [
@@ -758,7 +758,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-059", eksamen: "Eksamensark", nr: 59, tema: "Anatomi og hørselsfysiologi", poeng: 1,
+    id: "EA-059", eksamen: "Høst 2024", nr: 59, tema: "Anatomi og hørselsfysiologi", poeng: 1,
     tekst: "Hvilket område i cochlea er særlig knyttet til aldersrelatert diskanttap?",
     figur: null,
     alternativer: [
@@ -771,7 +771,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-060", eksamen: "Eksamensark", nr: 60, tema: "Aldring og kognisjon", poeng: 1,
+    id: "EA-060", eksamen: "Høst 2024", nr: 60, tema: "Aldring og kognisjon", poeng: 1,
     tekst: "Hva innebærer kognisjon?",
     figur: null,
     alternativer: [
@@ -784,7 +784,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-061", eksamen: "Eksamensark", nr: 61, tema: "Aldring og kognisjon", poeng: 1,
+    id: "EA-061", eksamen: "Høst 2024", nr: 61, tema: "Aldring og kognisjon", poeng: 1,
     tekst: "Hvilken kognitiv funksjon svekkes ofte med økende alder?",
     figur: null,
     alternativer: [
@@ -797,7 +797,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-062", eksamen: "Eksamensark", nr: 62, tema: "Aldring og kognisjon", poeng: 1,
+    id: "EA-062", eksamen: "Høst 2024", nr: 62, tema: "Aldring og kognisjon", poeng: 1,
     tekst: "Hva menes med krystallisert intelligens?",
     figur: null,
     alternativer: [
@@ -810,7 +810,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-063", eksamen: "Eksamensark", nr: 63, tema: "Aldring og kognisjon", poeng: 1,
+    id: "EA-063", eksamen: "Høst 2024", nr: 63, tema: "Aldring og kognisjon", poeng: 1,
     tekst: "Hva menes med flytende intelligens?",
     figur: null,
     alternativer: [
@@ -823,7 +823,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-064", eksamen: "Eksamensark", nr: 64, tema: "Aldring og kognisjon", poeng: 1,
+    id: "EA-064", eksamen: "Høst 2024", nr: 64, tema: "Aldring og kognisjon", poeng: 1,
     tekst: "Hva beskriver «common cause»-hypotesen om hørsel og kognisjon?",
     figur: null,
     alternativer: [
@@ -836,7 +836,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-065", eksamen: "Eksamensark", nr: 65, tema: "Aldring og kognisjon", poeng: 1,
+    id: "EA-065", eksamen: "Høst 2024", nr: 65, tema: "Aldring og kognisjon", poeng: 1,
     tekst: "Hvilken sammenheng er dokumentert mellom hørselstap og demens?",
     figur: null,
     alternativer: [
@@ -849,7 +849,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-066", eksamen: "Eksamensark", nr: 66, tema: "Aldring og kognisjon", poeng: 1,
+    id: "EA-066", eksamen: "Høst 2024", nr: 66, tema: "Aldring og kognisjon", poeng: 1,
     tekst: "Hva kjennetegner seleksjon i SOC-modellen?",
     figur: null,
     alternativer: [
@@ -862,7 +862,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-067", eksamen: "Eksamensark", nr: 67, tema: "Aldring og kognisjon", poeng: 1,
+    id: "EA-067", eksamen: "Høst 2024", nr: 67, tema: "Aldring og kognisjon", poeng: 1,
     tekst: "Hva innebærer optimalisering i SOC-modellen?",
     figur: null,
     alternativer: [
@@ -875,7 +875,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-068", eksamen: "Eksamensark", nr: 68, tema: "Aldring og kognisjon", poeng: 1,
+    id: "EA-068", eksamen: "Høst 2024", nr: 68, tema: "Aldring og kognisjon", poeng: 1,
     tekst: "Hva innebærer kompensasjon i SOC-modellen?",
     figur: null,
     alternativer: [
@@ -888,7 +888,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-069", eksamen: "Eksamensark", nr: 69, tema: "Psykisk helse, mestring og stigma", poeng: 1,
+    id: "EA-069", eksamen: "Høst 2024", nr: 69, tema: "Psykisk helse, mestring og stigma", poeng: 1,
     tekst: "Hva står C for i ABC-modellen for bedre mental helse?",
     figur: null,
     alternativer: [
@@ -901,7 +901,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-070", eksamen: "Eksamensark", nr: 70, tema: "Psykisk helse, mestring og stigma", poeng: 1,
+    id: "EA-070", eksamen: "Høst 2024", nr: 70, tema: "Psykisk helse, mestring og stigma", poeng: 1,
     tekst: "Hva er et eksempel på selvstereotypisering blant eldre?",
     figur: null,
     alternativer: [
@@ -914,7 +914,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-071", eksamen: "Eksamensark", nr: 71, tema: "Psykisk helse, mestring og stigma", poeng: 1,
+    id: "EA-071", eksamen: "Høst 2024", nr: 71, tema: "Psykisk helse, mestring og stigma", poeng: 1,
     tekst: "Hva er aldersdiskriminering?",
     figur: null,
     alternativer: [
@@ -927,7 +927,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-072", eksamen: "Eksamensark", nr: 72, tema: "Aldring og kognisjon", poeng: 1,
+    id: "EA-072", eksamen: "Høst 2024", nr: 72, tema: "Aldring og kognisjon", poeng: 1,
     tekst: "Hva innebærer sosial deltakelse i alderdommen?",
     figur: null,
     alternativer: [
@@ -940,7 +940,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-073", eksamen: "Eksamensark", nr: 73, tema: "Aldring og kognisjon", poeng: 1,
+    id: "EA-073", eksamen: "Høst 2024", nr: 73, tema: "Aldring og kognisjon", poeng: 1,
     tekst: "Hvorfor kan hørselstap påvirke livskvaliteten hos eldre?",
     figur: null,
     alternativer: [
@@ -953,7 +953,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-074", eksamen: "Eksamensark", nr: 74, tema: "Aldring og kognisjon", poeng: 1,
+    id: "EA-074", eksamen: "Høst 2024", nr: 74, tema: "Aldring og kognisjon", poeng: 1,
     tekst: "Hva er en viktig forskjell mellom normal aldring og demens?",
     figur: null,
     alternativer: [
@@ -966,7 +966,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-075", eksamen: "Eksamensark", nr: 75, tema: "Aldring og kognisjon", poeng: 1,
+    id: "EA-075", eksamen: "Høst 2024", nr: 75, tema: "Aldring og kognisjon", poeng: 1,
     tekst: "Hva er et viktig mål med audiologisk rehabilitering hos eldre?",
     figur: null,
     alternativer: [
@@ -979,7 +979,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-076", eksamen: "Eksamensark", nr: 76, tema: "Psykisk helse, mestring og stigma", poeng: 1,
+    id: "EA-076", eksamen: "Høst 2024", nr: 76, tema: "Psykisk helse, mestring og stigma", poeng: 1,
     tekst: "Hva kjennetegner en psykisk lidelse sammenlignet med forbigående psykiske plager?",
     figur: null,
     alternativer: [
@@ -992,7 +992,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-077", eksamen: "Eksamensark", nr: 77, tema: "Psykisk helse, mestring og stigma", poeng: 1,
+    id: "EA-077", eksamen: "Høst 2024", nr: 77, tema: "Psykisk helse, mestring og stigma", poeng: 1,
     tekst: "Hvilke psykiske lidelser er blant de vanligste i befolkningen?",
     figur: null,
     alternativer: [
@@ -1005,7 +1005,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-078", eksamen: "Eksamensark", nr: 78, tema: "Psykisk helse, mestring og stigma", poeng: 1,
+    id: "EA-078", eksamen: "Høst 2024", nr: 78, tema: "Psykisk helse, mestring og stigma", poeng: 1,
     tekst: "Hva innebærer stigma ifølge Erving Goffman?",
     figur: null,
     alternativer: [
@@ -1018,7 +1018,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-079", eksamen: "Eksamensark", nr: 79, tema: "Psykisk helse, mestring og stigma", poeng: 1,
+    id: "EA-079", eksamen: "Høst 2024", nr: 79, tema: "Psykisk helse, mestring og stigma", poeng: 1,
     tekst: "Hvordan kan stigma påvirke bruk av høreapparat?",
     figur: null,
     alternativer: [
@@ -1031,7 +1031,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-080", eksamen: "Eksamensark", nr: 80, tema: "Psykisk helse, mestring og stigma", poeng: 1,
+    id: "EA-080", eksamen: "Høst 2024", nr: 80, tema: "Psykisk helse, mestring og stigma", poeng: 1,
     tekst: "Hva menes med informasjonskontroll i forbindelse med stigma?",
     figur: null,
     alternativer: [
@@ -1044,7 +1044,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-081", eksamen: "Eksamensark", nr: 81, tema: "Psykisk helse, mestring og stigma", poeng: 1,
+    id: "EA-081", eksamen: "Høst 2024", nr: 81, tema: "Psykisk helse, mestring og stigma", poeng: 1,
     tekst: "Hva er et eksempel på problemfokusert mestring?",
     figur: null,
     alternativer: [
@@ -1057,7 +1057,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-082", eksamen: "Eksamensark", nr: 82, tema: "Psykisk helse, mestring og stigma", poeng: 1,
+    id: "EA-082", eksamen: "Høst 2024", nr: 82, tema: "Psykisk helse, mestring og stigma", poeng: 1,
     tekst: "Hva er et eksempel på følelsesfokusert mestring?",
     figur: null,
     alternativer: [
@@ -1070,7 +1070,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-083", eksamen: "Eksamensark", nr: 83, tema: "Psykisk helse, mestring og stigma", poeng: 1,
+    id: "EA-083", eksamen: "Høst 2024", nr: 83, tema: "Psykisk helse, mestring og stigma", poeng: 1,
     tekst: "Hvilken faktor kan redusere opplevelsen av skadelig stress?",
     figur: null,
     alternativer: [
@@ -1083,7 +1083,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-084", eksamen: "Eksamensark", nr: 84, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
+    id: "EA-084", eksamen: "Høst 2024", nr: 84, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
     tekst: "Hva er nevroplastisitetens betydning for rehabilitering?",
     figur: null,
     alternativer: [
@@ -1096,7 +1096,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-085", eksamen: "Eksamensark", nr: 85, tema: "Folkehelse og epidemiologi", poeng: 1,
+    id: "EA-085", eksamen: "Høst 2024", nr: 85, tema: "Folkehelse og epidemiologi", poeng: 1,
     tekst: "Hva innebærer ICF-modellen?",
     figur: null,
     alternativer: [
@@ -1109,7 +1109,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-086", eksamen: "Eksamensark", nr: 86, tema: "Folkehelse og epidemiologi", poeng: 1,
+    id: "EA-086", eksamen: "Høst 2024", nr: 86, tema: "Folkehelse og epidemiologi", poeng: 1,
     tekst: "Hva er forskjellen mellom aktivitet og deltakelse i ICF?",
     figur: null,
     alternativer: [
@@ -1122,7 +1122,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-087", eksamen: "Eksamensark", nr: 87, tema: "Folkehelse og epidemiologi", poeng: 1,
+    id: "EA-087", eksamen: "Høst 2024", nr: 87, tema: "Folkehelse og epidemiologi", poeng: 1,
     tekst: "Hva er et eksempel på en miljøfaktor i ICF?",
     figur: null,
     alternativer: [
@@ -1135,7 +1135,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-088", eksamen: "Eksamensark", nr: 88, tema: "Psykisk helse, mestring og stigma", poeng: 1,
+    id: "EA-088", eksamen: "Høst 2024", nr: 88, tema: "Psykisk helse, mestring og stigma", poeng: 1,
     tekst: "Hva kan bidra til hørselsrelatert fatigue i arbeidslivet?",
     figur: null,
     alternativer: [
@@ -1148,7 +1148,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-089", eksamen: "Eksamensark", nr: 89, tema: "Psykisk helse, mestring og stigma", poeng: 1,
+    id: "EA-089", eksamen: "Høst 2024", nr: 89, tema: "Psykisk helse, mestring og stigma", poeng: 1,
     tekst: "Hva er et viktig prinsipp ved personsentrert audiologisk rehabilitering?",
     figur: null,
     alternativer: [
@@ -1161,7 +1161,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-090", eksamen: "Eksamensark", nr: 90, tema: "Psykisk helse, mestring og stigma", poeng: 1,
+    id: "EA-090", eksamen: "Høst 2024", nr: 90, tema: "Psykisk helse, mestring og stigma", poeng: 1,
     tekst: "Hva kan bidra til at en person med hørselstap utsetter rehabilitering?",
     figur: null,
     alternativer: [
@@ -1174,7 +1174,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-091", eksamen: "Eksamensark", nr: 91, tema: "Vestibulært", poeng: 1,
+    id: "EA-091", eksamen: "Høst 2024", nr: 91, tema: "Vestibulært", poeng: 1,
     tekst: "Hvilke strukturer registrerer hovedsakelig rotasjonsbevegelser av hodet?",
     figur: null,
     alternativer: [
@@ -1187,7 +1187,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-092", eksamen: "Eksamensark", nr: 92, tema: "Vestibulært", poeng: 1,
+    id: "EA-092", eksamen: "Høst 2024", nr: 92, tema: "Vestibulært", poeng: 1,
     tekst: "Hvilke strukturer registrerer hovedsakelig lineær akselerasjon og hodets orientering i forhold til tyngdekraften?",
     figur: null,
     alternativer: [
@@ -1200,7 +1200,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-093", eksamen: "Eksamensark", nr: 93, tema: "Vestibulært", poeng: 1,
+    id: "EA-093", eksamen: "Høst 2024", nr: 93, tema: "Vestibulært", poeng: 1,
     tekst: "Hvilket otolittorgan er cVEMP hovedsakelig knyttet til?",
     figur: null,
     alternativer: [
@@ -1213,7 +1213,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-094", eksamen: "Eksamensark", nr: 94, tema: "Vestibulært", poeng: 1,
+    id: "EA-094", eksamen: "Høst 2024", nr: 94, tema: "Vestibulært", poeng: 1,
     tekst: "Hvilket otolittorgan er oVEMP hovedsakelig knyttet til?",
     figur: null,
     alternativer: [
@@ -1226,7 +1226,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-095", eksamen: "Eksamensark", nr: 95, tema: "Vestibulært", poeng: 1,
+    id: "EA-095", eksamen: "Høst 2024", nr: 95, tema: "Vestibulært", poeng: 1,
     tekst: "Hva er hovedfunksjonen til vestibulo-okulær refleks (VOR)?",
     figur: null,
     alternativer: [
@@ -1239,7 +1239,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-096", eksamen: "Eksamensark", nr: 96, tema: "Vestibulært", poeng: 1,
+    id: "EA-096", eksamen: "Høst 2024", nr: 96, tema: "Vestibulært", poeng: 1,
     tekst: "Hva kjennetegner Ménières sykdom?",
     figur: null,
     alternativer: [
@@ -1252,7 +1252,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-097", eksamen: "Eksamensark", nr: 97, tema: "Vestibulært", poeng: 1,
+    id: "EA-097", eksamen: "Høst 2024", nr: 97, tema: "Vestibulært", poeng: 1,
     tekst: "Hva er endolymfatisk hydrops?",
     figur: null,
     alternativer: [
@@ -1265,7 +1265,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-098", eksamen: "Eksamensark", nr: 98, tema: "Vestibulært", poeng: 1,
+    id: "EA-098", eksamen: "Høst 2024", nr: 98, tema: "Vestibulært", poeng: 1,
     tekst: "Hvilken tilstand kan gi uvanlig store VEMP-responser?",
     figur: null,
     alternativer: [
@@ -1278,7 +1278,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-099", eksamen: "Eksamensark", nr: 99, tema: "Vestibulært", poeng: 1,
+    id: "EA-099", eksamen: "Høst 2024", nr: 99, tema: "Vestibulært", poeng: 1,
     tekst: "Hva er nystagmus?",
     figur: null,
     alternativer: [
@@ -1291,7 +1291,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-100", eksamen: "Eksamensark", nr: 100, tema: "Vestibulært", poeng: 1,
+    id: "EA-100", eksamen: "Høst 2024", nr: 100, tema: "Vestibulært", poeng: 1,
     tekst: "Hva innebærer galvanisk vestibulær stimulering (GVS)?",
     figur: null,
     alternativer: [
@@ -1304,7 +1304,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-101", eksamen: "Eksamensark", nr: 101, tema: "Statistikk", poeng: 1,
+    id: "EA-101", eksamen: "Høst 2024", nr: 101, tema: "Statistikk", poeng: 1,
     tekst: "Hva er medianen i datasettet 4, 8, 10, 12, 16?",
     figur: null,
     alternativer: [
@@ -1317,7 +1317,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-102", eksamen: "Eksamensark", nr: 102, tema: "Statistikk", poeng: 1,
+    id: "EA-102", eksamen: "Høst 2024", nr: 102, tema: "Statistikk", poeng: 1,
     tekst: "Hva er gjennomsnittet av tallene 2, 4, 6 og 8?",
     figur: null,
     alternativer: [
@@ -1330,7 +1330,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-103", eksamen: "Eksamensark", nr: 103, tema: "Statistikk", poeng: 1,
+    id: "EA-103", eksamen: "Høst 2024", nr: 103, tema: "Statistikk", poeng: 1,
     tekst: "Hva beskriver standardavvik?",
     figur: null,
     alternativer: [
@@ -1343,7 +1343,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-104", eksamen: "Eksamensark", nr: 104, tema: "Statistikk", poeng: 1,
+    id: "EA-104", eksamen: "Høst 2024", nr: 104, tema: "Statistikk", poeng: 1,
     tekst: "Hva kjennetegner en normalfordeling?",
     figur: null,
     alternativer: [
@@ -1356,7 +1356,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-105", eksamen: "Eksamensark", nr: 105, tema: "Statistikk", poeng: 1,
+    id: "EA-105", eksamen: "Høst 2024", nr: 105, tema: "Statistikk", poeng: 1,
     tekst: "Hva skjer typisk med gjennomsnittet i en positivt skjev fordeling?",
     figur: null,
     alternativer: [
@@ -1369,7 +1369,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-106", eksamen: "Eksamensark", nr: 106, tema: "Statistikk", poeng: 1,
+    id: "EA-106", eksamen: "Høst 2024", nr: 106, tema: "Statistikk", poeng: 1,
     tekst: "Hva er en nullhypotese?",
     figur: null,
     alternativer: [
@@ -1382,7 +1382,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-107", eksamen: "Eksamensark", nr: 107, tema: "Statistikk", poeng: 1,
+    id: "EA-107", eksamen: "Høst 2024", nr: 107, tema: "Statistikk", poeng: 1,
     tekst: "Hva innebærer en type I-feil?",
     figur: null,
     alternativer: [
@@ -1395,7 +1395,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-108", eksamen: "Eksamensark", nr: 108, tema: "Statistikk", poeng: 1,
+    id: "EA-108", eksamen: "Høst 2024", nr: 108, tema: "Statistikk", poeng: 1,
     tekst: "Hva innebærer en type II-feil?",
     figur: null,
     alternativer: [
@@ -1408,7 +1408,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-109", eksamen: "Eksamensark", nr: 109, tema: "Statistikk", poeng: 1,
+    id: "EA-109", eksamen: "Høst 2024", nr: 109, tema: "Statistikk", poeng: 1,
     tekst: "Hva gjør man vanligvis dersom p < 0,05 og signifikansnivået er 0,05?",
     figur: null,
     alternativer: [
@@ -1421,7 +1421,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-110", eksamen: "Eksamensark", nr: 110, tema: "Forskningsmetode", poeng: 1,
+    id: "EA-110", eksamen: "Høst 2024", nr: 110, tema: "Forskningsmetode", poeng: 1,
     tekst: "Hva betyr prevalens?",
     figur: null,
     alternativer: [
@@ -1434,7 +1434,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-111", eksamen: "Eksamensark", nr: 111, tema: "Forskningsmetode", poeng: 1,
+    id: "EA-111", eksamen: "Høst 2024", nr: 111, tema: "Forskningsmetode", poeng: 1,
     tekst: "Hvilket forskningsdesign egner seg godt til å undersøke prevalens?",
     figur: null,
     alternativer: [
@@ -1447,7 +1447,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-112", eksamen: "Eksamensark", nr: 112, tema: "Forskningsmetode", poeng: 1,
+    id: "EA-112", eksamen: "Høst 2024", nr: 112, tema: "Forskningsmetode", poeng: 1,
     tekst: "Hva kjennetegner kvalitativ forskning?",
     figur: null,
     alternativer: [
@@ -1460,7 +1460,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-113", eksamen: "Eksamensark", nr: 113, tema: "Forskningsmetode", poeng: 1,
+    id: "EA-113", eksamen: "Høst 2024", nr: 113, tema: "Forskningsmetode", poeng: 1,
     tekst: "Hvilken datainnsamlingsmetode brukes ofte i kvalitativ forskning?",
     figur: null,
     alternativer: [
@@ -1473,7 +1473,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-114", eksamen: "Eksamensark", nr: 114, tema: "Forskningsmetode", poeng: 1,
+    id: "EA-114", eksamen: "Høst 2024", nr: 114, tema: "Forskningsmetode", poeng: 1,
     tekst: "Hva kjennetegner et strategisk utvalg?",
     figur: null,
     alternativer: [
@@ -1486,7 +1486,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-115", eksamen: "Eksamensark", nr: 115, tema: "Statistikk", poeng: 1,
+    id: "EA-115", eksamen: "Høst 2024", nr: 115, tema: "Statistikk", poeng: 1,
     tekst: "Hvilket målenivå har kategoriene mildt, moderat og alvorlig hørselstap?",
     figur: null,
     alternativer: [
@@ -1499,7 +1499,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-116", eksamen: "Eksamensark", nr: 116, tema: "Statistikk", poeng: 1,
+    id: "EA-116", eksamen: "Høst 2024", nr: 116, tema: "Statistikk", poeng: 1,
     tekst: "Hvilket målenivå har kategoriene bestått og ikke bestått på en hørselsscreening?",
     figur: null,
     alternativer: [
@@ -1512,7 +1512,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-117", eksamen: "Eksamensark", nr: 117, tema: "Statistikk", poeng: 1,
+    id: "EA-117", eksamen: "Høst 2024", nr: 117, tema: "Statistikk", poeng: 1,
     tekst: "Hvilket målenivå har høreterskler uttrykt i dB HL?",
     figur: null,
     alternativer: [
@@ -1525,7 +1525,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-118", eksamen: "Eksamensark", nr: 118, tema: "Statistikk", poeng: 1,
+    id: "EA-118", eksamen: "Høst 2024", nr: 118, tema: "Statistikk", poeng: 1,
     tekst: "Hvilken statistisk test er vanligvis egnet for å sammenligne gjennomsnittet av to avhengige, tilnærmet normalfordelte måleserier?",
     figur: null,
     alternativer: [
@@ -1538,7 +1538,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-119", eksamen: "Eksamensark", nr: 119, tema: "Statistikk", poeng: 1,
+    id: "EA-119", eksamen: "Høst 2024", nr: 119, tema: "Statistikk", poeng: 1,
     tekst: "Hva er en avhengig variabel?",
     figur: null,
     alternativer: [
@@ -1551,7 +1551,7 @@ OPPGAVER.push(
     fasit: "generert", sikkerhet: "høy"
   },
   {
-    id: "EA-120", eksamen: "Eksamensark", nr: 120, tema: "Forskningsmetode", poeng: 1,
+    id: "EA-120", eksamen: "Høst 2024", nr: 120, tema: "Forskningsmetode", poeng: 1,
     tekst: "Hvilken del av en vitenskapelig artikkel beskriver vanligvis utvalg, datainnsamling og analyse?",
     figur: null,
     alternativer: [
