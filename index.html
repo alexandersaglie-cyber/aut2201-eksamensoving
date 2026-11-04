@@ -15,11 +15,17 @@
   <!-- Alt innhold tegnes inn her av app.js -->
   <main id="app"></main>
 
+  <!-- Supabase-biblioteket (innlogging og database). Laster det ikke (uten nett), virker appen lokalt. -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.0/dist/umd/supabase.js"></script>
+  <script src="config.js"></script>
+
   <!-- Hver eksamen har egne filer. De som heter «-noe» legger til i listene fra filene over seg. -->
   <script src="data/oppgaver.js"></script>
   <script src="data/oppgaver-host2024.js"></script>
   <script src="data/kort.js"></script>
   <script src="data/kort-host2024.js"></script>
+
+  <script src="sky.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

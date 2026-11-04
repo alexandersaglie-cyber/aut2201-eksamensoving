@@ -103,7 +103,7 @@ button.hoved {
 .knapperad.liten button { padding: 6px 10px; font-size: 0.9rem; }
 
 label { display: block; margin: 10px 0; font-weight: 600; font-size: 0.95rem; }
-select, input[type="search"], textarea {
+select, input[type="search"], input[type="email"], input[type="password"], textarea {
   display: block;
   width: 100%;
   margin-top: 4px;
@@ -273,6 +273,19 @@ textarea { resize: vertical; }
 .stolpe { height: 8px; background: var(--bakgrunn); border-radius: 4px; overflow: hidden; margin-top: 4px; }
 .stolpe div { height: 100%; background: var(--riktig); }
 .stolpe.svak div { background: var(--feil); }
+
+/* ---------- Konto og skjemaer ---------- */
+
+.konto p { margin: 0 0 4px; }
+.kontolinje { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.kontolinje b { word-break: break-all; }
+
+.skjemamelding { min-height: 1.2em; margin: 8px 0 0; color: var(--dempet); }
+.skjemamelding.feil { color: var(--feil); font-weight: 600; }
+
+.personvern { background: var(--bakgrunn); border-radius: 8px; padding: 10px 12px; }
+label.avkrysning { display: flex; gap: 10px; align-items: flex-start; font-weight: normal; }
+label.avkrysning input { width: 20px; height: 20px; flex: none; margin-top: 2px; }
 
 /* ---------- Redigering ---------- */
 

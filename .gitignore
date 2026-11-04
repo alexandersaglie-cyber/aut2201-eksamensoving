@@ -1,2 +1,5 @@
 _tmp/
 .claude/
+.env
+.env.*
+_config.bak

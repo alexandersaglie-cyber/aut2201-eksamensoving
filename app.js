@@ -1,8 +1,8 @@
 // AUT2201 eksamensøving – hele appen ligger i denne fila.
 //
 // Dataene kommer fra data/oppgaver*.js (OPPGAVER) og data/kort*.js (KORT).
-// Fremgang og egne endringer lagres i nettleserens localStorage, så det trengs
-// ingen innlogging eller server. Hver nettleser (PC, mobil) har sin egen lagring.
+// Fremgang lagres alltid i nettleserens localStorage, så appen virker uten nett og uten konto.
+// Er man innlogget, synkroniseres den i tillegg med skyen (se sky.js).
 //
 // Oppbygging:
 //   1. Lagring        – lese/skrive localStorage
@@ -10,9 +10,10 @@
 //   3. Forside
 //   4. Flashcards     – bokssystem: kort du ikke kan, kommer oftere
 //   5. Flervalg       – runde med poengsum, karakter og svake tema, og «Mine resultater»
-//   6. Redigering     – endre/slette kort og spørsmål
-//   7. Sikkerhetskopi – laste ned / hente inn fremgang og endringer
-//   8. Hendelser      – kobler knapper og taster til funksjonene over
+//   6. Redigering     – endre kort og spørsmål (bare admin)
+//   7. Konto          – innlogging, registrering, passord, skjul for meg og meld feil
+//   8. Sikkerhetskopi – laste ned / hente inn fremgang og endringer
+//   9. Hendelser      – kobler knapper og taster til funksjonene over
 
 "use strict";
 
@@ -23,33 +24,60 @@
 const LAGRINGSNOKKEL = "aut2201-eksamensoving";
 
 // bokser:     hvilken boks (1–5) hvert flashcard ligger i. Mangler = nytt kort.
+// boksTid:    når hvert kort sist ble besvart (brukes til å avgjøre hva som er nyest ved synk).
 // endringer:  redigerte kort/spørsmål, lagret som hele objekter under sin id.
-// slettet:    id-er til kort/spørsmål som er slettet.
+// skjult:     kort/spørsmål man har skjult for seg selv: { id: { skjult, tid } }.
 // resultater: fullførte flervalgsrunder med karakter (se lagreRunde()).
-let lagret = { bokser: {}, endringer: {}, slettet: [], resultater: [] };
+// eier:       id-en til kontoen fremgangen tilhører (null = ikke koblet til noen konto ennå).
+// profil:     den innloggede brukerens profil fra sist, så rollen er kjent også uten nett.
+// usynket:    true hvis det finnes endringer som ikke er sendt til skyen ennå.
+function tomLagring() {
+  return {
+    bokser: {}, boksTid: {}, endringer: {}, skjult: {}, resultater: [],
+    eier: null, profil: null, usynket: false
+  };
+}
+let lagret = tomLagring();
 
 function lastInn() {
   try {
     const tekst = localStorage.getItem(LAGRINGSNOKKEL);
-    if (tekst) lagret = Object.assign(lagret, JSON.parse(tekst));
-    gammeltNavnTilNytt();
+    if (tekst) lagret = Object.assign(tomLagring(), JSON.parse(tekst));
+    oppgraderLagring();
   } catch (feil) {
     // Lagring er ikke tilgjengelig (f.eks. privat vindu). Appen virker, men husker ingenting.
   }
 }
 
-// «Eksamensark» het tidligere det som nå er «Høst 2024». Oppdaterer redigerte kort/spørsmål
-// og resultathistorikk som ble lagret med det gamle navnet.
-function gammeltNavnTilNytt() {
+// Gjør om data lagret av eldre versjoner av appen til dagens format.
+function oppgraderLagring() {
+  // «Eksamensark» heter nå «Høst 2024».
   Object.values(lagret.endringer).forEach(x => {
     if (x.eksamen === "Eksamensark") x.eksamen = "Høst 2024";
   });
   lagret.resultater.forEach(r => {
     r.beskrivelse = r.beskrivelse.replace("Eksamensark", "Høst 2024");
   });
+  // Tidligere «slettet» er nå «skjult for meg».
+  if (Array.isArray(lagret.slettet)) {
+    lagret.slettet.forEach(id => { lagret.skjult[id] = { skjult: true, tid: null }; });
+    delete lagret.slettet;
+  }
+  // Hver runde trenger en unik id, så den ikke lagres to ganger i skyen.
+  lagret.resultater.forEach(r => { if (!r.id) r.id = lagNyId(); });
 }
 
-function lagre() {
+// Unik id (UUID). crypto.randomUUID finnes ikke når siden åpnes direkte fra disken.
+function lagNyId() {
+  if (window.crypto?.randomUUID) return crypto.randomUUID();
+  return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+    (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16));
+}
+
+function naa() { return new Date().toISOString(); }
+
+// Lagrer bare på enheten. Brukes av synken selv.
+function lagreLokalt() {
   try {
     localStorage.setItem(LAGRINGSNOKKEL, JSON.stringify(lagret));
   } catch (feil) {
@@ -57,15 +85,38 @@ function lagre() {
   }
 }
 
+// Lagrer på enheten og sender endringen til skyen hvis man er innlogget.
+function lagre() {
+  if (bruker) lagret.usynket = true;
+  lagreLokalt();
+  planleggSynk();
+}
+
+// Fjerner fremgang, resultater og skjulte kort fra enheten (f.eks. ved utlogging).
+function tomLokalFremgang() {
+  const { endringer } = lagret; // admins redigeringer beholdes
+  lagret = tomLagring();
+  lagret.endringer = endringer;
+  lagreLokalt();
+}
+
 // =====================================================================
 // 2. Data og hjelpefunksjoner
 // =====================================================================
 
-// Bruker den redigerte versjonen der den finnes, og hopper over slettede.
+function erSkjult(id) { return Boolean(lagret.skjult[id]?.skjult); }
+
+// Bruker den redigerte versjonen der den finnes, og hopper over skjulte.
 function medEndringer(liste) {
   return liste
-    .filter(x => !lagret.slettet.includes(x.id))
+    .filter(x => !erSkjult(x.id))
     .map(x => lagret.endringer[x.id] || x);
+}
+
+// Finner et kort eller spørsmål på id, også om det er skjult.
+function finnElement(id) {
+  const x = KORT.find(k => k.id === id) || OPPGAVER.find(o => o.id === id);
+  return x && (lagret.endringer[id] || x);
 }
 
 function alleKort() { return medEndringer(KORT); }
@@ -149,7 +200,11 @@ function visHjem() {
   const forFa = oppgaver.length > 0 && oppgaver.length < Number(antallValgt)
     ? `<p class="dempet">Utvalget har bare ${oppgaver.length} spørsmål, så runden får ${oppgaver.length}.</p>` : "";
 
+  const antallSkjulte = Object.values(lagret.skjult).filter(s => s.skjult).length;
+
   vis("hjem", `
+    ${kontoPanel()}
+
     <section class="panel">
       <h2>Hva vil du øve på?</h2>
       <div class="filtre">
@@ -185,19 +240,45 @@ function visHjem() {
     </section>
 
     <section class="panel">
-      <h2>Administrer</h2>
+      <h2>Innstillinger</h2>
       <div class="knapperad">
-        <button data-handling="rediger-liste">Rediger kort og spørsmål</button>
+        ${erAdmin() ? `<button data-handling="rediger-liste">Rediger kort og spørsmål</button>` : ""}
+        <button data-handling="vis-skjulte">Skjulte kort og spørsmål${antallSkjulte ? ` (${antallSkjulte})` : ""}</button>
         <button data-handling="eksporter">Last ned sikkerhetskopi</button>
         <label class="knapp" style="margin:0;font-weight:normal">Hent sikkerhetskopi
           <input type="file" id="importer" accept=".json,application/json" hidden>
         </label>
         <button data-handling="nullstill">Nullstill fremgang</button>
       </div>
-      <p class="dempet">Fremgangen lagres bare i denne nettleseren. Bruk sikkerhetskopi for å flytte den
-        mellom PC og mobil.</p>
     </section>
   `);
+}
+
+// Øverst på forsiden: hvem som er innlogget og om synken er ferdig.
+function kontoPanel() {
+  if (!innloggingSattOpp) return "";
+  if (!sky) {
+    return `<section class="panel konto"><p class="dempet">Innlogging er ikke tilgjengelig akkurat nå
+      (ingen nett?). Fremgangen lagres på denne enheten.</p></section>`;
+  }
+  if (!bruker) {
+    return `
+      <section class="panel konto">
+        <p>Logg inn for å lagre fremgangen i skyen og bruke den på både PC og mobil.
+          Uten konto lagres alt bare på denne enheten.</p>
+        <button class="hoved" data-handling="vis-logg-inn">Logg inn eller lag konto</button>
+      </section>`;
+  }
+  return `
+    <section class="panel konto">
+      <div class="kontolinje">
+        <div>
+          <b>${esc(bruker.epost)}</b>${erAdmin() ? ` <span class="merke">Admin</span>` : ""}<br>
+          <span class="dempet" id="synkstatus">${esc(synkStatus)}</span>
+        </div>
+        <button data-handling="logg-ut">Logg ut</button>
+      </div>
+    </section>`;
 }
 
 // =====================================================================
@@ -261,10 +342,18 @@ function visKort() {
     </article>
     ${svarknapper}
     <div class="knapperad liten">
-      <button data-handling="rediger" data-type="kort" data-id="${k.id}">Rediger eller slett kortet</button>
+      ${elementKnapper("kort", k.id)}
       <button data-handling="hjem">Avslutt</button>
     </div>
   `);
+}
+
+// Knapper under et kort/spørsmål: admin redigerer, alle kan skjule for seg selv og melde feil.
+function elementKnapper(type, id) {
+  return `
+    ${erAdmin() ? `<button data-handling="rediger" data-type="${type}" data-id="${id}">Rediger</button>` : ""}
+    <button data-handling="skjul" data-id="${id}">Skjul for meg</button>
+    <button data-handling="meld-feil" data-id="${id}">Meld feil</button>`;
 }
 
 function svarKort(svar) {
@@ -273,6 +362,7 @@ function svarKort(svar) {
   if (svar === "kunne") lagret.bokser[id] = b === 0 ? 2 : Math.min(5, b + 1);
   if (svar === "usikker") lagret.bokser[id] = Math.max(1, b - 1);
   if (svar === "ikke") lagret.bokser[id] = 1;
+  lagret.boksTid[id] = naa();
   okt.telling[svar]++;
   lagre();
   nesteKort();
@@ -346,9 +436,7 @@ function visSporsmal() {
         <p class="kilde">Kilde: ${esc(kildeOppgave(o))} · Fasit: ${esc(o.fasit)}</p>
       </div>
       <button class="hoved" data-handling="neste">${erSiste ? "Se resultat" : "Neste spørsmål"}</button>
-      <div class="knapperad liten">
-        <button data-handling="rediger" data-type="sporsmal" data-id="${o.id}">Rediger eller slett spørsmålet</button>
-      </div>`;
+      <div class="knapperad liten">${elementKnapper("sporsmal", o.id)}</div>`;
   }
 
   vis("flervalg", `
@@ -442,7 +530,8 @@ function lagreRunde(antallRiktig, prosent, karakter, perTema) {
   if (runde.lagret) return;
   runde.lagret = true;
   lagret.resultater.push({
-    dato: new Date().toISOString(),
+    id: lagNyId(),
+    dato: naa(),
     beskrivelse: runde.beskrivelse,
     antall: runde.resultater.length,
     riktige: antallRiktig,
@@ -606,7 +695,6 @@ let listeValg = { type: "kort", sok: "" };
 let etterRedigering = visHjem;
 
 function visRedigerListe() {
-  const antallSlettet = lagret.slettet.length;
   vis("liste", `
     <section class="panel">
       <h2>Rediger kort og spørsmål</h2>
@@ -615,7 +703,6 @@ function visRedigerListe() {
         <button class="${listeValg.type === "sporsmal" ? "aktiv" : ""}" data-handling="fane" data-type="sporsmal">Flervalgsspørsmål</button>
       </div>
       <input id="sok" type="search" placeholder="Søk i tekst eller tema …" value="${esc(listeValg.sok)}">
-      ${antallSlettet ? `<div class="knapperad liten"><button data-handling="gjenopprett">Gjenopprett ${antallSlettet} slettede</button></div>` : ""}
       <ul id="liste" class="liste">${lagListe()}</ul>
     </section>
   `);
@@ -637,7 +724,6 @@ function lagListe() {
       ${esc(erKort ? x.forside : x.tekst.slice(0, 160))}
       <div class="knapperad liten">
         <button data-handling="rediger" data-type="${listeValg.type}" data-id="${x.id}">Rediger</button>
-        <button data-handling="slett" data-id="${x.id}">Slett</button>
       </div>
     </li>`).join("");
 }
@@ -672,7 +758,6 @@ function visRediger(type, id) {
         <button class="hoved" type="submit">Lagre</button>
         <button type="button" data-handling="avbryt">Avbryt</button>
         ${lagret.endringer[id] ? `<button type="button" data-handling="tilbakestill" data-id="${id}">Tilbakestill til original</button>` : ""}
-        <button type="button" data-handling="slett" data-id="${id}">Slett</button>
       </div>
     </form>
   `);
@@ -704,17 +789,196 @@ function lagreRedigering(skjema) {
   etterRedigering();
 }
 
-function slett(id) {
-  if (!confirm("Vil du slette dette? Du kan gjenopprette det senere fra redigeringslista.")) return;
-  lagret.slettet.push(id);
-  lagre();
-  // Fra lista blir vi værende i lista; ellers går vi tilbake dit vi kom fra.
-  if (skjerm === "liste") visRedigerListe();
-  else etterRedigering();
+// Hvor man skal tilbake etter redigering, skjuling eller feilmelding.
+function tilbakeFunksjon() {
+  if (skjerm === "kort") return fortsettKort;
+  if (skjerm === "flervalg") return fortsettFlervalg;
+  if (skjerm === "skjulte") return visSkjulte;
+  if (skjerm === "liste") return visRedigerListe;
+  return visHjem;
 }
 
 // =====================================================================
-// 7. Sikkerhetskopi
+// 7. Konto: innlogging, passord, skjul for meg og meld feil
+// =====================================================================
+
+const PERSONVERN = `Når du lager konto, lagres e-postadressen din, fremgangen din (flashcards,
+  flervalgsresultater og statistikk per tema), feil du melder fra om, og når du sist var aktiv.
+  Dataene lagres hos Supabase i EU og brukes bare i denne appen. Appens administrator kan se
+  e-postadressen og statistikken din, men aldri passordet ditt. Du kan når som helst be
+  administrator om å slette kontoen og dataene dine.`;
+
+let innloggingFane = "logg-inn";
+
+function visLoggInn() {
+  const erNy = innloggingFane === "ny-konto";
+  vis("logginn", `
+    <section class="panel">
+      <div class="faner">
+        <button class="${erNy ? "" : "aktiv"}" data-handling="innlogging-fane" data-fane="logg-inn">Logg inn</button>
+        <button class="${erNy ? "aktiv" : ""}" data-handling="innlogging-fane" data-fane="ny-konto">Ny konto</button>
+      </div>
+      <form id="${erNy ? "registrerskjema" : "logginnskjema"}">
+        <label>E-post<input type="email" name="epost" autocomplete="email" required></label>
+        <label>Passord<input type="password" name="passord" minlength="6" required
+          autocomplete="${erNy ? "new-password" : "current-password"}"></label>
+        ${erNy ? `
+          <p class="dempet personvern">${PERSONVERN}</p>
+          <label class="avkrysning"><input type="checkbox" name="godtar" required>
+            Jeg har lest dette og godtar at dataene lagres</label>` : ""}
+        <p class="skjemamelding" role="status"></p>
+        <button class="hoved" type="submit">${erNy ? "Lag konto" : "Logg inn"}</button>
+      </form>
+      ${erNy ? "" : `<div class="knapperad liten"><button data-handling="glemt-passord">Glemt passord?</button></div>`}
+      <p class="dempet">Du forblir innlogget på denne enheten til du logger ut.</p>
+    </section>
+  `);
+}
+
+function visGlemtPassord() {
+  vis("logginn", `
+    <form class="panel" id="glemtskjema">
+      <h2>Glemt passord</h2>
+      <p class="dempet">Skriv e-postadressen din, så får du en lenke for å lage nytt passord.</p>
+      <label>E-post<input type="email" name="epost" autocomplete="email" required></label>
+      <p class="skjemamelding" role="status"></p>
+      <button class="hoved" type="submit">Send lenke</button>
+    </form>
+  `);
+}
+
+// Vises når man kommer tilbake fra lenken i «glemt passord»-e-posten.
+function visNyttPassord() {
+  vis("nyttpassord", `
+    <form class="panel" id="nyttpassordskjema">
+      <h2>Lag nytt passord</h2>
+      <label>Nytt passord<input type="password" name="passord" minlength="6" autocomplete="new-password" required></label>
+      <p class="skjemamelding" role="status"></p>
+      <button class="hoved" type="submit">Lagre passord</button>
+    </form>
+  `);
+}
+
+function skjemaMelding(skjema, tekst, erFeil) {
+  const el = skjema.querySelector(".skjemamelding");
+  el.textContent = tekst;
+  el.classList.toggle("feil", Boolean(erFeil));
+}
+
+// Felles for alle skjemaene på konto-sidene. Knappen låses mens vi venter på serveren.
+async function sendKontoskjema(skjema) {
+  const data = new FormData(skjema);
+  const epost = (data.get("epost") || "").trim();
+  const passord = data.get("passord");
+  const knapp = skjema.querySelector("button[type=submit]");
+  knapp.disabled = true;
+  skjemaMelding(skjema, "Vent litt …");
+
+  try {
+    if (skjema.id === "logginnskjema") {
+      const feil = await loggInn(epost, passord);
+      // Gikk det bra, viser vedInnloggingEndret() forsiden.
+      if (feil) skjemaMelding(skjema, feil, true);
+    } else if (skjema.id === "registrerskjema") {
+      const svar = await registrer(epost, passord);
+      if (svar.feil) skjemaMelding(skjema, svar.feil, true);
+      else if (svar.maBekrefte) skjemaMelding(skjema, "Kontoen er laget. Sjekk e-posten din og trykk på lenken for å bekrefte den.");
+    } else if (skjema.id === "glemtskjema") {
+      const feil = await glemtPassord(epost);
+      skjemaMelding(skjema, feil || "Hvis det finnes en konto med denne adressen, er lenken sendt nå.", Boolean(feil));
+    } else if (skjema.id === "nyttpassordskjema") {
+      const feil = await settNyttPassord(passord);
+      if (feil) skjemaMelding(skjema, feil, true);
+      else { alert("Passordet er endret."); visHjem(); }
+    }
+  } finally {
+    knapp.disabled = false;
+  }
+}
+
+// Kalles fra sky.js når man logger inn eller ut.
+function vedInnloggingEndret() {
+  if (skjerm === "hjem" || (skjerm === "logginn" && bruker)) visHjem();
+}
+
+// Kalles fra sky.js når synken har hentet ned endringer fra andre enheter.
+function vedSynkFerdig() {
+  if (skjerm === "hjem") visHjem();
+  if (skjerm === "historikk") visMineResultater();
+}
+
+function skjul(id) {
+  lagret.skjult[id] = { skjult: true, tid: naa() };
+  lagre();
+  tilbakeFunksjon()();
+}
+
+function visSkjulte() {
+  const skjulte = Object.keys(lagret.skjult).filter(erSkjult).map(finnElement).filter(Boolean);
+  vis("skjulte", `
+    <section class="panel">
+      <h2>Skjulte kort og spørsmål</h2>
+      <p class="dempet">Disse har du skjult for deg selv. De kommer ikke i flashcards eller flervalg
+        før du viser dem igjen.</p>
+      <ul class="liste">
+        ${skjulte.length ? skjulte.map(x => `
+          <li>
+            <span class="dempet">${esc(x.forside ? kildeKort(x) : kildeOppgave(x))} · ${esc(x.tema)}</span><br>
+            ${esc((x.forside || x.tekst).slice(0, 160))}
+            <div class="knapperad liten"><button data-handling="vis-igjen" data-id="${x.id}">Vis igjen</button></div>
+          </li>`).join("") : `<li class="dempet">Du har ikke skjult noe.</li>`}
+      </ul>
+    </section>
+  `);
+}
+
+let feilmeldingTilbake = visHjem;
+
+function visMeldFeil(id) {
+  const x = finnElement(id);
+  if (!sky) {
+    return vis("meldfeil", `
+      <section class="panel">
+        <h2>Meld feil</h2>
+        <p>Å melde feil krever innlogging, og det er ikke tilgjengelig akkurat nå.</p>
+        <div class="knapperad liten"><button data-handling="avbryt-melding">Tilbake</button></div>
+      </section>`);
+  }
+  if (!bruker) {
+    return vis("meldfeil", `
+      <section class="panel">
+        <h2>Meld feil</h2>
+        <p>Du må være innlogget for å melde feil, så administrator kan se hvem som har meldt fra.</p>
+        <button class="hoved" data-handling="vis-logg-inn">Logg inn eller lag konto</button>
+        <div class="knapperad liten"><button data-handling="avbryt-melding">Tilbake</button></div>
+      </section>`);
+  }
+  vis("meldfeil", `
+    <form class="panel" id="meldskjema" data-id="${id}">
+      <h2>Meld feil</h2>
+      <p class="dempet">${esc(x.forside ? kildeKort(x) : kildeOppgave(x))}</p>
+      <p>${esc(x.forside || x.tekst)}</p>
+      <label>Hva er feil?<textarea name="melding" rows="4" maxlength="2000" required
+        placeholder="F.eks. «Riktig svar skal være C, se forelesning 5.»"></textarea></label>
+      <p class="skjemamelding" role="status"></p>
+      <button class="hoved" type="submit">Send</button>
+      <div class="knapperad liten"><button type="button" data-handling="avbryt-melding">Avbryt</button></div>
+    </form>
+  `);
+}
+
+async function sendMeldFeil(skjema) {
+  const knapp = skjema.querySelector("button[type=submit]");
+  knapp.disabled = true;
+  const feil = await sendFeilmelding(skjema.dataset.id, new FormData(skjema).get("melding").trim());
+  knapp.disabled = false;
+  if (feil) return skjemaMelding(skjema, feil, true);
+  alert("Takk! Administrator får se meldingen.");
+  feilmeldingTilbake();
+}
+
+// =====================================================================
+// 8. Sikkerhetskopi
 // =====================================================================
 
 function eksporter() {
@@ -731,13 +995,19 @@ function importer(fil) {
     .then(tekst => {
       const data = JSON.parse(tekst);
       if (typeof data !== "object" || !data.bokser) throw new Error("Feil format");
-      lagret = {
-        bokser: data.bokser || {},
+      const { eier, profil } = lagret; // kontoen man er innlogget på, beholdes
+      lagret = Object.assign(tomLagring(), {
+        bokser: data.bokser,
+        boksTid: data.boksTid || {},
         endringer: data.endringer || {},
-        slettet: data.slettet || [],
-        resultater: data.resultater || []
-      };
-      gammeltNavnTilNytt();
+        skjult: data.skjult || {},
+        slettet: data.slettet, // fra eldre versjoner; gjøres om i oppgraderLagring()
+        resultater: data.resultater || [],
+        eier, profil
+      });
+      // Kort uten tidspunkt regnes som besvart nå, så de vinner over det som ligger i skyen.
+      Object.keys(lagret.bokser).forEach(id => { if (!lagret.boksTid[id]) lagret.boksTid[id] = naa(); });
+      oppgraderLagring();
       lagre();
       alert("Sikkerhetskopien er hentet inn.");
       visHjem();
@@ -764,8 +1034,12 @@ const HANDLINGER = {
     HANDLINGER["start-flervalg"]();
   },
   "mine-resultater": () => visMineResultater(),
-  "slett-historikk": () => {
+  "slett-historikk": async () => {
     if (!confirm("Vil du slette alle lagrede resultater? Dette kan ikke angres.")) return;
+    if (bruker) {
+      const feil = await slettSkyResultater();
+      if (feil) return alert("Fikk ikke slettet resultatene i skyen. " + feil);
+    }
     lagret.resultater = [];
     lagre();
     visMineResultater();
@@ -776,30 +1050,45 @@ const HANDLINGER = {
   "rediger-liste": () => visRedigerListe(),
   "fane": el => { listeValg.type = el.dataset.type; visRedigerListe(); },
   "rediger": el => {
-    // Husk hvor vi skal tilbake etter redigeringen.
-    if (skjerm === "kort") etterRedigering = fortsettKort;
-    else if (skjerm === "flervalg") etterRedigering = fortsettFlervalg;
-    else etterRedigering = visRedigerListe;
+    etterRedigering = tilbakeFunksjon(); // husk hvor vi skal tilbake etterpå
     visRediger(el.dataset.type, el.dataset.id);
   },
   "avbryt": () => etterRedigering(),
-  "slett": el => slett(el.dataset.id),
   "tilbakestill": el => {
-    if (!confirm("Vil du fjerne endringene dine og gå tilbake til originalen?")) return;
+    if (!confirm("Vil du fjerne endringene og gå tilbake til originalen?")) return;
     delete lagret.endringer[el.dataset.id];
     lagre();
     etterRedigering();
   },
-  "gjenopprett": () => {
-    if (!confirm("Vil du gjenopprette alle slettede kort og spørsmål?")) return;
-    lagret.slettet = [];
+  "skjul": el => skjul(el.dataset.id),
+  "vis-skjulte": () => visSkjulte(),
+  "vis-igjen": el => {
+    lagret.skjult[el.dataset.id] = { skjult: false, tid: naa() };
     lagre();
-    visRedigerListe();
+    visSkjulte();
+  },
+  "meld-feil": el => {
+    feilmeldingTilbake = tilbakeFunksjon();
+    visMeldFeil(el.dataset.id);
+  },
+  "avbryt-melding": () => feilmeldingTilbake(),
+  "vis-logg-inn": () => { innloggingFane = "logg-inn"; visLoggInn(); },
+  "innlogging-fane": el => { innloggingFane = el.dataset.fane; visLoggInn(); },
+  "glemt-passord": () => visGlemtPassord(),
+  "logg-ut": async () => {
+    if (!confirm("Vil du logge ut? Fremgangen er lagret i kontoen din og hentes ned igjen når du logger inn.")) return;
+    await loggUt();
+    visHjem();
   },
   "eksporter": () => eksporter(),
-  "nullstill": () => {
-    if (!confirm("Vil du nullstille fremgangen for flashcards? Redigeringene dine beholdes.")) return;
+  "nullstill": async () => {
+    if (!confirm("Vil du nullstille fremgangen for flashcards?")) return;
+    if (bruker) {
+      const feil = await slettSkyFremgang();
+      if (feil) return alert("Fikk ikke nullstilt fremgangen i skyen. " + feil);
+    }
     lagret.bokser = {};
+    lagret.boksTid = {};
     lagre();
     visHjem();
   }
@@ -828,7 +1117,10 @@ app.addEventListener("input", hendelse => {
 
 app.addEventListener("submit", hendelse => {
   hendelse.preventDefault();
-  lagreRedigering(hendelse.target);
+  const skjema = hendelse.target;
+  if (skjema.id === "redigerskjema") lagreRedigering(skjema);
+  else if (skjema.id === "meldskjema") sendMeldFeil(skjema);
+  else sendKontoskjema(skjema);
 });
 
 hjemKnapp.addEventListener("click", visHjem);
@@ -856,3 +1148,4 @@ document.addEventListener("keydown", hendelse => {
 // Start appen
 lastInn();
 visHjem();
+startSky();
