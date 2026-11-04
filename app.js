@@ -10,7 +10,7 @@
 //   3. Forside
 //   4. Flashcards     – bokssystem: kort du ikke kan, kommer oftere
 //   5. Flervalg       – runde med poengsum, karakter og svake tema, og «Mine resultater»
-//   6. Redigering     – endre kort og spørsmål (bare admin)
+//   6. Adminpanel     – brukere, innhold (for alle brukere) og feilmeldinger. Bare for admin.
 //   7. Konto          – innlogging, registrering, passord, skjul for meg og meld feil
 //   8. Sikkerhetskopi – laste ned / hente inn fremgang og endringer
 //   9. Hendelser      – kobler knapper og taster til funksjonene over
@@ -25,7 +25,8 @@ const LAGRINGSNOKKEL = "aut2201-eksamensoving";
 
 // bokser:     hvilken boks (1–5) hvert flashcard ligger i. Mangler = nytt kort.
 // boksTid:    når hvert kort sist ble besvart (brukes til å avgjøre hva som er nyest ved synk).
-// endringer:  redigerte kort/spørsmål, lagret som hele objekter under sin id.
+// innhold:    admins endringer fra databasen (kopi, så de finnes også uten nett): { id: { type, data, slettet } }.
+// endringer:  eldre, lokale redigeringer fra før appen fikk adminpanel.
 // skjult:     kort/spørsmål man har skjult for seg selv: { id: { skjult, tid } }.
 // resultater: fullførte flervalgsrunder med karakter (se lagreRunde()).
 // eier:       id-en til kontoen fremgangen tilhører (null = ikke koblet til noen konto ennå).
@@ -33,7 +34,7 @@ const LAGRINGSNOKKEL = "aut2201-eksamensoving";
 // usynket:    true hvis det finnes endringer som ikke er sendt til skyen ennå.
 function tomLagring() {
   return {
-    bokser: {}, boksTid: {}, endringer: {}, skjult: {}, resultater: [],
+    bokser: {}, boksTid: {}, innhold: {}, endringer: {}, skjult: {}, resultater: [],
     eier: null, profil: null, usynket: false
   };
 }
@@ -94,8 +95,9 @@ function lagre() {
 
 // Fjerner fremgang, resultater og skjulte kort fra enheten (f.eks. ved utlogging).
 function tomLokalFremgang() {
-  const { endringer } = lagret; // admins redigeringer beholdes
+  const { innhold, endringer } = lagret; // innholdet er felles for alle og beholdes
   lagret = tomLagring();
+  lagret.innhold = innhold;
   lagret.endringer = endringer;
   lagreLokalt();
 }
@@ -106,24 +108,40 @@ function tomLokalFremgang() {
 
 function erSkjult(id) { return Boolean(lagret.skjult[id]?.skjult); }
 
-// Bruker den redigerte versjonen der den finnes, og hopper over skjulte.
-function medEndringer(liste) {
-  return liste
-    .filter(x => !erSkjult(x.id))
-    .map(x => lagret.endringer[x.id] || x);
+// Setter sammen innholdet:
+//   1. grunninnholdet fra datafilene (KORT / OPPGAVER)
+//   2. admins endringer, nye kort/spørsmål og slettinger fra databasen (lagret.innhold)
+//   3. eldre lokale redigeringer (lagret.endringer), der admin ikke har endret noe
+// type er "kort" eller "sporsmal". Skjulte er med; bruk alleKort()/alleOppgaver() for å fjerne dem.
+function sammensatt(type, grunnlag) {
+  const iDatafilene = new Set(grunnlag.map(x => x.id));
+  const nye = Object.entries(lagret.innhold)
+    .filter(([id, r]) => r.type === type && !iDatafilene.has(id))
+    .map(([id, r]) => ({ ...r.data, id }));
+  return [...grunnlag, ...nye]
+    .filter(x => !lagret.innhold[x.id]?.slettet)
+    .map(x => lagret.innhold[x.id] ? { ...lagret.innhold[x.id].data, id: x.id } : (lagret.endringer[x.id] || x));
 }
+
+function alleKort() { return sammensatt("kort", KORT).filter(x => !erSkjult(x.id)); }
+function alleOppgaver() { return sammensatt("sporsmal", OPPGAVER).filter(x => !erSkjult(x.id)); }
+
+function typeFor(x) { return "forside" in x ? "kort" : "sporsmal"; }
 
 // Finner et kort eller spørsmål på id, også om det er skjult.
 function finnElement(id) {
-  const x = KORT.find(k => k.id === id) || OPPGAVER.find(o => o.id === id);
-  return x && (lagret.endringer[id] || x);
+  return [...sammensatt("kort", KORT), ...sammensatt("sporsmal", OPPGAVER)].find(x => x.id === id);
 }
 
-function alleKort() { return medEndringer(KORT); }
-function alleOppgaver() { return medEndringer(OPPGAVER); }
-
-const TEMAER = [...new Set(OPPGAVER.map(o => o.tema))].sort((a, b) => a.localeCompare(b, "no"));
-const EKSAMENER = [...new Set(OPPGAVER.map(o => o.eksamen))];
+// Temaer og eksamener regnes ut fra innholdet, så nye temaer fra admin kommer med.
+function temaer() {
+  const alle = [...sammensatt("sporsmal", OPPGAVER), ...sammensatt("kort", KORT)];
+  return [...new Set(alle.map(x => x.tema))].sort((a, b) => a.localeCompare(b, "no"));
+}
+function eksamener() {
+  const alle = [...sammensatt("sporsmal", OPPGAVER), ...sammensatt("kort", KORT)];
+  return [...new Set(alle.map(x => x.eksamen))];
+}
 
 // Filteret på forsiden gjelder både flashcards og flervalg.
 let filter = { tema: "", eksamen: "" };
@@ -138,7 +156,9 @@ function filtrert(liste) {
 }
 
 function kildeOppgave(o) { return `${o.eksamen}, oppg. ${o.nr}`; }
-function kildeKort(k) { return `${k.eksamen}, oppg. ${k.oppgaver.join(", ")}`; }
+function kildeKort(k) {
+  return k.oppgaver?.length ? `${k.eksamen}, oppg. ${k.oppgaver.join(", ")}` : k.eksamen;
+}
 
 // Gjør tekst trygg å sette inn i HTML (så f.eks. «<» ikke tolkes som kode).
 function esc(tekst) {
@@ -190,9 +210,9 @@ function visHjem() {
   const boksnavn = ["Nye", "Boks 1", "Boks 2", "Boks 3", "Boks 4", "Boks 5"];
   const sisteRunde = lagret.resultater[lagret.resultater.length - 1];
 
-  const temaValg = TEMAER.map(t =>
+  const temaValg = temaer().map(t =>
     `<option ${t === filter.tema ? "selected" : ""}>${esc(t)}</option>`).join("");
-  const eksamenValg = EKSAMENER.map(e =>
+  const eksamenValg = eksamener().map(e =>
     `<option ${e === filter.eksamen ? "selected" : ""}>${esc(e)}</option>`).join("");
   const antallValg = ANTALL_VALG.map(a =>
     `<option value="${a}" ${a === antallValgt ? "selected" : ""}>${a} spørsmål</option>`).join("");
@@ -242,7 +262,6 @@ function visHjem() {
     <section class="panel">
       <h2>Innstillinger</h2>
       <div class="knapperad">
-        ${erAdmin() ? `<button data-handling="rediger-liste">Rediger kort og spørsmål</button>` : ""}
         <button data-handling="vis-skjulte">Skjulte kort og spørsmål${antallSkjulte ? ` (${antallSkjulte})` : ""}</button>
         <button data-handling="eksporter">Last ned sikkerhetskopi</button>
         <label class="knapp" style="margin:0;font-weight:normal">Hent sikkerhetskopi
@@ -278,6 +297,7 @@ function kontoPanel() {
         </div>
         <button data-handling="logg-ut">Logg ut</button>
       </div>
+      ${erAdmin() ? `<button class="hoved" data-handling="admin">Adminpanel</button>` : ""}
     </section>`;
 }
 
@@ -686,21 +706,112 @@ function visMineResultater() {
 }
 
 // =====================================================================
-// 6. Redigering
+// 6. Adminpanel: brukere, innhold og feilmeldinger
 // =====================================================================
+// Panelet vises bare for admin, men det er databasen og serverfunksjonen som faktisk
+// sjekker rollen. En vanlig bruker som fikser frem knappene, blir likevel avvist.
 
-let listeValg = { type: "kort", sok: "" };
+function adminFaner(aktiv) {
+  const fane = (navn, tekst) =>
+    `<button class="${aktiv === navn ? "aktiv" : ""}" data-handling="admin-fane" data-fane="${navn}">${tekst}</button>`;
+  return `
+    <section class="panel">
+      <h2>Adminpanel</h2>
+      <div class="faner">${fane("brukere", "Brukere")}${fane("innhold", "Innhold")}${fane("feil", "Feilmeldinger")}</div>
+    </section>`;
+}
+
+function datoTekst(iso) { return iso ? formaterDato(iso) : "aldri"; }
+
+// ---------- Brukere ----------
+
+async function visAdminBrukere() {
+  vis("admin-brukere", adminFaner("brukere") + `<section class="panel"><p class="dempet">Laster brukere …</p></section>`);
+  let brukere;
+  try {
+    brukere = await hentBrukeroversikt();
+  } catch (feil) {
+    if (skjerm === "admin-brukere") {
+      app.querySelector("section:last-child").innerHTML = `<p class="feiltekst">${esc(feil.message)}</p>`;
+    }
+    return;
+  }
+  if (skjerm !== "admin-brukere") return; // brukeren har gått videre mens vi ventet
+
+  const rad = b => {
+    const erMeg = b.id === bruker.id;
+    const knapp = (handling, tekst) =>
+      `<button data-handling="admin-bruker" data-hva="${handling}" data-id="${b.id}" data-epost="${esc(b.epost)}">${tekst}</button>`;
+    return `
+      <li class="brukerrad">
+        <div>
+          <b>${esc(b.epost)}</b>
+          ${b.rolle === "admin" ? `<span class="merke">Admin</span>` : ""}
+          ${b.blokkert ? `<span class="merke varsel">Blokkert</span>` : ""}
+          ${erMeg ? `<span class="merke">Deg</span>` : ""}
+        </div>
+        <div class="dempet">Registrert ${esc(datoTekst(b.opprettet))} · Sist aktiv ${esc(datoTekst(b.sist_aktiv || b.sist_innlogget))}</div>
+        <div class="dempet">${b.antall_runder} runder${b.snitt_prosent !== null ? ` · snitt ${b.snitt_prosent} % (${karakterFor(Number(b.snitt_prosent))})` : ""}
+          · ${b.kort_ovd} kort øvd · ${b.antall_feilmeldinger} feilmeldinger</div>
+        ${erMeg ? "" : `
+          <div class="knapperad liten">
+            ${b.rolle === "admin" ? knapp("fjern-admin", "Fjern admin") : knapp("gjor-admin", "Gjør til admin")}
+            ${b.blokkert ? knapp("opphev-blokkering", "Opphev blokkering") : knapp("blokker", "Blokker")}
+            ${knapp("slett", "Slett bruker")}
+          </div>`}
+      </li>`;
+  };
+
+  vis("admin-brukere", adminFaner("brukere") + `
+    <section class="panel">
+      <p class="dempet">${brukere.length} brukere.</p>
+      <ul class="liste">${brukere.map(rad).join("")}</ul>
+    </section>`);
+}
+
+const ADMIN_SPORSMAL = {
+  "gjor-admin": e => `Gjøre ${e} til admin?\n\nAdmin kan se alle brukere, redigere innhold og blokkere og slette brukere.`,
+  "fjern-admin": e => `Fjerne admin-rollen fra ${e}?`,
+  "blokker": e => `Blokkere ${e}?\n\nBrukeren blir logget ut og kan ikke logge inn eller lagre noe før blokkeringen oppheves.`,
+  "opphev-blokkering": e => `Oppheve blokkeringen av ${e}?`,
+  "slett": e => `SLETTE kontoen ${e}?\n\nAll fremgang, alle resultater og feilmeldinger fra brukeren slettes for godt. Dette kan ikke angres.`
+};
+
+async function utforAdminHandling(el) {
+  const { hva, id, epost } = el.dataset;
+  if (!confirm(ADMIN_SPORSMAL[hva](epost))) return;
+  el.disabled = true;
+  const feil = await adminHandling(hva, id);
+  if (feil) alert(feil);
+  visAdminBrukere();
+}
+
+// ---------- Innhold ----------
+
+let listeValg = { type: "kort", sok: "", slettede: false };
 
 // Hva som skal skje etter lagring/avbryt/sletting – avhenger av hvor man kom fra.
 let etterRedigering = visHjem;
 
+function slettedeElementer(type) {
+  return Object.entries(lagret.innhold)
+    .filter(([, r]) => r.type === type && r.slettet)
+    .map(([id, r]) => ({ ...r.data, id }));
+}
+
 function visRedigerListe() {
-  vis("liste", `
+  const type = listeValg.type;
+  const antallSlettede = slettedeElementer(type).length;
+  vis("liste", adminFaner("innhold") + `
     <section class="panel">
-      <h2>Rediger kort og spørsmål</h2>
       <div class="faner">
-        <button class="${listeValg.type === "kort" ? "aktiv" : ""}" data-handling="fane" data-type="kort">Flashcards</button>
-        <button class="${listeValg.type === "sporsmal" ? "aktiv" : ""}" data-handling="fane" data-type="sporsmal">Flervalgsspørsmål</button>
+        <button class="${type === "kort" ? "aktiv" : ""}" data-handling="fane" data-type="kort">Flashcards</button>
+        <button class="${type === "sporsmal" ? "aktiv" : ""}" data-handling="fane" data-type="sporsmal">Flervalgsspørsmål</button>
+      </div>
+      <p class="dempet">Endringer her gjelder for alle brukere.</p>
+      <div class="knapperad liten">
+        <button data-handling="nytt-element" data-type="${type}">+ Nytt ${type === "kort" ? "flashcard" : "spørsmål"}</button>
+        <button data-handling="vis-slettede">${listeValg.slettede ? "Vis aktive" : `Slettede (${antallSlettede})`}</button>
       </div>
       <input id="sok" type="search" placeholder="Søk i tekst eller tema …" value="${esc(listeValg.sok)}">
       <ul id="liste" class="liste">${lagListe()}</ul>
@@ -711,7 +822,9 @@ function visRedigerListe() {
 function lagListe() {
   const sok = listeValg.sok.toLowerCase();
   const erKort = listeValg.type === "kort";
-  const elementer = erKort ? alleKort() : alleOppgaver();
+  const elementer = listeValg.slettede
+    ? slettedeElementer(listeValg.type)
+    : (erKort ? sammensatt("kort", KORT) : sammensatt("sporsmal", OPPGAVER));
 
   const treff = elementer.filter(x =>
     (erKort ? x.forside + " " + x.bakside : x.tekst).toLowerCase().includes(sok) ||
@@ -721,58 +834,91 @@ function lagListe() {
   return treff.map(x => `
     <li>
       <span class="dempet">${esc(erKort ? kildeKort(x) : kildeOppgave(x))} · ${esc(x.tema)}${x.redigert ? " · redigert" : ""}</span><br>
-      ${esc(erKort ? x.forside : x.tekst.slice(0, 160))}
+      ${esc((erKort ? x.forside : x.tekst).slice(0, 160))}
       <div class="knapperad liten">
-        <button data-handling="rediger" data-type="${listeValg.type}" data-id="${x.id}">Rediger</button>
+        ${listeValg.slettede
+          ? `<button data-handling="gjenopprett-innhold" data-id="${x.id}">Gjenopprett</button>`
+          : `<button data-handling="rediger" data-type="${listeValg.type}" data-id="${x.id}">Rediger</button>`}
       </div>
     </li>`).join("");
 }
 
+// Et tomt kort/spørsmål når admin lager noe nytt.
+function nyttElement(type) {
+  const felles = { eksamen: "Egne", tema: temaer()[0], sikkerhet: "høy", forklaring: "" };
+  if (type === "kort") {
+    return { ...felles, id: "K-" + lagNyId(), oppgaver: [], forside: "", bakside: "" };
+  }
+  return { ...felles, id: "S-" + lagNyId(), nr: 0, poeng: 1, tekst: "", figur: null,
+    alternativer: ["", "", "", ""], riktig: 0, fasit: "egen" };
+}
+
+// id = null betyr nytt kort/spørsmål.
 function visRediger(type, id) {
-  const x = (type === "kort" ? alleKort() : alleOppgaver()).find(x => x.id === id);
-  const temaValg = TEMAER.map(t => `<option ${t === x.tema ? "selected" : ""}>${esc(t)}</option>`).join("");
+  const erNy = id === null;
+  const x = erNy ? nyttElement(type) : finnElement(id);
+  const iDatafilene = (type === "kort" ? KORT : OPPGAVER).some(d => d.id === x.id);
 
   const felter = type === "kort" ? `
-      <label>Forside (spørsmål)<textarea name="forside" rows="3">${esc(x.forside)}</textarea></label>
-      <label>Bakside (svar)<textarea name="bakside" rows="3">${esc(x.bakside)}</textarea></label>
-      <label>Forklaring<textarea name="forklaring" rows="3">${esc(x.forklaring)}</textarea></label>`
+      <label>Forside (spørsmål)<textarea name="forside" rows="3" required>${esc(x.forside)}</textarea></label>
+      <label>Bakside (svar)<textarea name="bakside" rows="3" required>${esc(x.bakside)}</textarea></label>
+      <label>Forklaring<textarea name="forklaring" rows="3">${esc(x.forklaring)}</textarea></label>
+      <label>Bygger på oppgave nr. (valgfritt, skill med komma)
+        <input type="search" name="oppgaver" value="${esc(x.oppgaver.join(", "))}"></label>`
     : `
-      <label>Oppgavetekst<textarea name="tekst" rows="5">${esc(x.tekst)}</textarea></label>
+      <label>Oppgavetekst<textarea name="tekst" rows="5" required>${esc(x.tekst)}</textarea></label>
       <fieldset>
         <legend>Alternativer – merk det riktige</legend>
         ${x.alternativer.map((alt, i) => `
           <div class="alt-rad">
             <input type="radio" name="riktig" value="${i}" ${i === x.riktig ? "checked" : ""} aria-label="Alternativ ${i + 1} er riktig">
-            <textarea name="alt${i}" rows="2">${esc(alt)}</textarea>
+            <textarea name="alt${i}" rows="2" required>${esc(alt)}</textarea>
           </div>`).join("")}
       </fieldset>
       <label>Forklaring<textarea name="forklaring" rows="4">${esc(x.forklaring)}</textarea></label>`;
 
   vis("rediger", `
-    <form class="panel" id="redigerskjema" data-type="${type}" data-id="${id}">
-      <h2>Rediger ${type === "kort" ? "flashcard" : "flervalgsspørsmål"}</h2>
-      <p class="dempet">Kilde: ${esc(type === "kort" ? kildeKort(x) : kildeOppgave(x))}</p>
-      <label>Tema<select name="tema">${temaValg}</select></label>
+    <form class="panel" id="redigerskjema" data-type="${type}" data-id="${x.id}" data-ny="${erNy}">
+      <h2>${erNy ? "Nytt" : "Rediger"} ${type === "kort" ? "flashcard" : "flervalgsspørsmål"}</h2>
+      ${erNy ? "" : `<p class="dempet">Kilde: ${esc(type === "kort" ? kildeKort(x) : kildeOppgave(x))}</p>`}
+      <p class="dempet">Endringen lagres for alle brukere.</p>
+      <div class="filtre">
+        <label>Tema<input type="search" name="tema" list="temaliste" value="${esc(x.tema)}" required></label>
+        <label>Eksamen<input type="search" name="eksamen" list="eksamenliste" value="${esc(x.eksamen)}" required></label>
+      </div>
+      <datalist id="temaliste">${temaer().map(t => `<option value="${esc(t)}">`).join("")}</datalist>
+      <datalist id="eksamenliste">${eksamener().map(e => `<option value="${esc(e)}">`).join("")}</datalist>
       ${felter}
+      <p class="skjemamelding" role="status"></p>
       <div class="knapperad">
-        <button class="hoved" type="submit">Lagre</button>
+        <button class="hoved" type="submit">Lagre for alle</button>
         <button type="button" data-handling="avbryt">Avbryt</button>
-        ${lagret.endringer[id] ? `<button type="button" data-handling="tilbakestill" data-id="${id}">Tilbakestill til original</button>` : ""}
+        ${!erNy && iDatafilene && lagret.innhold[x.id]
+          ? `<button type="button" data-handling="tilbakestill" data-id="${x.id}">Tilbakestill til original</button>` : ""}
+        ${erNy ? "" : `<button type="button" data-handling="slett-for-alle" data-id="${x.id}">Slett for alle</button>`}
       </div>
     </form>
   `);
 }
 
-function lagreRedigering(skjema) {
+async function lagreRedigering(skjema) {
   const type = skjema.dataset.type;
   const id = skjema.dataset.id;
+  const erNy = skjema.dataset.ny === "true";
   const data = new FormData(skjema);
-  const gammel = (type === "kort" ? alleKort() : alleOppgaver()).find(x => x.id === id);
-  const ny = { ...gammel, tema: data.get("tema"), forklaring: data.get("forklaring").trim(), redigert: true };
+  const gammel = erNy ? nyttElement(type) : finnElement(id);
+  const ny = {
+    ...gammel, id,
+    tema: data.get("tema").trim(),
+    eksamen: data.get("eksamen").trim(),
+    forklaring: data.get("forklaring").trim(),
+    redigert: !erNy
+  };
 
   if (type === "kort") {
     ny.forside = data.get("forside").trim();
     ny.bakside = data.get("bakside").trim();
+    ny.oppgaver = data.get("oppgaver").split(",").map(s => parseInt(s, 10)).filter(n => !isNaN(n));
   } else {
     ny.tekst = data.get("tekst").trim();
     ny.alternativer = [0, 1, 2, 3].map(i => data.get("alt" + i).trim());
@@ -782,11 +928,104 @@ function lagreRedigering(skjema) {
       ny.fasit = "egen";
       ny.sikkerhet = "høy";
     }
+    // Nye spørsmål får neste ledige nummer i eksamenen de hører til.
+    if (erNy || ny.eksamen !== gammel.eksamen) {
+      const brukt = sammensatt("sporsmal", OPPGAVER).filter(o => o.eksamen === ny.eksamen).map(o => o.nr);
+      ny.nr = Math.max(0, ...brukt) + 1;
+    }
   }
 
-  lagret.endringer[id] = ny;
-  lagre();
+  const knapp = skjema.querySelector("button[type=submit]");
+  knapp.disabled = true;
+  skjemaMelding(skjema, "Lagrer …");
+  const feil = await lagreInnhold(id, type, ny);
+  knapp.disabled = false;
+  if (feil) return skjemaMelding(skjema, feil, true);
   etterRedigering();
+}
+
+async function slettForAlle(id) {
+  const x = finnElement(id);
+  if (!confirm("Slette dette for alle brukere?\n\nDet kan gjenopprettes senere under «Slettede».")) return;
+  const feil = await lagreInnhold(id, typeFor(x), x, true);
+  if (feil) return alert(feil);
+  etterRedigering();
+}
+
+async function gjenopprettInnhold(id) {
+  const r = lagret.innhold[id];
+  const feil = await lagreInnhold(id, r.type, r.data, false);
+  if (feil) return alert(feil);
+  visRedigerListe();
+}
+
+async function tilbakestill(id) {
+  if (!confirm("Fjerne endringene og gå tilbake til originalen fra eksamensfilene? Det gjelder for alle brukere.")) return;
+  const feil = await fjernInnhold(id);
+  if (feil) return alert(feil);
+  etterRedigering();
+}
+
+// Admin kan ha redigert kort lokalt før adminpanelet fantes. Tilbys publisert én gang.
+async function publiserLokaleEndringer() {
+  const ider = Object.keys(lagret.endringer);
+  if (!erAdmin() || ider.length === 0 || lagret.spurtOmPublisering) return;
+  lagret.spurtOmPublisering = true;
+  lagreLokalt();
+  if (!confirm(`Du har ${ider.length} redigerte kort/spørsmål fra før, som bare ligger på denne enheten. Vil du lagre dem for alle brukere?`)) return;
+  for (const id of ider) {
+    const feil = await lagreInnhold(id, typeFor(lagret.endringer[id]), lagret.endringer[id]);
+    if (feil) return alert("Stoppet: " + feil);
+    delete lagret.endringer[id];
+  }
+  lagreLokalt();
+  alert("Endringene er lagret for alle.");
+  visHjem();
+}
+
+// Kalles fra sky.js når admins endringer er hentet fra databasen.
+function vedInnholdHentet() {
+  if (skjerm === "hjem") visHjem();
+}
+
+// ---------- Feilmeldinger ----------
+
+async function visAdminFeil() {
+  vis("admin-feil", adminFaner("feil") + `<section class="panel"><p class="dempet">Laster feilmeldinger …</p></section>`);
+  let meldinger;
+  try {
+    meldinger = await hentFeilmeldinger();
+  } catch (feil) {
+    if (skjerm === "admin-feil") {
+      app.querySelector("section:last-child").innerHTML = `<p class="feiltekst">${esc(feil.message)}</p>`;
+    }
+    return;
+  }
+  if (skjerm !== "admin-feil") return;
+
+  meldinger.sort((a, b) => a.lost - b.lost); // uløste først
+  const rad = m => {
+    const x = finnElement(m.element_id);
+    return `
+      <li class="${m.lost ? "lost" : ""}">
+        <span class="dempet">${x ? esc(x.forside ? kildeKort(x) : kildeOppgave(x)) : "Slettet element"}
+          · fra ${esc(m.profiler?.epost || "slettet bruker")} · ${esc(formaterDato(m.opprettet))}
+          ${m.lost ? " · <b>løst</b>" : ""}</span><br>
+        ${x ? `<i>${esc((x.forside || x.tekst).slice(0, 120))}</i><br>` : ""}
+        <b>«${esc(m.melding)}»</b>
+        <div class="knapperad liten">
+          ${x ? `<button data-handling="rediger" data-type="${typeFor(x)}" data-id="${x.id}">Rediger elementet</button>` : ""}
+          <button data-handling="feil-lost" data-id="${m.id}" data-lost="${!m.lost}">${m.lost ? "Åpne igjen" : "Merk som løst"}</button>
+          <button data-handling="slett-feilmelding" data-id="${m.id}">Slett</button>
+        </div>
+      </li>`;
+  };
+
+  vis("admin-feil", adminFaner("feil") + `
+    <section class="panel">
+      <p class="dempet">${meldinger.filter(m => !m.lost).length} uløste av ${meldinger.length}.</p>
+      <ul class="liste">${meldinger.length ? meldinger.map(rad).join("") : `<li class="dempet">Ingen feilmeldinger.</li>`}</ul>
+    </section>`);
 }
 
 // Hvor man skal tilbake etter redigering, skjuling eller feilmelding.
@@ -795,6 +1034,7 @@ function tilbakeFunksjon() {
   if (skjerm === "flervalg") return fortsettFlervalg;
   if (skjerm === "skjulte") return visSkjulte;
   if (skjerm === "liste") return visRedigerListe;
+  if (skjerm === "admin-feil") return visAdminFeil;
   return visHjem;
 }
 
@@ -898,7 +1138,9 @@ async function sendKontoskjema(skjema) {
 
 // Kalles fra sky.js når man logger inn eller ut.
 function vedInnloggingEndret() {
-  if (skjerm === "hjem" || (skjerm === "logginn" && bruker)) visHjem();
+  const paAdminside = ["admin-brukere", "admin-feil", "liste", "rediger"].includes(skjerm);
+  if (skjerm === "hjem" || (skjerm === "logginn" && bruker) || (paAdminside && !erAdmin())) visHjem();
+  publiserLokaleEndringer();
 }
 
 // Kalles fra sky.js når synken har hentet ned endringer fra andre enheter.
@@ -1047,19 +1289,36 @@ const HANDLINGER = {
   "velg": el => velgAlternativ(Number(el.dataset.nr)),
   "neste": () => nesteSporsmal(),
   "ov-feil": () => startFlervalg(runde.feil, runde.feil.length, "Øv på feilene"),
-  "rediger-liste": () => visRedigerListe(),
-  "fane": el => { listeValg.type = el.dataset.type; visRedigerListe(); },
+  "admin": () => visAdminBrukere(),
+  "admin-fane": el => {
+    const fane = el.dataset.fane;
+    if (fane === "brukere") visAdminBrukere();
+    if (fane === "innhold") visRedigerListe();
+    if (fane === "feil") visAdminFeil();
+  },
+  "admin-bruker": el => utforAdminHandling(el),
+  "fane": el => { listeValg.type = el.dataset.type; listeValg.slettede = false; visRedigerListe(); },
+  "vis-slettede": () => { listeValg.slettede = !listeValg.slettede; visRedigerListe(); },
+  "nytt-element": el => { etterRedigering = visRedigerListe; visRediger(el.dataset.type, null); },
+  "slett-for-alle": el => slettForAlle(el.dataset.id),
+  "gjenopprett-innhold": el => gjenopprettInnhold(el.dataset.id),
+  "feil-lost": async el => {
+    const feil = await settFeilmeldingLost(Number(el.dataset.id), el.dataset.lost === "true");
+    if (feil) alert(feil);
+    visAdminFeil();
+  },
+  "slett-feilmelding": async el => {
+    if (!confirm("Slette denne feilmeldingen?")) return;
+    const feil = await slettFeilmelding(Number(el.dataset.id));
+    if (feil) alert(feil);
+    visAdminFeil();
+  },
   "rediger": el => {
     etterRedigering = tilbakeFunksjon(); // husk hvor vi skal tilbake etterpå
     visRediger(el.dataset.type, el.dataset.id);
   },
   "avbryt": () => etterRedigering(),
-  "tilbakestill": el => {
-    if (!confirm("Vil du fjerne endringene og gå tilbake til originalen?")) return;
-    delete lagret.endringer[el.dataset.id];
-    lagre();
-    etterRedigering();
-  },
+  "tilbakestill": el => tilbakestill(el.dataset.id),
   "skjul": el => skjul(el.dataset.id),
   "vis-skjulte": () => visSkjulte(),
   "vis-igjen": el => {

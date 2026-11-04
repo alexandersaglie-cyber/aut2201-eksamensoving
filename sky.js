@@ -7,8 +7,8 @@
 //
 // Supabase husker innloggingen på enheten, så man forblir innlogget til man logger ut.
 //
-// Bruker disse fra app.js: lagret, lagreLokalt(), tomLokalFremgang(),
-// vedInnloggingEndret(), vedSynkFerdig(), visNyttPassord().
+// Bruker disse fra app.js: lagret, lagreLokalt(), tomLokalFremgang(), naa(),
+// vedInnloggingEndret(), vedSynkFerdig(), vedInnholdHentet(), visNyttPassord().
 
 "use strict";
 
@@ -59,7 +59,8 @@ function startSky() {
     // Supabase anbefaler å ikke vente på andre kall inne i denne funksjonen.
     setTimeout(() => behandleInnlogging(hendelse, sesjon), 0);
   });
-  window.addEventListener("online", () => synk());
+  window.addEventListener("online", () => { synk(); hentInnhold(); });
+  hentInnhold();
 }
 
 async function behandleInnlogging(hendelse, sesjon) {
@@ -75,8 +76,15 @@ async function behandleInnlogging(hendelse, sesjon) {
 
   try {
     const { data, error } = await sky.from("profiler")
-      .select("epost, rolle, blokkert").eq("id", sesjon.user.id).single();
+      .select("epost, rolle, blokkert").eq("id", sesjon.user.id).maybeSingle();
     if (error) throw error;
+    if (!data) {
+      // Kontoen er slettet av admin.
+      await sky.auth.signOut();
+      tomLokalFremgang();
+      alert("Kontoen din finnes ikke lenger.");
+      return;
+    }
     if (data.blokkert) {
       await sky.auth.signOut();
       alert("Kontoen din er blokkert. Ta kontakt med administrator.");
@@ -294,5 +302,78 @@ async function slettSkyResultater() {
 
 async function sendFeilmelding(elementId, melding) {
   const { error } = await sky.from("feilmeldinger").insert({ element_id: elementId, melding });
+  return error ? oversettFeil(error) : null;
+}
+
+// =====================================================================
+// Innhold (admins endringer i kort og spørsmål)
+// =====================================================================
+
+// Henter admins endringer og legger dem i lagret.innhold, så de også finnes uten nett.
+async function hentInnhold() {
+  if (!sky || !navigator.onLine) return;
+  const { data, error } = await sky.from("innhold").select("id, type, data, slettet");
+  if (error) return console.warn("Fikk ikke hentet innhold:", error);
+  lagret.innhold = Object.fromEntries(data.map(r => [r.id, { type: r.type, data: r.data, slettet: r.slettet }]));
+  lagreLokalt();
+  vedInnholdHentet();
+}
+
+// Lagrer et kort/spørsmål for alle brukere. Bare admin får lov (sjekkes i databasen).
+async function lagreInnhold(id, type, data, slettet = false) {
+  const { error } = await sky.from("innhold").upsert({ id, type, data, slettet, oppdatert: naa() });
+  if (error) return oversettFeil(error);
+  lagret.innhold[id] = { type, data, slettet };
+  lagreLokalt();
+  return null;
+}
+
+// Fjerner admins endring, så grunninnholdet fra datafilene gjelder igjen.
+async function fjernInnhold(id) {
+  const { error } = await sky.from("innhold").delete().eq("id", id);
+  if (error) return oversettFeil(error);
+  delete lagret.innhold[id];
+  lagreLokalt();
+  return null;
+}
+
+// =====================================================================
+// Admin: brukere og feilmeldinger
+// =====================================================================
+// Databasen og serverfunksjonen sjekker selv at den som spør er admin.
+
+async function hentBrukeroversikt() {
+  const { data, error } = await sky.rpc("admin_brukeroversikt");
+  if (error) throw new Error(oversettFeil(error));
+  return data;
+}
+
+// Blokkere, oppheve blokkering, endre rolle og slette går via serverfunksjonen «admin».
+async function adminHandling(handling, brukerId) {
+  const { error } = await sky.functions.invoke("admin", { body: { handling, brukerId } });
+  if (!error) return null;
+  try {
+    const svar = await error.context.json(); // feilmeldingen fra serverfunksjonen
+    return svar.feil || oversettFeil(error);
+  } catch (feil) {
+    return oversettFeil(error);
+  }
+}
+
+async function hentFeilmeldinger() {
+  const { data, error } = await sky.from("feilmeldinger")
+    .select("id, element_id, melding, opprettet, lost, profiler(epost)")
+    .order("opprettet", { ascending: false });
+  if (error) throw new Error(oversettFeil(error));
+  return data;
+}
+
+async function settFeilmeldingLost(id, lost) {
+  const { error } = await sky.from("feilmeldinger").update({ lost }).eq("id", id);
+  return error ? oversettFeil(error) : null;
+}
+
+async function slettFeilmelding(id) {
+  const { error } = await sky.from("feilmeldinger").delete().eq("id", id);
   return error ? oversettFeil(error) : null;
 }

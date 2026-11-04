@@ -287,6 +287,13 @@ textarea { resize: vertical; }
 label.avkrysning { display: flex; gap: 10px; align-items: flex-start; font-weight: normal; }
 label.avkrysning input { width: 20px; height: 20px; flex: none; margin-top: 2px; }
 
+/* ---------- Adminpanel ---------- */
+
+.brukerrad > div { margin: 2px 0; }
+.liste li.lost { opacity: 0.6; }
+.feiltekst { color: var(--feil); font-weight: 600; }
+.konto .hoved { margin-top: 12px; }
+
 /* ---------- Redigering ---------- */
 
 .faner { display: flex; gap: 8px; margin-bottom: 8px; }
