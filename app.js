@@ -64,7 +64,9 @@ const EKSAMENER = [...new Set(OPPGAVER.map(o => o.eksamen))];
 
 // Filteret på forsiden gjelder både flashcards og flervalg.
 let filter = { tema: "", eksamen: "" };
-let antallValgt = "20";
+// Hvor mange spørsmål en flervalgsrunde har. Spørsmålene trekkes tilfeldig fra utvalget.
+const ANTALL_VALG = ["25", "50", "100"];
+let antallValgt = "25";
 
 function filtrert(liste) {
   return liste.filter(x =>
@@ -129,8 +131,11 @@ function visHjem() {
     `<option ${t === filter.tema ? "selected" : ""}>${esc(t)}</option>`).join("");
   const eksamenValg = EKSAMENER.map(e =>
     `<option ${e === filter.eksamen ? "selected" : ""}>${esc(e)}</option>`).join("");
-  const antallValg = ["10", "20", "alle"].map(a =>
-    `<option value="${a}" ${a === antallValgt ? "selected" : ""}>${a === "alle" ? "Alle" : a}</option>`).join("");
+  const antallValg = ANTALL_VALG.map(a =>
+    `<option value="${a}" ${a === antallValgt ? "selected" : ""}>${a} spørsmål</option>`).join("");
+  // Har utvalget (f.eks. ett tema) færre spørsmål enn valgt, blir runden kortere.
+  const forFa = oppgaver.length > 0 && oppgaver.length < Number(antallValgt)
+    ? `<p class="dempet">Utvalget har bare ${oppgaver.length} spørsmål, så runden får ${oppgaver.length}.</p>` : "";
 
   vis("hjem", `
     <section class="panel">
@@ -161,6 +166,7 @@ function visHjem() {
       <p class="dempet">Eksamensspørsmål med stokkede alternativer. Du får forklaring etter hvert svar,
         og karakter og svake tema etter runden.</p>
       <label>Antall spørsmål <select id="antall">${antallValg}</select></label>
+      ${forFa}
       <button class="hoved" data-handling="start-flervalg" ${oppgaver.length ? "" : "disabled"}>Start runde</button>
       ${sisteRunde ? `<p class="dempet">Siste runde: <b>${sisteRunde.karakter}</b> (${sisteRunde.prosent} %) · ${esc(formaterDato(sisteRunde.dato))}</p>` : ""}
       <div class="knapperad liten"><button data-handling="mine-resultater">Mine resultater${lagret.resultater.length ? ` (${lagret.resultater.length})` : ""}</button></div>
@@ -738,7 +744,7 @@ const HANDLINGER = {
   "svar-kort": el => svarKort(el.dataset.svar),
   "start-flervalg": () => {
     const liste = filtrert(alleOppgaver());
-    startFlervalg(liste, antallValgt === "alle" ? liste.length : Number(antallValgt), beskrivFilter());
+    startFlervalg(liste, Number(antallValgt), beskrivFilter());
   },
   "ov-tema": el => {
     filter = { tema: el.dataset.tema, eksamen: "" };
@@ -795,7 +801,7 @@ app.addEventListener("change", hendelse => {
   const el = hendelse.target;
   if (el.id === "filter-tema") { filter.tema = el.value; visHjem(); }
   if (el.id === "filter-eksamen") { filter.eksamen = el.value; visHjem(); }
-  if (el.id === "antall") antallValgt = el.value;
+  if (el.id === "antall") { antallValgt = el.value; visHjem(); }
   if (el.id === "importer" && el.files[0]) importer(el.files[0]);
 });
 
