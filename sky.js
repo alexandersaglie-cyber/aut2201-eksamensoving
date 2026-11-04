@@ -47,6 +47,10 @@ let bruker = null;
 // Kort tekst om synken som vises på forsiden, f.eks. «Synkronisert 10:31».
 let synkStatus = "";
 
+// Blir true når Supabase har sagt om noen er innlogget på enheten (rett etter oppstart).
+// Før det viser appen «Laster …» i stedet for innloggingen.
+let innloggingSjekket = false;
+
 function erAdmin() { return bruker?.rolle === "admin"; }
 
 // Adressen appen ligger på. Lenker i e-poster (bekreftelse, nytt passord) sender folk hit.
@@ -64,6 +68,7 @@ function startSky() {
 }
 
 async function behandleInnlogging(hendelse, sesjon) {
+  innloggingSjekket = true;
   if (hendelse === "PASSWORD_RECOVERY") return visNyttPassord();
 
   if (!sesjon) {

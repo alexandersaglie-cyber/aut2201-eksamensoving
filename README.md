@@ -17,9 +17,9 @@ Hurtigtaster på PC: mellomrom snur kortet og 1/2/3 svarer. I flervalg velger 1�
 
 ## Lagring og innlogging
 
-Fremgangen lagres alltid først i nettleseren (localStorage), så appen virker uten nett og uten konto.
+Det første man ser, er innloggingen. Man må logge inn eller lage konto før man kommer til appen, og man forblir innlogget på enheten til man logger ut. Skjemaene har en «Vis passord»-boks.
 
-Er du innlogget, synkroniseres fremgang, resultater og skjulte kort med Supabase, og følger deg mellom PC og mobil. Første gang du logger inn, flyttes det som ligger på enheten over til kontoen. Du forblir innlogget på enheten til du logger ut.
+Fremgang, resultater og skjulte kort synkroniseres med Supabase og følger deg mellom PC og mobil. Alt lagres først i nettleseren (localStorage), så appen virker også uten nett når man har vært innlogget på enheten før. Første gang man logger inn, flyttes fremgang som allerede ligger på enheten over til kontoen.
 
 - `config.js` har Supabase-adressen og den offentlige nøkkelen. De er ikke hemmelige, siden tilgangsreglene i databasen beskytter dataene. Service role-nøkkelen skal aldri inn i appen.
 - `supabase/01_innlogging.sql` setter opp tabeller og tilgangsregler. Den kjøres én gang i Supabases SQL Editor.

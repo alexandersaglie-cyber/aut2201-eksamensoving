@@ -233,8 +233,30 @@ let skjerm = "hjem";
 function vis(navn, html) {
   skjerm = navn;
   app.innerHTML = html;
-  hjemKnapp.hidden = navn === "hjem";
+  hjemKnapp.hidden = navn === "hjem" || maLoggeInn();
   window.scrollTo(0, 0);
+}
+
+// Man må logge inn før man får bruke appen (når Supabase er satt opp i config.js).
+// Unntak: uten nett, når Supabase-biblioteket ikke kunne lastes, slipper den inn som
+// har vært innlogget på enheten før. Da øver man lokalt og synker senere.
+function maLoggeInn() {
+  if (!innloggingSattOpp || bruker) return false;
+  if (!sky) return !lagret.profil;
+  return true;
+}
+
+function visLaster() {
+  vis("laster", `<section class="panel"><p class="dempet">Laster …</p></section>`);
+}
+
+function visIngenNett() {
+  vis("ingennett", `
+    <section class="panel">
+      <h2>Ingen kontakt med serveren</h2>
+      <p>Du må være på nett for å logge inn første gang. Sjekk nettet og prøv igjen.</p>
+      <button class="hoved" data-handling="last-pa-nytt">Prøv igjen</button>
+    </section>`);
 }
 
 // =====================================================================
@@ -242,6 +264,12 @@ function vis(navn, html) {
 // =====================================================================
 
 function visHjem() {
+  // Ikke innlogget: vis innloggingen i stedet (eller «Laster …» mens vi sjekker).
+  if (maLoggeInn()) {
+    if (!sky) return visIngenNett();
+    return innloggingSjekket ? visLoggInn() : visLaster();
+  }
+
   const kort = filtrert(alleKort());
   const oppgaver = filtrert(alleOppgaver());
 
@@ -316,17 +344,9 @@ function visHjem() {
 // Øverst på forsiden: hvem som er innlogget og om synken er ferdig.
 function kontoPanel() {
   if (!innloggingSattOpp) return "";
-  if (!sky) {
-    return `<section class="panel konto"><p class="dempet">Innlogging er ikke tilgjengelig akkurat nå
-      (ingen nett?). Fremgangen lagres på denne enheten.</p></section>`;
-  }
-  if (!bruker) {
-    return `
-      <section class="panel konto">
-        <p>Logg inn for å lagre fremgangen i skyen og bruke den på både PC og mobil.
-          Uten konto lagres alt bare på denne enheten.</p>
-        <button class="hoved" data-handling="vis-logg-inn">Logg inn eller lag konto</button>
-      </section>`;
+  if (!sky || !bruker) {
+    return `<section class="panel konto"><p class="dempet">Ingen kontakt med serveren akkurat nå.
+      Fremgangen lagres på denne enheten og synkroniseres når nettet er tilbake.</p></section>`;
   }
   return `
     <section class="panel konto">
@@ -1090,9 +1110,22 @@ const PERSONVERN = `Når du lager konto, lagres e-postadressen din, fremgangen d
 
 let innloggingFane = "logg-inn";
 
+// Passordfelt med avkrysningsboks for å se det man skriver.
+function passordFelt(etikett, autocomplete) {
+  return `
+    <label>${etikett}<input type="password" name="passord" minlength="6" required autocomplete="${autocomplete}"></label>
+    <label class="avkrysning"><input type="checkbox" class="vis-passord"> Vis passord</label>`;
+}
+
 function visLoggInn() {
   const erNy = innloggingFane === "ny-konto";
   vis("logginn", `
+    <section class="panel velkommen">
+      <h2>Velkommen</h2>
+      <p class="dempet">Øv til eksamen i AUT2201 med flashcards og flervalgsspørsmål fra tidligere eksamener.
+        Logg inn eller lag en konto for å komme i gang. Fremgangen lagres i kontoen din og følger deg
+        mellom PC og mobil.</p>
+    </section>
     <section class="panel">
       <div class="faner">
         <button class="${erNy ? "" : "aktiv"}" data-handling="innlogging-fane" data-fane="logg-inn">Logg inn</button>
@@ -1100,8 +1133,7 @@ function visLoggInn() {
       </div>
       <form id="${erNy ? "registrerskjema" : "logginnskjema"}">
         <label>E-post<input type="email" name="epost" autocomplete="email" required></label>
-        <label>Passord<input type="password" name="passord" minlength="6" required
-          autocomplete="${erNy ? "new-password" : "current-password"}"></label>
+        ${passordFelt("Passord", erNy ? "new-password" : "current-password")}
         ${erNy ? `
           <p class="dempet personvern">${PERSONVERN}</p>
           <label class="avkrysning"><input type="checkbox" name="godtar" required>
@@ -1123,6 +1155,7 @@ function visGlemtPassord() {
       <label>E-post<input type="email" name="epost" autocomplete="email" required></label>
       <p class="skjemamelding" role="status"></p>
       <button class="hoved" type="submit">Send lenke</button>
+      <div class="knapperad liten"><button type="button" data-handling="vis-logg-inn">Tilbake til innlogging</button></div>
     </form>
   `);
 }
@@ -1132,7 +1165,7 @@ function visNyttPassord() {
   vis("nyttpassord", `
     <form class="panel" id="nyttpassordskjema">
       <h2>Lag nytt passord</h2>
-      <label>Nytt passord<input type="password" name="passord" minlength="6" autocomplete="new-password" required></label>
+      ${passordFelt("Nytt passord", "new-password")}
       <p class="skjemamelding" role="status"></p>
       <button class="hoved" type="submit">Lagre passord</button>
     </form>
@@ -1178,8 +1211,14 @@ async function sendKontoskjema(skjema) {
 
 // Kalles fra sky.js når man logger inn eller ut.
 function vedInnloggingEndret() {
+  // Utlogget (eller blokkert/slettet): tilbake til innloggingen, uansett hvor man var.
+  // Står man midt i «lag nytt passord», får man bli der.
+  if (maLoggeInn()) {
+    if (!["logginn", "nyttpassord"].includes(skjerm)) visHjem();
+    return;
+  }
   const paAdminside = ["admin-brukere", "admin-feil", "liste", "rediger"].includes(skjerm);
-  if (skjerm === "hjem" || (skjerm === "logginn" && bruker) || (paAdminside && !erAdmin())) visHjem();
+  if (["hjem", "laster", "logginn"].includes(skjerm) || (paAdminside && !erAdmin())) visHjem();
   publiserLokaleEndringer();
 }
 
@@ -1372,6 +1411,7 @@ const HANDLINGER = {
   },
   "avbryt-melding": () => feilmeldingTilbake(),
   "vis-logg-inn": () => { innloggingFane = "logg-inn"; visLoggInn(); },
+  "last-pa-nytt": () => location.reload(),
   "innlogging-fane": el => { innloggingFane = el.dataset.fane; visLoggInn(); },
   "glemt-passord": () => visGlemtPassord(),
   "logg-ut": async () => {
@@ -1404,6 +1444,9 @@ app.addEventListener("change", hendelse => {
   if (el.id === "filter-eksamen") { filter.eksamen = el.value; visHjem(); }
   if (el.id === "antall") { antallValgt = el.value; visHjem(); }
   if (el.id === "importer" && el.files[0]) importer(el.files[0]);
+  if (el.classList.contains("vis-passord")) {
+    el.form.querySelector("input[name=passord]").type = el.checked ? "text" : "password";
+  }
 });
 
 // Søket oppdaterer bare lista, så tekstfeltet beholder markøren.
