@@ -32,13 +32,18 @@ const LAGRINGSNOKKEL = "aut2201-eksamensoving";
 // pagaendeRunde: flervalgsrunden man er midt i, så den kan fortsettes etter at appen er lukket,
 //             også på en annen enhet (se lagreRundeTilstand()). null når ingen runde er påbegynt.
 // pagaendeRundeTid: når den påbegynte runden sist endret seg (brukes til å avgjøre hva som er nyest ved synk).
+// nullstilt:  når fremgangen / resultathistorikken sist ble nullstilt: { fremgang, resultater }.
+//             Alt fra før dette regnes som slettet, også på andre enheter (se sky.js).
+// slettedeResultater: id-er til enkeltrunder som er slettet.
 // eier:       id-en til kontoen fremgangen tilhører (null = ikke koblet til noen konto ennå).
 // profil:     den innloggede brukerens profil fra sist, så rollen er kjent også uten nett.
 // usynket:    true hvis det finnes endringer som ikke er sendt til skyen ennå.
 function tomLagring() {
   return {
     bokser: {}, boksTid: {}, innhold: {}, endringer: {}, skjult: {}, resultater: [],
-    pagaendeRunde: null, pagaendeRundeTid: null, eier: null, profil: null, usynket: false
+    pagaendeRunde: null, pagaendeRundeTid: null,
+    nullstilt: { fremgang: null, resultater: null }, slettedeResultater: [],
+    eier: null, profil: null, usynket: false
   };
 }
 let lagret = tomLagring();
@@ -1448,18 +1453,20 @@ function importer(fil) {
     .then(tekst => {
       const data = JSON.parse(tekst);
       if (typeof data !== "object" || !data.bokser) throw new Error("Feil format");
-      const { eier, profil } = lagret; // kontoen man er innlogget på, beholdes
+      // Kontoen man er innlogget på og slettinger fra andre enheter beholdes.
+      const { eier, profil, nullstilt, slettedeResultater } = lagret;
       lagret = Object.assign(tomLagring(), {
         bokser: data.bokser,
-        boksTid: data.boksTid || {},
+        boksTid: {},
         endringer: data.endringer || {},
         skjult: data.skjult || {},
         slettet: data.slettet, // fra eldre versjoner; gjøres om i oppgraderLagring()
         resultater: data.resultater || [],
-        eier, profil
+        eier, profil, nullstilt, slettedeResultater
       });
-      // Kort uten tidspunkt regnes som besvart nå, så de vinner over det som ligger i skyen.
-      Object.keys(lagret.bokser).forEach(id => { if (!lagret.boksTid[id]) lagret.boksTid[id] = naa(); });
+      // Kortene i kopien regnes som besvart nå, så de vinner over skyen og ikke regnes som
+      // nullstilt fra før.
+      Object.keys(lagret.bokser).forEach(id => { lagret.boksTid[id] = naa(); });
       oppgraderLagring();
       lagre();
       melding("Sikkerhetskopien er hentet inn.");
@@ -1494,11 +1501,9 @@ const HANDLINGER = {
   },
   "mine-resultater": () => visMineResultater(),
   "slett-historikk": async () => {
-    if (!await bekreft("Vil du slette alle lagrede resultater? Dette kan ikke angres.")) return;
-    if (bruker) {
-      const feil = await slettSkyResultater();
-      if (feil) return melding("Fikk ikke slettet resultatene i skyen. " + feil);
-    }
+    if (!await bekreft("Vil du slette alle lagrede resultater? Det gjelder alle enhetene dine, og kan ikke angres.")) return;
+    // Synken sletter dem i skyen og på de andre enhetene (se sky.js).
+    lagret.nullstilt.resultater = naa();
     lagret.resultater = [];
     lagre();
     visMineResultater();
@@ -1560,11 +1565,9 @@ const HANDLINGER = {
   },
   "eksporter": () => eksporter(),
   "nullstill": async () => {
-    if (!await bekreft("Vil du nullstille fremgangen for flashcards?")) return;
-    if (bruker) {
-      const feil = await slettSkyFremgang();
-      if (feil) return melding("Fikk ikke nullstilt fremgangen i skyen. " + feil);
-    }
+    if (!await bekreft("Vil du nullstille fremgangen for flashcards? Det gjelder alle enhetene dine.")) return;
+    // Synken sletter den i skyen og på de andre enhetene (se sky.js).
+    lagret.nullstilt.fremgang = naa();
     lagret.bokser = {};
     lagret.boksTid = {};
     lagre();

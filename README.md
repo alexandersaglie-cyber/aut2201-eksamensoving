@@ -23,7 +23,7 @@ Det første man ser, er innloggingen. Man må logge inn eller lage konto før ma
 Fremgang, resultater, skjulte kort og påbegynte flervalgsrunder synkroniseres med Supabase og følger deg mellom PC og mobil. Alt lagres først i nettleseren (localStorage), så appen virker også uten nett når man har vært innlogget på enheten før. Første gang man logger inn, flyttes fremgang som allerede ligger på enheten over til kontoen.
 
 - `config.js` har Supabase-adressen og den offentlige nøkkelen. De er ikke hemmelige, siden tilgangsreglene i databasen beskytter dataene. Service role-nøkkelen skal aldri inn i appen.
-- `supabase/01_innlogging.sql` setter opp tabeller og tilgangsregler, og `supabase/03_pagaende_runde.sql` tabellen for påbegynte runder. De kjøres én gang i Supabases SQL Editor.
+- `supabase/01_innlogging.sql` setter opp tabeller og tilgangsregler, `supabase/03_pagaende_runde.sql` tabellen for påbegynte runder, og `supabase/04_slettinger.sql` tabellen som husker nullstillinger og slettede runder, så de ikke kommer tilbake fra andre enheter. De kjøres én gang i Supabases SQL Editor.
 - `sky.js` står for innlogging og synk.
 
 ## Admin

@@ -212,6 +212,16 @@ async function synk() {
     if (lagret.eier && lagret.eier !== bruker.id) tomLokalFremgang();
     lagret.eier = bruker.id;
 
+    // 0. Slettinger og nullstillinger fra alle enheter. Feiler dette (f.eks. før
+    //    04_slettinger.sql er kjørt), synker vi som før, uten dem.
+    let slettingerISkyen;
+    try {
+      slettingerISkyen = await hentSlettinger();
+    } catch (feil) {
+      console.warn("Fikk ikke hentet slettinger:", feil);
+    }
+    fjernSlettetLokalt();
+
     // 1. Hent det som ligger i skyen. (Filtrerer på egen id: admin kan lese alles rader.)
     const [fremgang, resultater, skjulte] = await Promise.all([
       sky.from("kort_fremgang").select("kort_id, boks, oppdatert").eq("bruker_id", bruker.id),
@@ -219,6 +229,13 @@ async function synk() {
       sky.from("skjulte").select("element_id, skjult, oppdatert").eq("bruker_id", bruker.id)
     ]);
     for (const svar of [fremgang, resultater, skjulte]) if (svar.error) throw svar.error;
+
+    // Rader i skyen som er slettet eller nullstilt (sendt opp igjen av en enhet med gammel kopi),
+    // tas ikke inn og ryddes bort.
+    const kortSomSkalBort = fremgang.data.filter(r => erNullstiltKort(r.oppdatert)).map(r => r.kort_id);
+    const resultaterSomSkalBort = resultater.data.filter(erSlettetResultat).map(r => r.id);
+    fremgang.data = fremgang.data.filter(r => !erNullstiltKort(r.oppdatert));
+    resultater.data = resultater.data.filter(r => !erSlettetResultat(r));
 
     // 2. Ta inn det som er nyere i skyen enn lokalt.
     const kortISkyen = {};
@@ -275,7 +292,22 @@ async function synk() {
       opplasting.push(sky.from("flervalg_resultater").upsert(nyeResultater, { onConflict: "id", ignoreDuplicates: true }));
     }
     if (nyeSkjulte.length) opplasting.push(sky.from("skjulte").upsert(nyeSkjulte));
+    if (kortSomSkalBort.length) {
+      opplasting.push(sky.from("kort_fremgang").delete().eq("bruker_id", bruker.id).in("kort_id", kortSomSkalBort));
+    }
+    if (resultaterSomSkalBort.length) {
+      opplasting.push(sky.from("flervalg_resultater").delete().eq("bruker_id", bruker.id).in("id", resultaterSomSkalBort));
+    }
     for (const svar of await Promise.all(opplasting)) if (svar.error) throw svar.error;
+
+    // Send opp slettingene hvis denne enheten vet om noen som skyen ikke har.
+    if (slettingerISkyen !== undefined && slettingerErNyere(slettingerISkyen)) {
+      try {
+        await lagreSlettinger();
+      } catch (feil) {
+        console.warn("Fikk ikke lagret slettinger:", feil);
+      }
+    }
 
     // 4. Påbegynt flervalgsrunde. Feiler dette (f.eks. før 03_pagaende_runde.sql er kjørt),
     //    skal resten av synken likevel regnes som vellykket.
@@ -319,19 +351,74 @@ async function synkPabegyntRunde() {
 }
 
 // =====================================================================
-// Sletting i skyen og feilmeldinger
+// Slettinger og nullstillinger
 // =====================================================================
+// «Nullstill fremgang», «Slett resultathistorikken» og slettede enkeltrunder huskes i kontoen
+// (tabellen slettinger). Da sender ikke en annen enhet med en gammel kopi dem opp igjen.
 
-// Brukes av «Nullstill fremgang» og «Slett resultathistorikken». Returnerer feilmelding eller null.
-async function slettSkyFremgang() {
-  const { error } = await sky.from("kort_fremgang").delete().eq("bruker_id", bruker.id);
-  return error ? oversettFeil(error) : null;
+// Svar på et flashcard fra før fremgangen ble nullstilt?
+function erNullstiltKort(tidspunkt) {
+  const nullstilt = lagret.nullstilt.fremgang;
+  return Boolean(nullstilt) && tid(tidspunkt) <= tid(nullstilt);
 }
 
-async function slettSkyResultater() {
-  const { error } = await sky.from("flervalg_resultater").delete().eq("bruker_id", bruker.id);
-  return error ? oversettFeil(error) : null;
+// Runde som er slettet, eller fra før resultathistorikken ble slettet?
+function erSlettetResultat(r) {
+  const nullstilt = lagret.nullstilt.resultater;
+  return lagret.slettedeResultater.includes(r.id) || (Boolean(nullstilt) && tid(r.dato) <= tid(nullstilt));
 }
+
+function senest(a, b) { return (tid(a) >= tid(b) ? a : b) || null; }
+
+// Henter slettingene i skyen og slår dem sammen med enhetens egne. Returnerer raden (eller null).
+async function hentSlettinger() {
+  const { data, error } = await sky.from("slettinger")
+    .select("fremgang_nullstilt, resultater_nullstilt, slettede_resultater")
+    .eq("bruker_id", bruker.id).maybeSingle();
+  if (error) throw error;
+  if (data) {
+    lagret.nullstilt.fremgang = senest(lagret.nullstilt.fremgang, data.fremgang_nullstilt);
+    lagret.nullstilt.resultater = senest(lagret.nullstilt.resultater, data.resultater_nullstilt);
+    lagret.slettedeResultater = [...new Set([...lagret.slettedeResultater, ...data.slettede_resultater])];
+  }
+  return data;
+}
+
+// Fjerner det som er slettet eller nullstilt fra enheten.
+function fjernSlettetLokalt() {
+  Object.keys(lagret.bokser).forEach(id => {
+    if (erNullstiltKort(lagret.boksTid[id])) {
+      delete lagret.bokser[id];
+      delete lagret.boksTid[id];
+    }
+  });
+  lagret.resultater = lagret.resultater.filter(r => !erSlettetResultat(r));
+}
+
+// Vet enheten om slettinger som skyen ikke har?
+function slettingerErNyere(rad) {
+  if (!rad) {
+    return Boolean(lagret.nullstilt.fremgang || lagret.nullstilt.resultater || lagret.slettedeResultater.length);
+  }
+  return tid(lagret.nullstilt.fremgang) > tid(rad.fremgang_nullstilt) ||
+    tid(lagret.nullstilt.resultater) > tid(rad.resultater_nullstilt) ||
+    lagret.slettedeResultater.some(id => !rad.slettede_resultater.includes(id));
+}
+
+async function lagreSlettinger() {
+  const { error } = await sky.from("slettinger").upsert({
+    bruker_id: bruker.id,
+    fremgang_nullstilt: lagret.nullstilt.fremgang,
+    resultater_nullstilt: lagret.nullstilt.resultater,
+    slettede_resultater: lagret.slettedeResultater,
+    oppdatert: naa()
+  });
+  if (error) throw error;
+}
+
+// =====================================================================
+// Feilmeldinger
+// =====================================================================
 
 async function sendFeilmelding(elementId, melding) {
   const { error } = await sky.from("feilmeldinger").insert({ element_id: elementId, melding });
