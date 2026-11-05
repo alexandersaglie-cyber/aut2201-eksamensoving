@@ -29,13 +29,15 @@ const LAGRINGSNOKKEL = "aut2201-eksamensoving";
 // endringer:  eldre, lokale redigeringer fra før appen fikk adminpanel.
 // skjult:     kort/spørsmål man har skjult for seg selv: { id: { skjult, tid } }.
 // resultater: fullførte flervalgsrunder med karakter (se lagreRunde()).
+// pagaendeRunde: flervalgsrunden man er midt i, så den kan fortsettes etter at appen er lukket
+//             (se lagreRundeTilstand()). null når ingen runde er påbegynt.
 // eier:       id-en til kontoen fremgangen tilhører (null = ikke koblet til noen konto ennå).
 // profil:     den innloggede brukerens profil fra sist, så rollen er kjent også uten nett.
 // usynket:    true hvis det finnes endringer som ikke er sendt til skyen ennå.
 function tomLagring() {
   return {
     bokser: {}, boksTid: {}, innhold: {}, endringer: {}, skjult: {}, resultater: [],
-    eier: null, profil: null, usynket: false
+    pagaendeRunde: null, eier: null, profil: null, usynket: false
   };
 }
 let lagret = tomLagring();
@@ -292,6 +294,7 @@ function visHjem() {
 
   vis("hjem", `
     ${kontoPanel()}
+    ${pabegyntPanel()}
 
     <section class="panel">
       <h2>Hva vil du øve på?</h2>
@@ -340,6 +343,22 @@ function visHjem() {
       </div>
     </section>
   `);
+}
+
+// På forsiden når en flervalgsrunde er påbegynt men ikke fullført.
+function pabegyntPanel() {
+  const p = lagret.pagaendeRunde;
+  if (!p) return "";
+  const { besvart, totalt } = pabegyntStatus();
+  return `
+    <section class="panel pabegynt">
+      <h2>Påbegynt flervalgsrunde</h2>
+      <p><b>${besvart} av ${totalt}</b> spørsmål besvart · ${esc(p.beskrivelse)}</p>
+      <div class="fremdrift"><div style="width:${Math.round(100 * besvart / totalt)}%"></div></div>
+      <p class="dempet">Startet ${esc(formaterDato(p.startet))}</p>
+      <button class="hoved" data-handling="fortsett-runde">Fortsett der du slapp</button>
+      <div class="knapperad liten"><button data-handling="forkast-runde">Forkast runden</button></div>
+    </section>`;
 }
 
 // Øverst på forsiden: hvem som er innlogget og om synken er ferdig.
@@ -466,22 +485,81 @@ function fortsettKort() {
 // 5. Flervalg
 // =====================================================================
 
-// Pågående runde: spørsmålene (hvert med stokket rekkefølge på alternativene),
-// hvor langt vi har kommet, hva som er valgt nå, og resultatene så langt.
+// Pågående runde: spørsmålene (hvert med stokket rekkefølge på alternativene og svaret man
+// har gitt, eller null), hvor langt vi har kommet, hva som er valgt nå, og resultatene så langt.
 let runde = null;
 
 // beskrivelse: hva runden besto av, f.eks. «Statistikk · Alle eksamener». Lagres i historikken.
 function startFlervalg(liste, antall, beskrivelse) {
   const utvalg = stokk(liste).slice(0, antall);
   runde = {
-    sporsmal: utvalg.map(o => ({ o, rekkefolge: stokk([0, 1, 2, 3]) })),
+    sporsmal: utvalg.map(o => ({ o, rekkefolge: stokk([0, 1, 2, 3]), svar: null })),
     i: 0,
     valgt: null,
     resultater: [],
     beskrivelse,
+    startet: naa(),
     lagret: false
   };
+  lagreRundeTilstand();
   visSporsmal();
+}
+
+// Starter en ny runde, men spør først hvis det finnes en påbegynt runde som da forkastes.
+async function startNyRunde(liste, antall, beskrivelse) {
+  const p = lagret.pagaendeRunde;
+  if (p) {
+    const { besvart, totalt } = pabegyntStatus();
+    if (!await bekreft(`Du har en påbegynt runde (${besvart} av ${totalt} besvart).\n\nVil du starte en ny? Den påbegynte runden forkastes.`)) return;
+  }
+  startFlervalg(liste, antall, beskrivelse);
+}
+
+// Lagrer runden på enheten etter hvert svar, så den kan fortsettes hvis appen lukkes.
+function lagreRundeTilstand() {
+  lagret.pagaendeRunde = {
+    beskrivelse: runde.beskrivelse,
+    startet: runde.startet,
+    sporsmal: runde.sporsmal.map(s => ({ id: s.o.id, rekkefolge: s.rekkefolge, svar: s.svar }))
+  };
+  lagreLokalt();
+}
+
+function pabegyntStatus() {
+  const s = lagret.pagaendeRunde.sporsmal;
+  return { besvart: s.filter(x => x.svar !== null).length, totalt: s.length };
+}
+
+// Henter frem den påbegynte runden og fortsetter ved første spørsmål som ikke er besvart.
+function fortsettPabegyntRunde() {
+  const p = lagret.pagaendeRunde;
+  const sporsmal = p.sporsmal
+    .map(s => ({ o: alleOppgaver().find(o => o.id === s.id), rekkefolge: s.rekkefolge, svar: s.svar }))
+    .filter(s => s.o); // spørsmål som er slettet eller skjult siden, tas ut
+  if (sporsmal.length === 0) {
+    lagret.pagaendeRunde = null;
+    lagreLokalt();
+    return visHjem();
+  }
+  runde = {
+    sporsmal,
+    i: 0,
+    valgt: null,
+    resultater: sporsmal.filter(s => s.svar !== null).map(s => ({ o: s.o, riktig: s.svar === s.o.riktig })),
+    beskrivelse: p.beskrivelse,
+    startet: p.startet,
+    lagret: false
+  };
+  const neste = sporsmal.findIndex(s => s.svar === null);
+  if (neste === -1) return visResultat(); // alt var besvart, bare resultatet manglet
+  runde.i = neste;
+  visSporsmal();
+}
+
+function forkastPabegyntRunde() {
+  lagret.pagaendeRunde = null;
+  lagreLokalt();
+  visHjem();
 }
 
 function beskrivFilter() {
@@ -533,14 +611,17 @@ function visSporsmal() {
       ${alternativer}
       ${forklaring}
     </section>
-    <div class="knapperad liten"><button data-handling="hjem">Avslutt runden</button></div>
+    <div class="knapperad liten"><button data-handling="hjem">Ta pause – fortsett senere</button></div>
+    <p class="dempet">Svarene dine lagres underveis. Lukker du appen, kan du fortsette der du slapp fra forsiden.</p>
   `);
 }
 
 function velgAlternativ(nr) {
-  const { o } = runde.sporsmal[runde.i];
+  const gjeldende = runde.sporsmal[runde.i];
   runde.valgt = nr;
-  runde.resultater.push({ o, riktig: nr === o.riktig });
+  gjeldende.svar = nr;
+  runde.resultater.push({ o: gjeldende.o, riktig: nr === gjeldende.o.riktig });
+  lagreRundeTilstand();
   visSporsmal();
 }
 
@@ -563,6 +644,7 @@ function fortsettFlervalg() {
   runde.sporsmal.splice(runde.i, 1);
   runde.resultater.pop();
   runde.valgt = null;
+  lagreRundeTilstand();
   if (runde.i >= runde.sporsmal.length) visResultat();
   else visSporsmal();
 }
@@ -621,12 +703,17 @@ function lagreRunde(antallRiktig, prosent, karakter, perTema) {
     perTema,
     feil: runde.feil.map(o => o.id)
   });
+  lagret.pagaendeRunde = null; // runden er ferdig og trenger ikke fortsettes
   lagre();
 }
 
 function visResultat() {
   const resultater = runde.resultater;
-  if (resultater.length === 0) return visHjem(); // alle spørsmålene ble slettet underveis
+  if (resultater.length === 0) { // alle spørsmålene ble slettet underveis
+    lagret.pagaendeRunde = null;
+    lagreLokalt();
+    return visHjem();
+  }
 
   const antallRiktig = resultater.filter(r => r.riktig).length;
   const prosent = Math.round(100 * antallRiktig / resultater.length);
@@ -1388,7 +1475,13 @@ const HANDLINGER = {
   "svar-kort": el => svarKort(el.dataset.svar),
   "start-flervalg": () => {
     const liste = filtrert(alleOppgaver());
-    startFlervalg(liste, Number(antallValgt), beskrivFilter());
+    startNyRunde(liste, Number(antallValgt), beskrivFilter());
+  },
+  "fortsett-runde": () => fortsettPabegyntRunde(),
+  "forkast-runde": async () => {
+    const { besvart, totalt } = pabegyntStatus();
+    if (!await bekreft(`Forkaste den påbegynte runden (${besvart} av ${totalt} besvart)?\n\nSvarene i runden blir ikke lagret i resultatene dine.`)) return;
+    forkastPabegyntRunde();
   },
   "ov-tema": el => {
     filter = { tema: el.dataset.tema, eksamen: "" };
