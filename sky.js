@@ -1,7 +1,7 @@
 // Innlogging og synkronisering med Supabase.
 //
 // Appen lagrer alltid først lokalt (localStorage), så den virker uten nett og uten konto.
-// Er man innlogget, sendes fremgang, resultater og skjulte kort til skyen, og endringer fra
+// Er man innlogget, sendes fremgang, resultater, skjulte kort og påbegynt flervalgsrunde til skyen, og endringer fra
 // andre enheter hentes ned. Er PC og mobil uenige om et kort, vinner den nyeste endringen.
 // Første gang man logger inn, flyttes det som allerede ligger lokalt over til kontoen.
 //
@@ -277,6 +277,14 @@ async function synk() {
     if (nyeSkjulte.length) opplasting.push(sky.from("skjulte").upsert(nyeSkjulte));
     for (const svar of await Promise.all(opplasting)) if (svar.error) throw svar.error;
 
+    // 4. Påbegynt flervalgsrunde. Feiler dette (f.eks. før 03_pagaende_runde.sql er kjørt),
+    //    skal resten av synken likevel regnes som vellykket.
+    try {
+      await synkPabegyntRunde();
+    } catch (feil) {
+      console.warn("Fikk ikke synket påbegynt runde:", feil);
+    }
+
     lagret.usynket = false;
     lagreLokalt();
     settSynkStatus("Synkronisert " + klokkeslett());
@@ -287,6 +295,26 @@ async function synk() {
   } finally {
     synkPagar = false;
     if (synkIgjen) { synkIgjen = false; planleggSynk(); }
+  }
+}
+
+// Påbegynt runde: den nyeste av den lokale og den i skyen vinner. En fullført eller forkastet
+// runde lagres som data = null, så den forsvinner fra de andre enhetene også.
+async function synkPabegyntRunde() {
+  const { data: rad, error } = await sky.from("pagaende_runder")
+    .select("data, oppdatert").eq("bruker_id", bruker.id).maybeSingle();
+  if (error) throw error;
+
+  const iSkyen = tid(rad?.oppdatert);
+  const lokalt = tid(lagret.pagaendeRundeTid);
+  if (iSkyen > lokalt) {
+    lagret.pagaendeRunde = rad.data;
+    lagret.pagaendeRundeTid = rad.oppdatert;
+  } else if (lokalt > iSkyen) {
+    const { error: feil } = await sky.from("pagaende_runder").upsert({
+      bruker_id: bruker.id, data: lagret.pagaendeRunde, oppdatert: lagret.pagaendeRundeTid
+    });
+    if (feil) throw feil;
   }
 }
 

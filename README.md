@@ -7,7 +7,7 @@
 Dobbeltklikk på `index.html`, så åpnes appen i nettleseren. Den trenger ingen installasjon, innlogging eller internett.
 
 - **Flashcards:** Snu kortet og svar «Kunne», «Usikker» eller «Kunne ikke». Kort du ikke kan, kommer oftere igjen.
-- **Flervalg:** Eksamensspørsmål med stokkede alternativer, forklaring etter hvert svar, og karakter (A–F) og svake tema til slutt. Svarene lagres underveis, så lukker man appen midt i en runde, kan man trykke «Fortsett der du slapp» på forsiden.
+- **Flervalg:** Eksamensspørsmål med stokkede alternativer, forklaring etter hvert svar, og karakter (A–F) og svake tema til slutt. Svarene lagres underveis, så lukker man appen midt i en runde, kan man trykke «Fortsett der du slapp» på forsiden – også på en annen enhet.
 - **Mine resultater:** Alle fullførte flervalgsrunder lagres med karakter. Siden viser utvikling over tid, snitt, beste karakter og svake tema samlet. Karakteren følger NTNUs prosentskala: A ≥ 89 %, B ≥ 77 %, C ≥ 65 %, D ≥ 53 %, E ≥ 41 %, F under 41 %.
 - **Filter:** Velg tema eller eksamen på forsiden. Filteret gjelder begge modusene.
 - **Skjul for meg / Meld feil:** Skjul kort og spørsmål du ikke vil se, eller meld fra om feil i et bestemt kort til administrator.
@@ -20,10 +20,10 @@ Hurtigtaster på PC: mellomrom snur kortet og 1/2/3 svarer. I flervalg velger 1�
 
 Det første man ser, er innloggingen. Man må logge inn eller lage konto før man kommer til appen, og man forblir innlogget på enheten til man logger ut. Skjemaene har en «Vis passord»-boks.
 
-Fremgang, resultater og skjulte kort synkroniseres med Supabase og følger deg mellom PC og mobil. Alt lagres først i nettleseren (localStorage), så appen virker også uten nett når man har vært innlogget på enheten før. Første gang man logger inn, flyttes fremgang som allerede ligger på enheten over til kontoen.
+Fremgang, resultater, skjulte kort og påbegynte flervalgsrunder synkroniseres med Supabase og følger deg mellom PC og mobil. Alt lagres først i nettleseren (localStorage), så appen virker også uten nett når man har vært innlogget på enheten før. Første gang man logger inn, flyttes fremgang som allerede ligger på enheten over til kontoen.
 
 - `config.js` har Supabase-adressen og den offentlige nøkkelen. De er ikke hemmelige, siden tilgangsreglene i databasen beskytter dataene. Service role-nøkkelen skal aldri inn i appen.
-- `supabase/01_innlogging.sql` setter opp tabeller og tilgangsregler. Den kjøres én gang i Supabases SQL Editor.
+- `supabase/01_innlogging.sql` setter opp tabeller og tilgangsregler, og `supabase/03_pagaende_runde.sql` tabellen for påbegynte runder. De kjøres én gang i Supabases SQL Editor.
 - `sky.js` står for innlogging og synk.
 
 ## Admin

@@ -29,15 +29,16 @@ const LAGRINGSNOKKEL = "aut2201-eksamensoving";
 // endringer:  eldre, lokale redigeringer fra før appen fikk adminpanel.
 // skjult:     kort/spørsmål man har skjult for seg selv: { id: { skjult, tid } }.
 // resultater: fullførte flervalgsrunder med karakter (se lagreRunde()).
-// pagaendeRunde: flervalgsrunden man er midt i, så den kan fortsettes etter at appen er lukket
-//             (se lagreRundeTilstand()). null når ingen runde er påbegynt.
+// pagaendeRunde: flervalgsrunden man er midt i, så den kan fortsettes etter at appen er lukket,
+//             også på en annen enhet (se lagreRundeTilstand()). null når ingen runde er påbegynt.
+// pagaendeRundeTid: når den påbegynte runden sist endret seg (brukes til å avgjøre hva som er nyest ved synk).
 // eier:       id-en til kontoen fremgangen tilhører (null = ikke koblet til noen konto ennå).
 // profil:     den innloggede brukerens profil fra sist, så rollen er kjent også uten nett.
 // usynket:    true hvis det finnes endringer som ikke er sendt til skyen ennå.
 function tomLagring() {
   return {
     bokser: {}, boksTid: {}, innhold: {}, endringer: {}, skjult: {}, resultater: [],
-    pagaendeRunde: null, eier: null, profil: null, usynket: false
+    pagaendeRunde: null, pagaendeRundeTid: null, eier: null, profil: null, usynket: false
   };
 }
 let lagret = tomLagring();
@@ -68,6 +69,8 @@ function oppgraderLagring() {
   }
   // Hver runde trenger en unik id, så den ikke lagres to ganger i skyen.
   lagret.resultater.forEach(r => { if (!r.id) r.id = lagNyId(); });
+  // Påbegynte runder fra før synken fantes, får et tidspunkt så de sendes til skyen.
+  if (lagret.pagaendeRunde && !lagret.pagaendeRundeTid) lagret.pagaendeRundeTid = naa();
 }
 
 // Unik id (UUID). crypto.randomUUID finnes ikke når siden åpnes direkte fra disken.
@@ -515,14 +518,20 @@ async function startNyRunde(liste, antall, beskrivelse) {
   startFlervalg(liste, antall, beskrivelse);
 }
 
-// Lagrer runden på enheten etter hvert svar, så den kan fortsettes hvis appen lukkes.
+// Setter (eller fjerner, med null) den påbegynte runden, og sender endringen til skyen.
+function settPabegyntRunde(verdi) {
+  lagret.pagaendeRunde = verdi;
+  lagret.pagaendeRundeTid = naa();
+  lagre();
+}
+
+// Lagrer runden etter hvert svar, så den kan fortsettes hvis appen lukkes – også på en annen enhet.
 function lagreRundeTilstand() {
-  lagret.pagaendeRunde = {
+  settPabegyntRunde({
     beskrivelse: runde.beskrivelse,
     startet: runde.startet,
     sporsmal: runde.sporsmal.map(s => ({ id: s.o.id, rekkefolge: s.rekkefolge, svar: s.svar }))
-  };
-  lagreLokalt();
+  });
 }
 
 function pabegyntStatus() {
@@ -537,8 +546,7 @@ function fortsettPabegyntRunde() {
     .map(s => ({ o: alleOppgaver().find(o => o.id === s.id), rekkefolge: s.rekkefolge, svar: s.svar }))
     .filter(s => s.o); // spørsmål som er slettet eller skjult siden, tas ut
   if (sporsmal.length === 0) {
-    lagret.pagaendeRunde = null;
-    lagreLokalt();
+    settPabegyntRunde(null);
     return visHjem();
   }
   runde = {
@@ -557,8 +565,7 @@ function fortsettPabegyntRunde() {
 }
 
 function forkastPabegyntRunde() {
-  lagret.pagaendeRunde = null;
-  lagreLokalt();
+  settPabegyntRunde(null);
   visHjem();
 }
 
@@ -703,15 +710,13 @@ function lagreRunde(antallRiktig, prosent, karakter, perTema) {
     perTema,
     feil: runde.feil.map(o => o.id)
   });
-  lagret.pagaendeRunde = null; // runden er ferdig og trenger ikke fortsettes
-  lagre();
+  settPabegyntRunde(null); // runden er ferdig og trenger ikke fortsettes
 }
 
 function visResultat() {
   const resultater = runde.resultater;
   if (resultater.length === 0) { // alle spørsmålene ble slettet underveis
-    lagret.pagaendeRunde = null;
-    lagreLokalt();
+    settPabegyntRunde(null);
     return visHjem();
   }
 
