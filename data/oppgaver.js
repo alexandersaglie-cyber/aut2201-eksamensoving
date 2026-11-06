@@ -10,7 +10,7 @@
 //   alternativer  de fire svaralternativene i samme rekkefølge som i PDF-en
 //   riktig        hvilket alternativ som er riktig (0 = første, 3 = siste)
 //   forklaring    kort løsningsforslag
-//   fasit         "generert" (laget av Claude), "kontrollert" (generert og sjekket mot pensum) eller "offisiell"
+//   fasit         "generert" (laget av Claude) eller "offisiell"
 //   sikkerhet     hvor sikker den genererte fasiten er: "høy", "middels" eller "lav"
 //   kandidatsvar  alternativet som var krysset av i eksamensbesvarelsen (0–3)
 //
@@ -125,7 +125,7 @@ const OPPGAVER = [
       "Corpus callosum er en av de seneste delene å modne"
     ],
     riktig: 1, forklaring: "Hørselsnerven er nesten moden ved fødsel, men hjernestammen modnes videre det første leveåret til ca. 18 måneder (ABR blir voksenlik). Auditiv cortex modnes til rundt 10–12 år, og corpus callosum er blant de siste delene som modnes.",
-    fasit: "kontrollert", sikkerhet: "høy", kandidatsvar: 0
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 0
   },
   {
     id: "H25-011", eksamen: "Høst 2025", nr: 11, tema: "Vestibulært", poeng: 1,
@@ -277,7 +277,7 @@ const OPPGAVER = [
     figur: null,
     alternativer: ["Trygghet og tilhørighet", "Frihet og verdighet", "Deltakelse og fellesskap", "Mening og mestring"],
     riktig: 1, forklaring: "Holtes psykiske helserettigheter knyttes til trygghet, tilhørighet, deltakelse, fellesskap, mening og mestring. «Frihet og verdighet» er ikke blant dem.",
-    fasit: "kontrollert", sikkerhet: "høy", kandidatsvar: 1
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1
   },
   {
     id: "H25-025", eksamen: "Høst 2025", nr: 25, tema: "Høreapparat og forsterkning", poeng: 1,
