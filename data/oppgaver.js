@@ -10,7 +10,7 @@
 //   alternativer  de fire svaralternativene i samme rekkefølge som i PDF-en
 //   riktig        hvilket alternativ som er riktig (0 = første, 3 = siste)
 //   forklaring    kort løsningsforslag
-//   fasit         "generert" (laget av Claude) eller "offisiell"
+//   fasit         "generert" (laget av Claude), "kontrollert" (generert og sjekket mot pensum) eller "offisiell"
 //   sikkerhet     hvor sikker den genererte fasiten er: "høy", "middels" eller "lav"
 //   kandidatsvar  alternativet som var krysset av i eksamensbesvarelsen (0–3)
 //
@@ -277,7 +277,7 @@ const OPPGAVER = [
     figur: null,
     alternativer: ["Trygghet og tilhørighet", "Frihet og verdighet", "Deltakelse og fellesskap", "Mening og mestring"],
     riktig: 1, forklaring: "Holtes psykiske helserettigheter knyttes til trygghet, tilhørighet, deltakelse, fellesskap, mening og mestring. «Frihet og verdighet» er ikke blant dem.",
-    fasit: "generert", sikkerhet: "lav", kandidatsvar: 1
+    fasit: "kontrollert", sikkerhet: "høy", kandidatsvar: 1
   },
   {
     id: "H25-025", eksamen: "Høst 2025", nr: 25, tema: "Høreapparat og forsterkning", poeng: 1,
