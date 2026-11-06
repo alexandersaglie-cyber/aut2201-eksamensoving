@@ -180,7 +180,7 @@ const OPPGAVER = [
       "Å overføre hørselssignaler til hjernen"
     ],
     riktig: 0, forklaring: "Det efferente (olivocochleære) systemet demper aktiviteten i de ytre hårcellene. Det gir beskyttelse mot høye lyder og bedre signal i støy. Overføring til hjernen er afferent.",
-    fasit: "generert", sikkerhet: "middels", kandidatsvar: 1
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1
   },
   {
     id: "H25-016", eksamen: "Høst 2025", nr: 16, tema: "Anatomi og hørselsfysiologi", poeng: 1,
@@ -390,7 +390,7 @@ const OPPGAVER = [
       "TEN reduserer forskjellen i maskeringseffektivitet mellom frekvenser, slik at pasientens absolutte terskler kan sammenlignes direkte med maskerte terskler"
     ],
     riktig: 2, forklaring: "TEN er spektralt formet slik at den maskerte terskelen blir lik på alle frekvenser (≈ TEN-nivået) hos normalthørende og ved hørselstap uten døde regioner. En maskert terskel som avviker klart fra dette, avslører en død region.",
-    fasit: "generert", sikkerhet: "middels", kandidatsvar: 3
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 3
   },
   {
     id: "H25-036", eksamen: "Høst 2025", nr: 36, tema: "Aldring og kognisjon", poeng: 1,
@@ -471,7 +471,7 @@ const OPPGAVER = [
     figur: null,
     alternativer: ["Vestibulo-stapedius refleks", "Vestibulo-okulær refleks", "Vestibulo-spinal refleks", "Vestibulo-kollikal refleks"],
     riktig: 0, forklaring: "VOR (øyne), VSR (kropp/ben) og VCR (nakke, grunnlaget for cVEMP) er vestibulære reflekser. Stapediusrefleksen er en akustisk refleks, og en «vestibulo-stapedius refleks» finnes ikke.",
-    fasit: "generert", sikkerhet: "middels", kandidatsvar: 2
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 2
   },
   {
     id: "H25-043", eksamen: "Høst 2025", nr: 43, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
@@ -492,7 +492,7 @@ const OPPGAVER = [
       "BMLD er generelt mindre enn BILD"
     ],
     riktig: 0, forklaring: "SπN0 gir størst MLD (ca. 15 dB ved lave frekvenser), litt mer enn S0Nπ. BILD er mindre (ca. 3–6 dB), og siden den måles med tale, avhenger den ikke av én testfrekvens.",
-    fasit: "generert", sikkerhet: "middels", kandidatsvar: 3
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 3
   },
   {
     id: "H25-045", eksamen: "Høst 2025", nr: 45, tema: "Psykisk helse, mestring og stigma", poeng: 1,
@@ -635,7 +635,7 @@ const OPPGAVER = [
       "Fordi redusert forsterkning i høyfrekvensene gir bedre taleforståelse enn full forsterkning"
     ],
     riktig: 3, forklaring: "Ved store høyfrekvente tap gir full hørbarhet lite ekstra taleforståelse (redusert «effektiv hørbarhet»). Mindre forsterkning gir like god eller bedre forståelse med akseptabel hørestyrke. NAL-NL2 tar ikke spesifikt hensyn til døde regioner.",
-    fasit: "generert", sikkerhet: "lav", kandidatsvar: 3
+    fasit: "generert", sikkerhet: "middels", kandidatsvar: 3
   },
   {
     id: "H25-056", eksamen: "Høst 2025", nr: 56, tema: "Psykisk helse, mestring og stigma", poeng: 1,
@@ -855,7 +855,7 @@ const OPPGAVER = [
       "Behandling av tinnitus kan redusere symptomer på angst, og behandling av angstsymptomer kan redusere byrden av tinnitus"
     ],
     riktig: 1, forklaring: "De tre andre påstandene er godt dokumentert. Påstanden om «dobbelt så høy selvmordsrisiko» ved tinnitus er ikke etablert kunnskap.",
-    fasit: "generert", sikkerhet: "lav", kandidatsvar: 1
+    fasit: "generert", sikkerhet: "middels", kandidatsvar: 1
   },
   {
     id: "H25-076", eksamen: "Høst 2025", nr: 76, tema: "Statistikk", poeng: 1,
@@ -1006,7 +1006,7 @@ const OPPGAVER = [
       "ITD-prosessering er basert på en integrasjon av eksitatoriske og inhibitoriske innganger i MSO-celler"
     ],
     riktig: 3, forklaring: "Hos pattedyr (i motsetning til fugler og Jeffress-modellen med forsinkelseslinjer) styres ITD-følsomheten i MSO av presist tidsstyrt inhibisjon sammen med eksitasjon.",
-    fasit: "generert", sikkerhet: "lav", kandidatsvar: 3
+    fasit: "generert", sikkerhet: "middels", kandidatsvar: 3
   },
   {
     id: "H25-088", eksamen: "Høst 2025", nr: 88, tema: "Diagnostikk og måling", poeng: 1,
