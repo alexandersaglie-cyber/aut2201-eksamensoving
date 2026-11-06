@@ -125,7 +125,7 @@ const OPPGAVER = [
       "Corpus callosum er en av de seneste delene å modne"
     ],
     riktig: 1, forklaring: "Hørselsnerven er nesten moden ved fødsel, men hjernestammen modnes videre det første leveåret til ca. 18 måneder (ABR blir voksenlik). Auditiv cortex modnes til rundt 10–12 år, og corpus callosum er blant de siste delene som modnes.",
-    fasit: "generert", sikkerhet: "lav", kandidatsvar: 0
+    fasit: "kontrollert", sikkerhet: "høy", kandidatsvar: 0
   },
   {
     id: "H25-011", eksamen: "Høst 2025", nr: 11, tema: "Vestibulært", poeng: 1,
