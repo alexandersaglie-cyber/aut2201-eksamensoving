@@ -54,7 +54,7 @@ OPPGAVER.push(
       "venstre øre"
     ],
     riktig: 1, forklaring: "Stapediusrefleksen er bilateral: sterk lyd i ett øre gir sammentrekning i begge ører. Responsen er om noe litt sterkere på samme side (ipsilateralt), ikke på motsatt side.",
-    fasit: "generert", sikkerhet: "middels", kandidatsvar: 2
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 2
   },
   {
     id: "A1-H23-005", emne: "AUT1000", eksamen: "Høst 2023", nr: 5, tema: "Øret: anatomi og fysiologi", poeng: 1,
@@ -79,8 +79,8 @@ OPPGAVER.push(
       "ca 20 dB",
       "ca 10 dB"
     ],
-    riktig: 1, forklaring: "Å lytte med to ører i stedet for ett gir binaural summasjon av hørestyrke, ca. 3 dB ved terskel og ca. 5–6 dB ved høyere nivåer. Noen kilder sier opptil 10 dB, så sjekk tallet som ble brukt i undervisningen.",
-    fasit: "generert", sikkerhet: "lav", kandidatsvar: 3
+    riktig: 1, forklaring: "Å lytte med to ører i stedet for ett gir binaural summasjon av hørestyrke: ca. 3 dB ved terskel og ca. 4–6 dB ved moderate nivåer som 50 dB SPL. Eldre studier oppgir opptil 10 dB, men nyere målinger og modeller (Moore & Glasberg) ligger rundt 5–6 dB.",
+    fasit: "generert", sikkerhet: "middels", kandidatsvar: 3
   },
   {
     id: "A1-H23-007", emne: "AUT1000", eksamen: "Høst 2023", nr: 7, tema: "Øret: anatomi og fysiologi", poeng: 1,
@@ -144,8 +144,8 @@ OPPGAVER.push(
       "Platepitelcarcinom",
       "Malignt melanom"
     ],
-    riktig: 2, forklaring: "Plateepitelkarsinom er den vanligste ondartede hudkreften på selve øremuslingen. Basalcellekarsinom er vanligst i ansiktet ellers. Kondrodermatitt er ikke ondartet.",
-    fasit: "generert", sikkerhet: "middels", kandidatsvar: 1
+    riktig: 2, forklaring: "Basalcellekarsinom og plateepitelkarsinom er de to klart vanligste ondartede svulstene på øremuslingen. Studiene er uenige om hvilken som er vanligst: flere finner flest basalcellekarsinom, mens mange lærebøker i øre-nese-hals oppgir plateepitelkarsinom. Sjekk hva som står i pensum. Kondrodermatitt er ikke ondartet.",
+    fasit: "generert", sikkerhet: "lav", kandidatsvar: 1
   },
   {
     id: "A1-H23-012", emne: "AUT1000", eksamen: "Høst 2023", nr: 12, tema: "Fonetikk og talelyder", poeng: 1,
@@ -197,7 +197,7 @@ OPPGAVER.push(
       "Akutt mellomørebetennelse (mediaotitt)"
     ],
     riktig: 1, forklaring: "Ved øregangseksem (ekstern otitt) tåler ikke øregangen ørepropp, så det hindrer oftest bruk av høreapparat.",
-    fasit: "generert", sikkerhet: "middels", kandidatsvar: 1
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1
   },
   {
     id: "A1-H23-016", emne: "AUT1000", eksamen: "Høst 2023", nr: 16, tema: "Fonetikk og talelyder", poeng: 1,
@@ -509,7 +509,7 @@ OPPGAVER.push(
       "Konstruktiv interferens"
     ],
     riktig: 3, forklaring: "Stående bølger oppstår når en bølge og dens refleksjon overlagres (interferens). Der de forsterker hverandre (konstruktiv interferens) får vi buker, og der de opphever hverandre får vi knuter.",
-    fasit: "generert", sikkerhet: "middels", kandidatsvar: 3
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 3
   },
   {
     id: "A1-H23-040", emne: "AUT1000", eksamen: "Høst 2023", nr: 40, tema: "Akustikk og lydfysikk", poeng: 1,
@@ -652,7 +652,7 @@ OPPGAVER.push(
       "Muskel- og bindevev mister elastisitet gjennom livet, og dette påvirker kvinnens artikulasjon til å bli mindre presis"
     ],
     riktig: 3, forklaring: "Kilde/filter-modellen forklarer problemene med lysere formanter og lys F0 (færre deltoner og dårligere definerte formanter). Tap av elastisitet og mindre presis artikulasjon er ikke en forklaring fra kilde/filter-modellen.",
-    fasit: "generert", sikkerhet: "middels", kandidatsvar: 2
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 2
   },
   {
     id: "A1-H23-051", emne: "AUT1000", eksamen: "Høst 2023", nr: 51, tema: "Øret: anatomi og fysiologi", poeng: 1,
@@ -1159,7 +1159,7 @@ OPPGAVER.push(
       "Økt nivådiskriminering (level discrimination)"
     ],
     riktig: 1, forklaring: "Binaural hørsel gir økt hørestyrke (binaural summasjon) og bedre nivå- og frekvensdiskriminering, men det hørbare frekvensområdet blir ikke større.",
-    fasit: "generert", sikkerhet: "middels", kandidatsvar: 1
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1
   },
   {
     id: "A1-H23-090", emne: "AUT1000", eksamen: "Høst 2023", nr: 90, tema: "Øret: anatomi og fysiologi", poeng: 1,
@@ -1263,7 +1263,7 @@ OPPGAVER.push(
       "Føre til kortere periodetid på lyden"
     ],
     riktig: 2, forklaring: "Lydhastigheten c = √(stivhet/tetthet). Økt tetthet (ved samme stivhet) gir lavere hastighet, og bølgelengden (λ = c/f) blir kortere.",
-    fasit: "generert", sikkerhet: "middels", kandidatsvar: 0
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 0
   },
   {
     id: "A1-H23-098", emne: "AUT1000", eksamen: "Høst 2023", nr: 98, tema: "Anatomi og nervesystemet", poeng: 1,
@@ -1302,6 +1302,6 @@ OPPGAVER.push(
       "Amplituden for i-lyden var sterkere, ettersom i er en lysere vokal enn a"
     ],
     riktig: 1, forklaring: "Vokaler er stemte og åpne lyder og gir kraftige amplitudeutslag. F2 synker fra i (høy F2) til a (lavere F2), og a er sterkere enn i.",
-    fasit: "generert", sikkerhet: "middels", kandidatsvar: 0
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 0
   }
 );

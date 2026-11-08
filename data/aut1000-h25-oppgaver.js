@@ -53,7 +53,7 @@ OPPGAVER.push(
       "44 100 Hz",
       "10 000 Hz"
     ],
-    riktig: 0, forklaring: "Samplingsteoremet (Nyquist) krever at samplingsfrekvensen er HØYERE enn to ganger høyeste frekvens (2 × 10 000 = 20 000 Hz). Minste hele verdi er da 20 001 Hz. Noen lærebøker sier «minst det dobbelte» (20 000 Hz), så sjekk hvordan det ble formulert i undervisningen.",
+    riktig: 1, forklaring: "Samplingsteoremet (Nyquist): samplingsfrekvensen må være minst det dobbelte av den høyeste frekvensen i signalet, altså 2 × 10 000 = 20 000 Hz. Noen kilder formulerer det strengt («høyere enn» det dobbelte), og da blir svaret 20 001 Hz. På norsk står det nesten alltid «minst det dobbelte», men sjekk hvordan det ble sagt i undervisningen.",
     fasit: "generert", sikkerhet: "lav", kandidatsvar: 2
   },
   {
@@ -145,7 +145,7 @@ OPPGAVER.push(
       "Regressiv partiell nærassimilasjon med allofonisk resultat"
     ],
     riktig: 3, forklaring: "T-en (som kommer etter) påvirker l-en (som kommer før): regressiv. Lydene står ved siden av hverandre: nærassimilasjon. Bare stemtheten endres: partiell. Ustemt l er ikke et eget fonem på norsk: allofonisk resultat.",
-    fasit: "generert", sikkerhet: "middels", kandidatsvar: 2
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 2
   },
   {
     id: "A1-H25-012", emne: "AUT1000", eksamen: "Høst 2025", nr: 12, tema: "Akustikk og lydfysikk", poeng: 1,
@@ -171,7 +171,7 @@ OPPGAVER.push(
       "Formantene påvirkes lite av den uvanlige grunntonen."
     ],
     riktig: 3, forklaring: "Formantene bestemmes av talekanalens form og lengde, ikke av grunntonen. En lys grunntone gir færre deltoner, så formantene blir dårligere definert, men de flytter seg lite.",
-    fasit: "generert", sikkerhet: "middels", kandidatsvar: 2
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 2
   },
   {
     id: "A1-H25-014", emne: "AUT1000", eksamen: "Høst 2025", nr: 14, tema: "Vestibulærsystemet", poeng: 1,
@@ -210,7 +210,7 @@ OPPGAVER.push(
       "Når lydkilden beveger seg mot lytteren, blir bølgelengden større, og en høyere frekvens vil høres."
     ],
     riktig: 0, forklaring: "Når lydkilden nærmer seg, presses bølgene sammen: kortere bølgelengde og høyere frekvens. Avstanden blir mindre, så lydtrykknivået øker.",
-    fasit: "generert", sikkerhet: "middels", kandidatsvar: 0
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 0
   },
   {
     id: "A1-H25-017", emne: "AUT1000", eksamen: "Høst 2025", nr: 17, tema: "Binaural hørsel og lokalisering", poeng: 1,
@@ -522,7 +522,7 @@ OPPGAVER.push(
       "Økt nivådiskriminering (level discrimination)"
     ],
     riktig: 1, forklaring: "Binaural hørsel gir økt hørestyrke (binaural summasjon) og bedre nivå- og frekvensdiskriminering, men det hørbare frekvensområdet blir ikke større.",
-    fasit: "generert", sikkerhet: "middels", kandidatsvar: 1
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1
   },
   {
     id: "A1-H25-041", emne: "AUT1000", eksamen: "Høst 2025", nr: 41, tema: "Signalbehandling og lydmåling", poeng: 1,
@@ -834,7 +834,7 @@ OPPGAVER.push(
       "begge ørene"
     ],
     riktig: 3, forklaring: "Stapediusrefleksen er bilateral: sterk lyd i ett øre gir sammentrekning i begge ører. Responsen er om noe litt sterkere på samme side (ipsilateralt), ikke på motsatt side.",
-    fasit: "generert", sikkerhet: "middels", kandidatsvar: 2
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 2
   },
   {
     id: "A1-H25-065", emne: "AUT1000", eksamen: "Høst 2025", nr: 65, tema: "Øret: anatomi og fysiologi", poeng: 1,
