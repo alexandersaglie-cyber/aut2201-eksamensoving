@@ -363,7 +363,7 @@ function visHjem() {
 
   const iBoks = [0, 0, 0, 0, 0, 0]; // plass 0 = nye kort, 1–5 = boksene
   kort.forEach(k => iBoks[boks(k.id)]++);
-  const boksnavn = ["Nye", "Boks 1", "Boks 2", "Boks 3", "Boks 4", "Boks 5"];
+  const kan = iBoks[5];
   const sisteRunde = mineResultater().at(-1);
 
   const temaValg = temaer().map(t =>
@@ -395,11 +395,17 @@ function visHjem() {
 
     <section class="panel">
       <h2>Flashcards</h2>
-      <p class="dempet">Snu kortet og si hvor godt du kunne det. «Kunne» flytter kortet en boks opp,
-        «Usikker» en boks ned og «Kunne ikke» helt tilbake til boks 1. Kort i lave bokser kommer oftere.</p>
+      <ol class="slik">
+        <li>Les spørsmålet og svar i hodet.</li>
+        <li>Snu kortet og se svaret.</li>
+        <li>Si ærlig hvor godt du kunne det. Kort du ikke kan, kommer oftere igjen.</li>
+      </ol>
+      <div class="skala"><span>Ikke forstått</span><span>Forstått</span></div>
       <div class="bokser">
-        ${boksnavn.map((navn, i) => `<div><b>${iBoks[i]}</b><span>${navn}</span></div>`).join("")}
+        ${BOKSNAVN.map((navn, i) => `<div class="niva${i}"><b>${iBoks[i]}</b><span>${navn}</span></div>`).join("")}
       </div>
+      <div class="fremdrift"><div style="width:${kort.length ? Math.round(100 * kan / kort.length) : 0}%"></div></div>
+      <p class="dempet">Du kan ${kan} av ${kort.length} kort.</p>
       <button class="hoved" data-handling="start-kort" ${kort.length ? "" : "disabled"}>Øv med flashcards</button>
     </section>
 
@@ -473,6 +479,9 @@ function visVelgFag() {
 // Et kort i boks 1 trekkes 16 ganger så ofte som et kort i boks 5.
 const VEKT = [10, 16, 8, 4, 2, 1];
 
+// Navnene på boksene, fra ikke forstått til forstått. Plass 0 er kort man ikke har øvd på ennå.
+const BOKSNAVN = ["Ikke øvd", "Kan ikke", "Lærer", "Halvveis", "Nesten", "Kan"];
+
 function boks(id) { return lagret.bokser[id] || 0; }
 
 // Pågående økt: kortene i utvalget, kortet som vises, om det er snudd, og telling av svar.
@@ -516,7 +525,7 @@ function visKort() {
   vis("kort", `
     <div class="statuslinje">
       <span>Kunne ${t.kunne} · Usikker ${t.usikker} · Kunne ikke ${t.ikke}</span>
-      <span>${b ? "Boks " + b : "Nytt kort"}</span>
+      <span>${BOKSNAVN[b]}</span>
     </div>
     <article class="flashcard ${okt.snudd ? "snudd" : ""}" data-handling="snu">
       <div>${merker(k)}</div>

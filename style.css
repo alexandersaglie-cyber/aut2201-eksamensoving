@@ -145,6 +145,17 @@ textarea { resize: vertical; }
 }
 .bokser b { display: block; font-size: 1.15rem; }
 .bokser span { font-size: 0.75rem; color: var(--dempet); }
+.bokser div { border-top: 4px solid var(--kant); }
+.bokser .niva1 { border-top-color: var(--feil); }
+.bokser .niva2 { border-top-color: #d9822b; }
+.bokser .niva3 { border-top-color: var(--usikker); }
+.bokser .niva4 { border-top-color: #7fb34a; }
+.bokser .niva5 { border-top-color: var(--riktig); }
+/* Pil over boksene: fra ikke forstått til forstått */
+.skala { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--dempet); margin-top: 10px; position: relative; }
+.skala::after { content: "→"; position: absolute; left: 50%; transform: translateX(-50%); }
+.slik { margin: 6px 0 0; padding-left: 22px; font-size: 0.95rem; }
+.slik li { margin: 2px 0; }
 
 /* ---------- Flashcards ---------- */
 
