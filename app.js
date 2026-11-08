@@ -378,7 +378,6 @@ function visHjem() {
 
   vis("hjem", `
     ${kontoPanel()}
-    ${fagLinje()}
     ${pabegyntPanel()}
 
     <section class="panel">
@@ -440,26 +439,14 @@ function kontoPanel() {
     Fremgangen lagres på denne enheten og synkroniseres når nettet er tilbake.</p></section>`;
 }
 
-// Hvilket fag man øver på, med knapp for å bytte.
-function fagLinje() {
-  const fag = valgtFag();
-  return `
-    <section class="panel fag">
-      <div class="kontolinje">
-        <div><span class="dempet">Fag</span><br><b>${esc(fag.kode)} ${esc(fag.navn)}</b></div>
-        <button data-handling="bytt-fag">Bytt fag</button>
-      </div>
-    </section>`;
-}
-
-// Fagsiden: vises etter innlogging til man har valgt fag, og når man trykker «Bytt fag».
+// Fagsiden: vises etter innlogging til man har valgt fag. Senere byttes fag i menyen.
 function visVelgFag() {
   const alleOpp = sammensatt("sporsmal", OPPGAVER);
   const alleK = sammensatt("kort", KORT);
   vis("velgfag", `
     <section class="panel">
       <h2>Velg fag</h2>
-      <p class="dempet">Hvilket fag vil du øve på? Appen husker valget, og du kan bytte når som helst.</p>
+      <p class="dempet">Hvilket fag vil du øve på? Appen husker valget, og du kan bytte i menyen (☰) øverst til høyre.</p>
     </section>
     ${FAG.map(f => {
       const opp = alleOpp.filter(x => fagFor(x) === f.kode);
@@ -1596,7 +1583,6 @@ const HANDLINGER = {
     HANDLINGER["start-flervalg"]();
   },
   "mine-resultater": () => visMineResultater(),
-  "bytt-fag": () => visVelgFag(),
   "velg-fag": el => {
     lagret.valgtFag = el.dataset.fag;
     filter = { tema: "", eksamen: "" }; // temaer og eksamener er forskjellige i hvert fag
