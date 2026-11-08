@@ -287,6 +287,23 @@ textarea { resize: vertical; }
 label.avkrysning { display: flex; gap: 10px; align-items: flex-start; font-weight: normal; }
 label.avkrysning input { width: 20px; height: 20px; flex: none; margin-top: 2px; }
 
+/* ---------- Fagvalg ---------- */
+
+.fagvalg {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: var(--tekst);
+  cursor: pointer;
+}
+.fagvalg b { font-size: 1.15rem; }
+.fagvalg:hover, .fagvalg.aktiv { border-color: var(--aksent); }
+.fagkode { color: var(--aksent); font-weight: 700; font-size: 0.9rem; }
+.panel.fag { padding: 12px 16px; }
+
 /* ---------- Påbegynt runde ---------- */
 
 .pabegynt { border-color: var(--aksent); border-width: 2px; }

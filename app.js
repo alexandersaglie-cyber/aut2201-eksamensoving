@@ -1,4 +1,4 @@
-// AUT2201 eksamensøving – hele appen ligger i denne fila.
+// Audiologi eksamensøving – hele appen ligger i denne fila.
 //
 // Dataene kommer fra data/oppgaver*.js (OPPGAVER) og data/kort*.js (KORT).
 // Fremgang lagres alltid i nettleserens localStorage, så appen virker uten nett og uten konto.
@@ -29,8 +29,9 @@ const LAGRINGSNOKKEL = "aut2201-eksamensoving";
 // endringer:  eldre, lokale redigeringer fra før appen fikk adminpanel.
 // skjult:     kort/spørsmål man har skjult for seg selv: { id: { skjult, tid } }.
 // resultater: fullførte flervalgsrunder med karakter (se lagreRunde()).
-// pagaendeRunde: flervalgsrunden man er midt i, så den kan fortsettes etter at appen er lukket,
-//             også på en annen enhet (se lagreRundeTilstand()). null når ingen runde er påbegynt.
+// pagaendeRunde: flervalgsrundene man er midt i, per fag ({ AUT2201: runde, … }), så de kan
+//             fortsettes etter at appen er lukket, også på en annen enhet (se lagreRundeTilstand()).
+// valgtFag:   koden til faget man øver på (f.eks. "AUT2201"). Appen åpner i dette faget neste gang.
 // pagaendeRundeTid: når den påbegynte runden sist endret seg (brukes til å avgjøre hva som er nyest ved synk).
 // nullstilt:  når fremgangen / resultathistorikken sist ble nullstilt: { fremgang, resultater }.
 //             Alt fra før dette regnes som slettet, også på andre enheter (se sky.js).
@@ -41,10 +42,17 @@ const LAGRINGSNOKKEL = "aut2201-eksamensoving";
 function tomLagring() {
   return {
     bokser: {}, boksTid: {}, innhold: {}, endringer: {}, skjult: {}, resultater: [],
-    pagaendeRunde: null, pagaendeRundeTid: null,
+    pagaendeRunde: {}, pagaendeRundeTid: null,
     nullstilt: { fremgang: null, resultater: null }, slettedeResultater: [],
-    eier: null, profil: null, usynket: false
+    valgtFag: null, eier: null, profil: null, usynket: false
   };
+}
+
+// Påbegynte runder lagres per fag: { AUT2201: runde, AUT1000: runde }. Eldre versjoner
+// lagret én runde (med feltet sporsmal), som da hører til AUT2201.
+function somRundekart(data) {
+  if (!data) return {};
+  return data.sporsmal ? { AUT2201: data } : data;
 }
 let lagret = tomLagring();
 
@@ -74,8 +82,11 @@ function oppgraderLagring() {
   }
   // Hver runde trenger en unik id, så den ikke lagres to ganger i skyen.
   lagret.resultater.forEach(r => { if (!r.id) r.id = lagNyId(); });
-  // Påbegynte runder fra før synken fantes, får et tidspunkt så de sendes til skyen.
-  if (lagret.pagaendeRunde && !lagret.pagaendeRundeTid) lagret.pagaendeRundeTid = naa();
+  // Påbegynte runder lagres per fag, og de fra før synken fantes får et tidspunkt.
+  lagret.pagaendeRunde = somRundekart(lagret.pagaendeRunde);
+  if (Object.keys(lagret.pagaendeRunde).length && !lagret.pagaendeRundeTid) lagret.pagaendeRundeTid = naa();
+  // Resultater fra før appen fikk flere fag, hører til AUT2201.
+  lagret.resultater.forEach(r => { if (!r.emne) r.emne = "AUT2201"; });
 }
 
 // Unik id (UUID). crypto.randomUUID finnes ikke når siden åpnes direkte fra disken.
@@ -105,10 +116,11 @@ function lagre() {
 
 // Fjerner fremgang, resultater og skjulte kort fra enheten (f.eks. ved utlogging).
 function tomLokalFremgang() {
-  const { innhold, endringer } = lagret; // innholdet er felles for alle og beholdes
+  const { innhold, endringer, valgtFag } = lagret; // innhold og fagvalg hører til enheten og beholdes
   lagret = tomLagring();
   lagret.innhold = innhold;
   lagret.endringer = endringer;
+  lagret.valgtFag = valgtFag;
   lagreLokalt();
 }
 
@@ -133,8 +145,20 @@ function sammensatt(type, grunnlag) {
     .map(x => lagret.innhold[x.id] ? { ...lagret.innhold[x.id].data, id: x.id } : (lagret.endringer[x.id] || x));
 }
 
-function alleKort() { return sammensatt("kort", KORT).filter(x => !erSkjult(x.id)); }
-function alleOppgaver() { return sammensatt("sporsmal", OPPGAVER).filter(x => !erSkjult(x.id)); }
+// Fagene i appen. Et nytt fag legges til her og får egne datafiler med emne: "<kode>".
+const FAG = [
+  { kode: "AUT2201", navn: "Audiologisk grunnkurs 2" },
+  { kode: "AUT1000", navn: "Audiologisk grunnkurs 1" }
+];
+
+// Innhold uten emne-felt (de første datafilene) hører til AUT2201.
+function fagFor(x) { return x.emne || "AUT2201"; }
+function valgtFag() { return FAG.find(f => f.kode === lagret.valgtFag) || null; }
+function iValgtFag(liste) { return liste.filter(x => fagFor(x) === lagret.valgtFag); }
+
+// Kort og spørsmål i faget som er valgt, uten de man har skjult for seg selv.
+function alleKort() { return iValgtFag(sammensatt("kort", KORT)).filter(x => !erSkjult(x.id)); }
+function alleOppgaver() { return iValgtFag(sammensatt("sporsmal", OPPGAVER)).filter(x => !erSkjult(x.id)); }
 
 function typeFor(x) { return "forside" in x ? "kort" : "sporsmal"; }
 
@@ -143,15 +167,18 @@ function finnElement(id) {
   return [...sammensatt("kort", KORT), ...sammensatt("sporsmal", OPPGAVER)].find(x => x.id === id);
 }
 
-// Temaer og eksamener regnes ut fra innholdet, så nye temaer fra admin kommer med.
+// Temaer og eksamener i faget som er valgt. Regnes ut fra innholdet, så nye temaer fra admin kommer med.
 function temaer() {
-  const alle = [...sammensatt("sporsmal", OPPGAVER), ...sammensatt("kort", KORT)];
+  const alle = iValgtFag([...sammensatt("sporsmal", OPPGAVER), ...sammensatt("kort", KORT)]);
   return [...new Set(alle.map(x => x.tema))].sort((a, b) => a.localeCompare(b, "no"));
 }
 function eksamener() {
-  const alle = [...sammensatt("sporsmal", OPPGAVER), ...sammensatt("kort", KORT)];
+  const alle = iValgtFag([...sammensatt("sporsmal", OPPGAVER), ...sammensatt("kort", KORT)]);
   return [...new Set(alle.map(x => x.eksamen))];
 }
+
+// Resultater (fullførte flervalgsrunder) i faget som er valgt.
+function mineResultater() { return lagret.resultater.filter(r => (r.emne || "AUT2201") === lagret.valgtFag); }
 
 // Filteret på forsiden gjelder både flashcards og flervalg.
 let filter = { tema: "", eksamen: "" };
@@ -279,6 +306,8 @@ function visHjem() {
     if (!sky) return visIngenNett();
     return innloggingSjekket ? visLoggInn() : visLaster();
   }
+  // Ikke valgt fag ennå: vis fagsiden.
+  if (!valgtFag()) return visVelgFag();
 
   const kort = filtrert(alleKort());
   const oppgaver = filtrert(alleOppgaver());
@@ -286,7 +315,7 @@ function visHjem() {
   const iBoks = [0, 0, 0, 0, 0, 0]; // plass 0 = nye kort, 1–5 = boksene
   kort.forEach(k => iBoks[boks(k.id)]++);
   const boksnavn = ["Nye", "Boks 1", "Boks 2", "Boks 3", "Boks 4", "Boks 5"];
-  const sisteRunde = lagret.resultater[lagret.resultater.length - 1];
+  const sisteRunde = mineResultater().at(-1);
 
   const temaValg = temaer().map(t =>
     `<option ${t === filter.tema ? "selected" : ""}>${esc(t)}</option>`).join("");
@@ -302,6 +331,7 @@ function visHjem() {
 
   vis("hjem", `
     ${kontoPanel()}
+    ${fagLinje()}
     ${pabegyntPanel()}
 
     <section class="panel">
@@ -335,7 +365,7 @@ function visHjem() {
       ${forFa}
       <button class="hoved" data-handling="start-flervalg" ${oppgaver.length ? "" : "disabled"}>Start runde</button>
       ${sisteRunde ? `<p class="dempet">Siste runde: <b>${sisteRunde.karakter}</b> (${sisteRunde.prosent} %) · ${esc(formaterDato(sisteRunde.dato))}</p>` : ""}
-      <div class="knapperad liten"><button data-handling="mine-resultater">Mine resultater${lagret.resultater.length ? ` (${lagret.resultater.length})` : ""}</button></div>
+      <div class="knapperad liten"><button data-handling="mine-resultater">Mine resultater${mineResultater().length ? ` (${mineResultater().length})` : ""}</button></div>
     </section>
 
     <section class="panel">
@@ -355,7 +385,7 @@ function visHjem() {
 
 // På forsiden når en flervalgsrunde er påbegynt men ikke fullført.
 function pabegyntPanel() {
-  const p = lagret.pagaendeRunde;
+  const p = pabegynt();
   if (!p) return "";
   const { besvart, totalt } = pabegyntStatus();
   return `
@@ -387,6 +417,44 @@ function kontoPanel() {
       </div>
       ${erAdmin() ? `<button class="hoved" data-handling="admin">Adminpanel</button>` : ""}
     </section>`;
+}
+
+// Hvilket fag man øver på, med knapp for å bytte.
+function fagLinje() {
+  const fag = valgtFag();
+  return `
+    <section class="panel fag">
+      <div class="kontolinje">
+        <div><span class="dempet">Fag</span><br><b>${esc(fag.kode)} ${esc(fag.navn)}</b></div>
+        <button data-handling="bytt-fag">Bytt fag</button>
+      </div>
+    </section>`;
+}
+
+// Fagsiden: vises etter innlogging til man har valgt fag, og når man trykker «Bytt fag».
+function visVelgFag() {
+  const alleOpp = sammensatt("sporsmal", OPPGAVER);
+  const alleK = sammensatt("kort", KORT);
+  vis("velgfag", `
+    <section class="panel">
+      <h2>Velg fag</h2>
+      <p class="dempet">Hvilket fag vil du øve på? Appen husker valget, og du kan bytte når som helst.</p>
+    </section>
+    ${FAG.map(f => {
+      const opp = alleOpp.filter(x => fagFor(x) === f.kode);
+      const kort = alleK.filter(x => fagFor(x) === f.kode);
+      const eks = [...new Set(opp.map(x => x.eksamen))];
+      const runder = lagret.resultater.filter(r => (r.emne || "AUT2201") === f.kode).length;
+      const ovd = kort.filter(k => boks(k.id) > 0).length;
+      return `
+        <button class="panel fagvalg ${f.kode === lagret.valgtFag ? "aktiv" : ""}" data-handling="velg-fag" data-fag="${f.kode}">
+          <span class="fagkode">${esc(f.kode)}</span>
+          <b>${esc(f.navn)}</b>
+          <span class="dempet">${opp.length} spørsmål · ${kort.length} flashcards · ${esc(eks.join(", "))}</span>
+          <span class="dempet">${runder} runder fullført · ${ovd} kort øvd</span>
+        </button>`;
+    }).join("")}
+  `);
 }
 
 // =====================================================================
@@ -515,17 +583,21 @@ function startFlervalg(liste, antall, beskrivelse) {
 
 // Starter en ny runde, men spør først hvis det finnes en påbegynt runde som da forkastes.
 async function startNyRunde(liste, antall, beskrivelse) {
-  const p = lagret.pagaendeRunde;
-  if (p) {
+  if (pabegynt()) {
     const { besvart, totalt } = pabegyntStatus();
     if (!await bekreft(`Du har en påbegynt runde (${besvart} av ${totalt} besvart).\n\nVil du starte en ny? Den påbegynte runden forkastes.`)) return;
   }
   startFlervalg(liste, antall, beskrivelse);
 }
 
-// Setter (eller fjerner, med null) den påbegynte runden, og sender endringen til skyen.
+// Den påbegynte runden i faget som er valgt, eller null.
+function pabegynt() { return lagret.pagaendeRunde[lagret.valgtFag] || null; }
+
+// Setter (eller fjerner, med null) den påbegynte runden i faget som er valgt, og sender
+// endringen til skyen.
 function settPabegyntRunde(verdi) {
-  lagret.pagaendeRunde = verdi;
+  if (verdi) lagret.pagaendeRunde[lagret.valgtFag] = verdi;
+  else delete lagret.pagaendeRunde[lagret.valgtFag];
   lagret.pagaendeRundeTid = naa();
   lagre();
 }
@@ -540,13 +612,13 @@ function lagreRundeTilstand() {
 }
 
 function pabegyntStatus() {
-  const s = lagret.pagaendeRunde.sporsmal;
+  const s = pabegynt().sporsmal;
   return { besvart: s.filter(x => x.svar !== null).length, totalt: s.length };
 }
 
 // Henter frem den påbegynte runden og fortsetter ved første spørsmål som ikke er besvart.
 function fortsettPabegyntRunde() {
-  const p = lagret.pagaendeRunde;
+  const p = pabegynt();
   const sporsmal = p.sporsmal
     .map(s => ({ o: alleOppgaver().find(o => o.id === s.id), rekkefolge: s.rekkefolge, svar: s.svar }))
     .filter(s => s.o); // spørsmål som er slettet eller skjult siden, tas ut
@@ -706,6 +778,7 @@ function lagreRunde(antallRiktig, prosent, karakter, perTema) {
   runde.lagret = true;
   lagret.resultater.push({
     id: lagNyId(),
+    emne: lagret.valgtFag,
     dato: naa(),
     beskrivelse: runde.beskrivelse,
     antall: runde.resultater.length,
@@ -785,7 +858,7 @@ function formaterDato(iso) {
 }
 
 function visMineResultater() {
-  const liste = lagret.resultater;
+  const liste = mineResultater();
   if (liste.length === 0) {
     return vis("historikk", `
       <section class="panel">
@@ -875,6 +948,7 @@ function adminFaner(aktiv) {
   return `
     <section class="panel">
       <h2>Adminpanel</h2>
+      <p class="dempet">Innholdet gjelder ${esc(lagret.valgtFag)}. Bytt fag på forsiden for å redigere et annet fag.</p>
       <div class="faner">${fane("brukere", "Brukere")}${fane("innhold", "Innhold")}${fane("feil", "Meldinger")}</div>
     </section>`;
 }
@@ -953,7 +1027,7 @@ let etterRedigering = visHjem;
 
 function slettedeElementer(type) {
   return Object.entries(lagret.innhold)
-    .filter(([, r]) => r.type === type && r.slettet)
+    .filter(([, r]) => r.type === type && r.slettet && fagFor(r.data) === lagret.valgtFag)
     .map(([id, r]) => ({ ...r.data, id }));
 }
 
@@ -982,7 +1056,7 @@ function lagListe() {
   const erKort = listeValg.type === "kort";
   const elementer = listeValg.slettede
     ? slettedeElementer(listeValg.type)
-    : (erKort ? sammensatt("kort", KORT) : sammensatt("sporsmal", OPPGAVER));
+    : iValgtFag(erKort ? sammensatt("kort", KORT) : sammensatt("sporsmal", OPPGAVER));
 
   const treff = elementer.filter(x =>
     (erKort ? x.forside + " " + x.bakside : x.tekst).toLowerCase().includes(sok) ||
@@ -1003,7 +1077,7 @@ function lagListe() {
 
 // Et tomt kort/spørsmål når admin lager noe nytt.
 function nyttElement(type) {
-  const felles = { eksamen: "Egne", tema: temaer()[0], sikkerhet: "høy", forklaring: "" };
+  const felles = { emne: lagret.valgtFag, eksamen: "Egne", tema: temaer()[0], sikkerhet: "høy", forklaring: "" };
   if (type === "kort") {
     return { ...felles, id: "K-" + lagNyId(), oppgaver: [], forside: "", bakside: "" };
   }
@@ -1223,7 +1297,7 @@ function visLoggInn() {
   vis("logginn", `
     <section class="panel velkommen">
       <h2>Velkommen</h2>
-      <p class="dempet">Øv til eksamen i AUT2201 med flashcards og flervalgsspørsmål fra tidligere eksamener.
+      <p class="dempet">Øv til eksamen i audiologifagene (AUT2201 og AUT1000) med flashcards og flervalgsspørsmål fra tidligere eksamener.
         Logg inn eller lag en konto for å komme i gang. Fremgangen lagres i kontoen din og følger deg
         mellom PC og mobil.</p>
     </section>
@@ -1327,6 +1401,7 @@ function vedInnloggingEndret() {
 function vedSynkFerdig() {
   if (skjerm === "hjem") visHjem();
   if (skjerm === "historikk") visMineResultater();
+  if (skjerm === "velgfag") visVelgFag();
 }
 
 function skjul(id) {
@@ -1500,11 +1575,19 @@ const HANDLINGER = {
     HANDLINGER["start-flervalg"]();
   },
   "mine-resultater": () => visMineResultater(),
+  "bytt-fag": () => visVelgFag(),
+  "velg-fag": el => {
+    lagret.valgtFag = el.dataset.fag;
+    filter = { tema: "", eksamen: "" }; // temaer og eksamener er forskjellige i hvert fag
+    lagreLokalt();
+    visHjem();
+  },
   "slett-historikk": async () => {
-    if (!await bekreft("Vil du slette alle lagrede resultater? Det gjelder alle enhetene dine, og kan ikke angres.")) return;
-    // Synken sletter dem i skyen og på de andre enhetene (se sky.js).
-    lagret.nullstilt.resultater = naa();
-    lagret.resultater = [];
+    if (!await bekreft(`Vil du slette alle resultatene dine i ${lagret.valgtFag}? Det gjelder alle enhetene dine, og kan ikke angres.`)) return;
+    // Rundene merkes som slettet, og synken sletter dem i skyen og på de andre enhetene (se sky.js).
+    const ider = mineResultater().map(r => r.id);
+    lagret.slettedeResultater = [...new Set([...lagret.slettedeResultater, ...ider])];
+    lagret.resultater = lagret.resultater.filter(r => !ider.includes(r.id));
     lagre();
     visMineResultater();
   },

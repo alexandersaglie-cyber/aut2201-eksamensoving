@@ -251,7 +251,7 @@ async function synk() {
     resultater.data.forEach(r => {
       if (!lagret.resultater.some(l => l.id === r.id)) {
         lagret.resultater.push({
-          id: r.id, dato: r.dato, beskrivelse: r.beskrivelse, antall: r.antall, riktige: r.riktige,
+          id: r.id, emne: r.emne || "AUT2201", dato: r.dato, beskrivelse: r.beskrivelse, antall: r.antall, riktige: r.riktige,
           prosent: r.prosent, karakter: r.karakter, perTema: r.per_tema, feil: r.feil
         });
       }
@@ -276,7 +276,7 @@ async function synk() {
     const nyeResultater = lagret.resultater
       .filter(r => !resultaterISkyen.has(r.id))
       .map(r => ({
-        id: r.id, bruker_id: bruker.id, dato: r.dato, beskrivelse: r.beskrivelse, antall: r.antall,
+        id: r.id, bruker_id: bruker.id, emne: r.emne || "AUT2201", dato: r.dato, beskrivelse: r.beskrivelse, antall: r.antall,
         riktige: r.riktige, prosent: r.prosent, karakter: r.karakter, per_tema: r.perTema, feil: r.feil
       }));
     const nyeSkjulte = Object.entries(lagret.skjult)
@@ -340,7 +340,7 @@ async function synkPabegyntRunde() {
   const iSkyen = tid(rad?.oppdatert);
   const lokalt = tid(lagret.pagaendeRundeTid);
   if (iSkyen > lokalt) {
-    lagret.pagaendeRunde = rad.data;
+    lagret.pagaendeRunde = somRundekart(rad.data); // eldre format: én runde i stedet for én per fag
     lagret.pagaendeRundeTid = rad.oppdatert;
   } else if (lokalt > iSkyen) {
     const { error: feil } = await sky.from("pagaende_runder").upsert({

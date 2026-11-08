@@ -1,6 +1,6 @@
-# AUT2201 eksamensøving
+# Audiologi eksamensøving
 
-Øvingsapp for AUT2201 Audiologisk grunnkurs 2, bygget på eksamen høst 2025 (100 spørsmål) og høst 2024 (120 spørsmål).
+Øvingsapp for audiologifagene ved NTNU: AUT2201 Audiologisk grunnkurs 2 (eksamen høst 2025 og høst 2024) og AUT1000 Audiologisk grunnkurs 1 (eksamen høst 2025 og høst 2023). Etter innlogging velger man fag, og appen husker valget. Hvert fag har egne spørsmål, flashcards, resultater og påbegynte runder.
 
 ## Slik bruker du den
 
@@ -23,7 +23,7 @@ Det første man ser, er innloggingen. Man må logge inn eller lage konto før ma
 Fremgang, resultater, skjulte kort og påbegynte flervalgsrunder synkroniseres med Supabase og følger deg mellom PC og mobil. Alt lagres først i nettleseren (localStorage), så appen virker også uten nett når man har vært innlogget på enheten før. Første gang man logger inn, flyttes fremgang som allerede ligger på enheten over til kontoen.
 
 - `config.js` har Supabase-adressen og den offentlige nøkkelen. De er ikke hemmelige, siden tilgangsreglene i databasen beskytter dataene. Service role-nøkkelen skal aldri inn i appen.
-- `supabase/01_innlogging.sql` setter opp tabeller og tilgangsregler, `supabase/03_pagaende_runde.sql` tabellen for påbegynte runder, og `supabase/04_slettinger.sql` tabellen som husker nullstillinger og slettede runder, så de ikke kommer tilbake fra andre enheter. De kjøres én gang i Supabases SQL Editor.
+- `supabase/01_innlogging.sql` setter opp tabeller og tilgangsregler, `supabase/03_pagaende_runde.sql` tabellen for påbegynte runder, `supabase/04_slettinger.sql` tabellen som husker nullstillinger og slettede runder, så de ikke kommer tilbake fra andre enheter, og `supabase/05_fag.sql` fag-feltet på resultatene. De kjøres én gang i Supabases SQL Editor.
 - `sky.js` står for innlogging og synk.
 
 ## Admin
@@ -62,6 +62,8 @@ Appen ligger på GitHub Pages: https://alexandersaglie-cyber.github.io/aut2201-e
 | `data/oppgaver-host2024.js` | De 120 spørsmålene fra eksamen høst 2024 |
 | `data/kort.js` | 93 flashcards fra høsteksamenen |
 | `data/kort-host2024.js` | 38 flashcards med nye begreper fra høst 2024 |
+| `data/aut1000-h25-oppgaver.js`, `data/aut1000-h23-oppgaver.js` | AUT1000: 100 + 100 spørsmål fra høst 2025 og høst 2023 |
+| `data/aut1000-kort.js` | 43 flashcards for AUT1000 |
 | `figurer/` | Figurene til figuroppgavene |
 
 Fasiten er **generert** (det fantes ingen offisiell fasit). Spørsmål og kort merket «Usikker fasit» bør sjekkes i pensum.
