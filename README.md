@@ -11,7 +11,8 @@ Dobbeltklikk på `index.html`, så åpnes appen i nettleseren. Den trenger ingen
 - **Mine resultater:** Alle fullførte flervalgsrunder lagres med karakter. Siden viser utvikling over tid, snitt, beste karakter og svake tema samlet. Karakteren følger NTNUs prosentskala: A ≥ 89 %, B ≥ 77 %, C ≥ 65 %, D ≥ 53 %, E ≥ 41 %, F under 41 %.
 - **Filter:** Velg tema eller eksamen på forsiden. Filteret gjelder begge modusene.
 - **Skjul for meg / Meld feil:** Skjul kort og spørsmål du ikke vil se, eller meld fra om feil i et bestemt kort til administrator.
-- **Send tilbakemelding:** Under Innstillinger kan alle sende generelle tilbakemeldinger og forslag til administrator.
+- **Meny (☰):** De tre strekene øverst til høyre viser kontoen, lar deg bytte fag, og har innstillingene: tilbakemelding, skjulte kort, sikkerhetskopi, nullstilling og «Logg ut».
+- **Send tilbakemelding:** I menyen kan alle sende generelle tilbakemeldinger og forslag til administrator.
 - **Rediger (admin):** Administrator kan endre kort og spørsmål.
 
 Hurtigtaster på PC: mellomrom snur kortet og 1/2/3 svarer. I flervalg velger 1–4 alternativ og Enter går videre.
@@ -28,7 +29,7 @@ Fremgang, resultater, skjulte kort og påbegynte flervalgsrunder synkroniseres m
 
 ## Admin
 
-Kontoen alexandersaglie@gmail.com er admin. Admin får knappen «Adminpanel» på forsiden, med tre faner:
+Kontoen alexandersaglie@gmail.com er admin. Admin får «Adminpanel» i menyen, med tre faner:
 
 - **Brukere:** e-post, registrert, sist aktiv og enkel statistikk. Her kan admin gjøre andre til admin, fjerne admin-rollen, blokkere, oppheve blokkering og slette brukere. Alt ber om bekreftelse først.
 - **Innhold:** redigere, legge til og slette flashcards og flervalgsspørsmål. Endringene gjelder for alle brukere, og slettede kan gjenopprettes.

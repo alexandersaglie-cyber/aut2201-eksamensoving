@@ -147,8 +147,8 @@ function sammensatt(type, grunnlag) {
 
 // Fagene i appen. Et nytt fag legges til her og får egne datafiler med emne: "<kode>".
 const FAG = [
-  { kode: "AUT2201", navn: "Audiologisk grunnkurs 2" },
-  { kode: "AUT1000", navn: "Audiologisk grunnkurs 1" }
+  { kode: "AUT1000", navn: "Audiologisk grunnkurs 1" },
+  { kode: "AUT2201", navn: "Audiologisk grunnkurs 2" }
 ];
 
 // Innhold uten emne-felt (de første datafilene) hører til AUT2201.
@@ -223,6 +223,8 @@ function merker(x) {
 
 const app = document.getElementById("app");
 const hjemKnapp = document.getElementById("hjem-knapp");
+const menyKnapp = document.getElementById("meny-knapp");
+const meny = document.getElementById("meny");
 
 // Egne dialogvinduer i stedet for nettleserens confirm() og alert(). Noen nettlesere
 // (f.eks. de som åpnes inne i Messenger og Snapchat) stopper de innebygde vinduene uten
@@ -271,7 +273,54 @@ function vis(navn, html) {
   skjerm = navn;
   app.innerHTML = html;
   hjemKnapp.hidden = navn === "hjem" || maLoggeInn();
+  menyKnapp.hidden = maLoggeInn();
+  // Tegnes siden på nytt (f.eks. etter synk) mens menyen er åpen, oppdateres menyen også.
+  if (maLoggeInn()) lukkMeny();
+  else if (!meny.hidden) meny.innerHTML = menyInnhold();
   window.scrollTo(0, 0);
+}
+
+// ---------- Menyen (de tre strekene øverst til høyre) ----------
+
+function apneMeny() {
+  meny.innerHTML = menyInnhold();
+  meny.hidden = false;
+  menyKnapp.setAttribute("aria-expanded", "true");
+}
+
+function lukkMeny() {
+  meny.hidden = true;
+  menyKnapp.setAttribute("aria-expanded", "false");
+}
+
+// Profil, fag, innstillinger og utlogging.
+function menyInnhold() {
+  const antallSkjulte = Object.values(lagret.skjult).filter(s => s.skjult).length;
+  const profil = sky && bruker
+    ? `<b>${esc(bruker.epost)}</b>${erAdmin() ? ` <span class="merke">Admin</span>` : ""}<br>
+       <span class="dempet" id="synkstatus">${esc(synkStatus)}</span>`
+    : `<span class="dempet">Ikke kontakt med serveren. Fremgangen lagres på enheten og synkroniseres senere.</span>`;
+  return `
+    <div class="menydel">${profil}</div>
+    <div class="menydel">
+      <h3>Fag</h3>
+      ${FAG.map(f => `
+        <button class="menyvalg ${f.kode === lagret.valgtFag ? "aktiv" : ""}" data-handling="velg-fag" data-fag="${f.kode}">
+          ${esc(f.kode)} ${esc(f.navn)}${f.kode === lagret.valgtFag ? " ✓" : ""}
+        </button>`).join("")}
+    </div>
+    <div class="menydel">
+      <h3>Innstillinger</h3>
+      ${erAdmin() ? `<button class="menyvalg" data-handling="admin">Adminpanel</button>` : ""}
+      <button class="menyvalg" data-handling="tilbakemelding">Send tilbakemelding eller meld feil</button>
+      <button class="menyvalg" data-handling="vis-skjulte">Skjulte kort og spørsmål${antallSkjulte ? ` (${antallSkjulte})` : ""}</button>
+      <button class="menyvalg" data-handling="eksporter">Last ned sikkerhetskopi</button>
+      <label class="menyvalg">Hent sikkerhetskopi
+        <input type="file" id="importer" accept=".json,application/json" hidden>
+      </label>
+      <button class="menyvalg" data-handling="nullstill">Nullstill fremgang</button>
+    </div>
+    ${sky && bruker ? `<div class="menydel"><button class="menyvalg" data-handling="logg-ut">Logg ut</button></div>` : ""}`;
 }
 
 // Man må logge inn før man får bruke appen (når Supabase er satt opp i config.js).
@@ -327,8 +376,6 @@ function visHjem() {
   const forFa = oppgaver.length > 0 && oppgaver.length < Number(antallValgt)
     ? `<p class="dempet">Utvalget har bare ${oppgaver.length} spørsmål, så runden får ${oppgaver.length}.</p>` : "";
 
-  const antallSkjulte = Object.values(lagret.skjult).filter(s => s.skjult).length;
-
   vis("hjem", `
     ${kontoPanel()}
     ${fagLinje()}
@@ -367,19 +414,6 @@ function visHjem() {
       ${sisteRunde ? `<p class="dempet">Siste runde: <b>${sisteRunde.karakter}</b> (${sisteRunde.prosent} %) · ${esc(formaterDato(sisteRunde.dato))}</p>` : ""}
       <div class="knapperad liten"><button data-handling="mine-resultater">Mine resultater${mineResultater().length ? ` (${mineResultater().length})` : ""}</button></div>
     </section>
-
-    <section class="panel">
-      <h2>Innstillinger</h2>
-      <div class="knapperad">
-        <button data-handling="tilbakemelding">Send tilbakemelding eller meld feil</button>
-        <button data-handling="vis-skjulte">Skjulte kort og spørsmål${antallSkjulte ? ` (${antallSkjulte})` : ""}</button>
-        <button data-handling="eksporter">Last ned sikkerhetskopi</button>
-        <label class="knapp" style="margin:0;font-weight:normal">Hent sikkerhetskopi
-          <input type="file" id="importer" accept=".json,application/json" hidden>
-        </label>
-        <button data-handling="nullstill">Nullstill fremgang</button>
-      </div>
-    </section>
   `);
 }
 
@@ -399,24 +433,11 @@ function pabegyntPanel() {
     </section>`;
 }
 
-// Øverst på forsiden: hvem som er innlogget og om synken er ferdig.
+// Øverst på forsiden når man er uten nett. Kontoen og utloggingen ligger i menyen.
 function kontoPanel() {
-  if (!innloggingSattOpp) return "";
-  if (!sky || !bruker) {
-    return `<section class="panel konto"><p class="dempet">Ingen kontakt med serveren akkurat nå.
-      Fremgangen lagres på denne enheten og synkroniseres når nettet er tilbake.</p></section>`;
-  }
-  return `
-    <section class="panel konto">
-      <div class="kontolinje">
-        <div>
-          <b>${esc(bruker.epost)}</b>${erAdmin() ? ` <span class="merke">Admin</span>` : ""}<br>
-          <span class="dempet" id="synkstatus">${esc(synkStatus)}</span>
-        </div>
-        <button data-handling="logg-ut">Logg ut</button>
-      </div>
-      ${erAdmin() ? `<button class="hoved" data-handling="admin">Adminpanel</button>` : ""}
-    </section>`;
+  if (!innloggingSattOpp || (sky && bruker)) return "";
+  return `<section class="panel konto"><p class="dempet">Ingen kontakt med serveren akkurat nå.
+    Fremgangen lagres på denne enheten og synkroniseres når nettet er tilbake.</p></section>`;
 }
 
 // Hvilket fag man øver på, med knapp for å bytte.
@@ -948,7 +969,7 @@ function adminFaner(aktiv) {
   return `
     <section class="panel">
       <h2>Adminpanel</h2>
-      <p class="dempet">Innholdet gjelder ${esc(lagret.valgtFag)}. Bytt fag på forsiden for å redigere et annet fag.</p>
+      <p class="dempet">Innholdet gjelder ${esc(lagret.valgtFag)}. Bytt fag i menyen (☰) for å redigere et annet fag.</p>
       <div class="faner">${fane("brukere", "Brukere")}${fane("innhold", "Innhold")}${fane("feil", "Meldinger")}</div>
     </section>`;
 }
@@ -1658,12 +1679,22 @@ const HANDLINGER = {
   }
 };
 
-app.addEventListener("click", hendelse => {
+// Knappene i både appen og menyen. Et trykk utenfor menyen lukker den.
+document.addEventListener("click", hendelse => {
+  if (!meny.hidden && !hendelse.target.closest("#meny, #meny-knapp")) lukkMeny();
+  if (!hendelse.target.closest("#app, #meny")) return;
   const el = hendelse.target.closest("[data-handling]");
-  if (el && HANDLINGER[el.dataset.handling]) HANDLINGER[el.dataset.handling](el);
+  if (el && HANDLINGER[el.dataset.handling]) {
+    if (el.closest("#meny")) lukkMeny();
+    HANDLINGER[el.dataset.handling](el);
+  }
 });
 
-app.addEventListener("change", hendelse => {
+menyKnapp.addEventListener("click", () => meny.hidden ? apneMeny() : lukkMeny());
+
+document.addEventListener("change", hendelse => {
+  if (!hendelse.target.closest("#app, #meny")) return;
+  if (hendelse.target.id === "importer") lukkMeny();
   const el = hendelse.target;
   if (el.id === "filter-tema") { filter.tema = el.value; visHjem(); }
   if (el.id === "filter-eksamen") { filter.eksamen = el.value; visHjem(); }
@@ -1697,6 +1728,7 @@ hjemKnapp.addEventListener("click", visHjem);
 document.addEventListener("keydown", hendelse => {
   if (["INPUT", "TEXTAREA", "SELECT"].includes(hendelse.target.tagName)) return;
   const tast = hendelse.key;
+  if (tast === "Escape" && !meny.hidden) { lukkMeny(); menyKnapp.focus(); return; }
 
   if (skjerm === "kort") {
     if ((tast === " " || tast === "Enter") && !okt.snudd) { hendelse.preventDefault(); HANDLINGER.snu(); }

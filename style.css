@@ -358,3 +358,43 @@ legend { font-weight: 600; font-size: 0.95rem; padding: 0 4px; }
 .alt-rad { display: flex; gap: 8px; align-items: center; margin: 6px 0; }
 .alt-rad input[type="radio"] { width: 22px; height: 22px; flex: none; }
 .alt-rad textarea { margin: 0; }
+
+/* ---------- Menyen (tre streker øverst til høyre) ---------- */
+
+.menyknapp {
+  margin-left: auto;
+  font-size: 1.4rem;
+  line-height: 1;
+  padding: 6px 12px;
+}
+.meny {
+  position: fixed;
+  top: 58px;
+  right: 12px;
+  width: min(340px, calc(100vw - 24px));
+  max-height: calc(100vh - 72px);
+  overflow-y: auto;
+  background: var(--flate);
+  border: 1px solid var(--kant);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  z-index: 5;
+}
+.menydel { padding: 12px 16px; border-bottom: 1px solid var(--kant); }
+.menydel:last-child { border-bottom: none; }
+.menydel h3 { font-size: 0.85rem; color: var(--dempet); margin: 0 0 6px; text-transform: uppercase; letter-spacing: 0.04em; }
+.menyvalg {
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin: 0;
+  padding: 9px 10px;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  font-weight: normal;
+  font-size: 0.97rem;
+  cursor: pointer;
+}
+.menyvalg:hover { background: var(--bakgrunn); }
+.menyvalg.aktiv { color: var(--aksent); font-weight: 600; }
