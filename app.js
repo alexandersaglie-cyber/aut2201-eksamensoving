@@ -184,7 +184,7 @@ function mineResultater() { return lagret.resultater.filter(r => (r.emne || "AUT
 let filter = { tema: "", eksamen: "" };
 // Hvor mange spørsmål en flervalgsrunde har. Spørsmålene trekkes tilfeldig fra utvalget.
 const ANTALL_VALG = ["25", "50", "100"];
-let antallValgt = "25";
+let antallValgt = "100";
 
 function filtrert(liste) {
   return liste.filter(x =>
