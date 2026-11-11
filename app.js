@@ -39,12 +39,13 @@ const LAGRINGSNOKKEL = "aut2201-eksamensoving";
 // eier:       id-en til kontoen fremgangen tilhører (null = ikke koblet til noen konto ennå).
 // profil:     den innloggede brukerens profil fra sist, så rollen er kjent også uten nett.
 // usynket:    true hvis det finnes endringer som ikke er sendt til skyen ennå.
+// flyttetKort: flashcards som er slått sammen med et annet kort, og der fremgangen er flyttet over.
 function tomLagring() {
   return {
     bokser: {}, boksTid: {}, innhold: {}, endringer: {}, skjult: {}, resultater: [],
     pagaendeRunde: {}, pagaendeRundeTid: null,
     nullstilt: { fremgang: null, resultater: null }, slettedeResultater: [],
-    valgtFag: null, eier: null, profil: null, usynket: false
+    valgtFag: null, eier: null, profil: null, usynket: false, flyttetKort: {}
   };
 }
 
@@ -68,13 +69,16 @@ function lastInn() {
 
 // Gjør om data lagret av eldre versjoner av appen til dagens format.
 function oppgraderLagring() {
-  // «Eksamensark» heter nå «Høst 2024».
+  // «Eksamensark» het en periode «Høst 2024», men er et øvingssett. «Høst 2024» er nå den
+  // offisielle eksamenen (fra 12.11.2026). Runder fra før det med «Høst 2024» gjaldt øvingssettet.
   Object.values(lagret.endringer).forEach(x => {
-    if (x.eksamen === "Eksamensark") x.eksamen = "Høst 2024";
+    if (x.eksamen === "Eksamensark") x.eksamen = "Øvingssett";
   });
   lagret.resultater.forEach(r => {
-    r.beskrivelse = r.beskrivelse.replace("Eksamensark", "Høst 2024");
+    r.beskrivelse = r.beskrivelse.replace("Eksamensark", "Øvingssett");
+    if (r.dato < "2026-11-12") r.beskrivelse = r.beskrivelse.replace("Høst 2024", "Øvingssett");
   });
+  flyttKortfremgang();
   // Tidligere «slettet» er nå «skjult for meg».
   if (Array.isArray(lagret.slettet)) {
     lagret.slettet.forEach(id => { lagret.skjult[id] = { skjult: true, tid: null }; });
@@ -87,6 +91,23 @@ function oppgraderLagring() {
   if (Object.keys(lagret.pagaendeRunde).length && !lagret.pagaendeRundeTid) lagret.pagaendeRundeTid = naa();
   // Resultater fra før appen fikk flere fag, hører til AUT2201.
   lagret.resultater.forEach(r => { if (!r.emne) r.emne = "AUT2201"; });
+}
+
+// Flashcards som er slått sammen med et annet kort (se duplikat-rapport.md). Boksen på det
+// gamle kortet flyttes til det nye. Har begge en boks, beholdes den høyeste. Kjøres når appen
+// starter og etter synk, siden fremgangen på det gamle kortet kan komme fra en annen enhet.
+const FLYTTEDE_KORT = { K001: "KE037", K029: "KE003", K085: "KE014", K061: "KE033" };
+function flyttKortfremgang() {
+  if (!lagret.flyttetKort) lagret.flyttetKort = {};
+  let endret = false;
+  Object.entries(FLYTTEDE_KORT).forEach(([gammel, ny]) => {
+    if (!lagret.bokser[gammel] || lagret.flyttetKort[gammel]) return;
+    lagret.bokser[ny] = Math.max(lagret.bokser[ny] || 0, lagret.bokser[gammel]);
+    lagret.boksTid[ny] = naa();
+    lagret.flyttetKort[gammel] = true;
+    endret = true;
+  });
+  return endret;
 }
 
 // Unik id (UUID). crypto.randomUUID finnes ikke når siden åpnes direkte fra disken.
@@ -142,7 +163,16 @@ function sammensatt(type, grunnlag) {
     .map(([id, r]) => ({ ...r.data, id }));
   return [...grunnlag, ...nye]
     .filter(x => !lagret.innhold[x.id]?.slettet)
-    .map(x => lagret.innhold[x.id] ? { ...lagret.innhold[x.id].data, id: x.id } : (lagret.endringer[x.id] || x));
+    .map(x => tilpass(lagret.innhold[x.id] ? { ...lagret.innhold[x.id].data, id: x.id } : (lagret.endringer[x.id] || x), x));
+}
+
+// Redigerte kopier (fra admin eller eldre lokale endringer) er lagret før datafilene fikk
+// kilden «ogsa» og før øvingssettet fikk nytt navn. Her får de det samme som datafilene.
+function tilpass(x, original) {
+  const ut = { ...x };
+  if (!ut.ogsa && original.ogsa) ut.ogsa = original.ogsa;
+  if (/^(EA-|KE)/.test(ut.id) && ut.eksamen === "Høst 2024") ut.eksamen = "Øvingssett";
+  return ut;
 }
 
 // Fagene i appen. Et nytt fag legges til her og får egne datafiler med emne: "<kode>".
@@ -174,7 +204,7 @@ function temaer() {
 }
 function eksamener() {
   const alle = iValgtFag([...sammensatt("sporsmal", OPPGAVER), ...sammensatt("kort", KORT)]);
-  return [...new Set(alle.map(x => x.eksamen))];
+  return [...new Set(alle.flatMap(eksamenerFor))];
 }
 
 // Resultater (fullførte flervalgsrunder) i faget som er valgt.
@@ -189,12 +219,18 @@ let antallValgt = "100";
 function filtrert(liste) {
   return liste.filter(x =>
     (!filter.tema || x.tema === filter.tema) &&
-    (!filter.eksamen || x.eksamen === filter.eksamen));
+    (!filter.eksamen || eksamenerFor(x).includes(filter.eksamen)));
 }
 
-function kildeOppgave(o) { return `${o.eksamen}, oppg. ${o.nr}`; }
+// Et spørsmål kan ha gått igjen på flere eksamener. «ogsa» lister de andre kildene,
+// f.eks. [{ eksamen: "Høst 2024", nr: 1 }], så spørsmålet vises under alle eksamenene.
+function eksamenerFor(x) { return [x.eksamen, ...(x.ogsa || []).map(k => k.eksamen)]; }
+function kildeOppgave(o) {
+  return [o, ...(o.ogsa || [])].map(k => `${k.eksamen}, oppg. ${k.nr}`).join(" + ");
+}
 function kildeKort(k) {
-  return k.oppgaver?.length ? `${k.eksamen}, oppg. ${k.oppgaver.join(", ")}` : k.eksamen;
+  const egen = k.oppgaver?.length ? `${k.eksamen}, oppg. ${k.oppgaver.join(", ")}` : k.eksamen;
+  return [egen, ...(k.ogsa || []).map(o => `${o.eksamen}, oppg. ${o.nr}`)].join(" + ");
 }
 
 // Gjør tekst trygg å sette inn i HTML (så f.eks. «<» ikke tolkes som kode).
@@ -457,7 +493,7 @@ function visVelgFag() {
     ${FAG.map(f => {
       const opp = alleOpp.filter(x => fagFor(x) === f.kode);
       const kort = alleK.filter(x => fagFor(x) === f.kode);
-      const eks = [...new Set(opp.map(x => x.eksamen))];
+      const eks = [...new Set(opp.flatMap(eksamenerFor))];
       const runder = lagret.resultater.filter(r => (r.emne || "AUT2201") === f.kode).length;
       const ovd = kort.filter(k => boks(k.id) > 0).length;
       return `
@@ -1416,6 +1452,7 @@ function vedInnloggingEndret() {
 
 // Kalles fra sky.js når synken har hentet ned endringer fra andre enheter.
 function vedSynkFerdig() {
+  if (flyttKortfremgang()) lagre();
   if (skjerm === "hjem") visHjem();
   if (skjerm === "historikk") visMineResultater();
   if (skjerm === "velgfag") visVelgFag();

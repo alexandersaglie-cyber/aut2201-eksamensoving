@@ -13,10 +13,6 @@
 
 const KORT = [
   // ---------- Statistikk ----------
-  { id: "K001", tema: "Statistikk", eksamen: "Høst 2025", oppgaver: [4], sikkerhet: "høy",
-    forside: "Hva er en type 1-feil (alfafeil)?",
-    bakside: "Å konkludere med signifikant funn når det egentlig ikke er noen forskjell, altså å forkaste en sann nullhypotese (falsk positiv).",
-    forklaring: "Type 2-feil er det motsatte: man overser en effekt som faktisk finnes." },
   { id: "K002", tema: "Statistikk", eksamen: "Høst 2025", oppgaver: [6], sikkerhet: "høy",
     forside: "Hvilken test bruker du når de samme personene er målt i to situasjoner og dataene er normalfordelte?",
     bakside: "Paret t-test.",
@@ -129,10 +125,6 @@ const KORT = [
     forside: "Hva er en tuningkurve, og hva er den karakteristiske frekvensen (CF)?",
     bakside: "Responsområdet til et enkeltnevron som funksjon av frekvens. CF er frekvensen ved kurvens laveste punkt, der fiberen er mest følsom.",
     forklaring: "Formen avhenger av CF. Høyfrekvente fibre har skarp tupp og lang lavfrekvent hale. Tuningkurver viser hvor viktig stedskoding er." },
-  { id: "K029", tema: "Anatomi og hørselsfysiologi", eksamen: "Høst 2025", oppgaver: [85], sikkerhet: "høy",
-    forside: "Hva er volley-prinsippet?",
-    bakside: "Grupper av nervefibre fyrer på ulike perioder av lydbølgen og koder til sammen frekvensen, slik at faselåsing virker opp til noen få kHz.",
-    forklaring: "Én fiber klarer ikke å fyre på hver periode. Ved høye frekvenser kodes frekvens bare med stedskode (tonotopi)." },
   { id: "K030", tema: "Anatomi og hørselsfysiologi", eksamen: "Høst 2025", oppgaver: [59], sikkerhet: "høy",
     forside: "Hvilken stimulus egner seg til å studere temporale egenskaper i nevronenes fyringsmønster?",
     bakside: "Klikk.",
@@ -267,10 +259,6 @@ const KORT = [
     forklaring: "I eksamensfiguren var det for hodetelefoner (TDH-49) ved 1000 Hz. Innstikkstelefoner gir generelt høyere interaural demping." },
 
   // ---------- Vestibulært ----------
-  { id: "K061", tema: "Vestibulært", eksamen: "Høst 2025", oppgaver: [11], sikkerhet: "høy",
-    forside: "Hva er det anatomiske korrelatet til Ménières sykdom?",
-    bakside: "Endolymfatisk hydrops.",
-    forklaring: "Tidlig er symptomene anfallsvise: fluktuerende hørselstap, tinnitus og svimmelhet. Betennelse i vestibularisnerven er en annen diagnose (nevritt)." },
   { id: "K062", tema: "Vestibulært", eksamen: "Høst 2025", oppgaver: [37], sikkerhet: "høy",
     forside: "Hvilket organ vurderer cVEMP og oVEMP?",
     bakside: "cVEMP vurderer sacculus. oVEMP vurderer utriculus.",
@@ -371,10 +359,6 @@ const KORT = [
     forside: "Hva betyr «metakognitiv»?",
     bakside: "Bevissthet om egen tenkning («tenkning om tenkning»).",
     forklaring: "" },
-  { id: "K085", tema: "Aldring og kognisjon", eksamen: "Høst 2025", oppgaver: [18], sikkerhet: "høy",
-    forside: "Hva er top-down-prosessering (eksekutiv funksjon) i hørsel?",
-    bakside: "Evnen til å tolke lyd ved hjelp av kognisjon, kunnskap og kontekst.",
-    forklaring: "Å høre og skille lyder er bottom-up-prosessering." },
   { id: "K086", tema: "Aldring og kognisjon", eksamen: "Høst 2025", oppgaver: [22], sikkerhet: "høy",
     forside: "Hva er en vanlig kognitiv konsekvens av nedsatt hørsel hos eldre?",
     bakside: "Økt risiko for demens.",
