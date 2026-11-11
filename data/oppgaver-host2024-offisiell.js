@@ -29,7 +29,7 @@ OPPGAVER.push(
       "Man kan fokusere på problemene ved en situasjon og stenge ut negative tanker og følelser knyttet til situasjonen"
     ],
     riktig: 1, forklaring: "Problemfokusert mestring går ut på å gjøre noe med selve problemet, f.eks. skaffe informasjon og planlegge. Å stenge ute tanker og følelser er unngåelse.",
-    fasit: "generert", sikkerhet: "middels", kandidatsvar: 3, ogsa: [{ eksamen: "Øvingssett", nr: 81 }]
+    fasit: "generert", sikkerhet: "middels", kandidatsvar: 3, ogsa: [{ eksamen: "Høst 2024", nr: 181 }]
   },
   {
     id: "O24-010", eksamen: "Høst 2024", nr: 10, tema: "Aldring og kognisjon", poeng: 1,
@@ -55,7 +55,7 @@ OPPGAVER.push(
       "Angst og depresjon"
     ],
     riktig: 3, forklaring: "Angstlidelser og depresjon er de vanligste psykiske lidelsene i befolkningen.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 3, ogsa: [{ eksamen: "Øvingssett", nr: 77 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 3, ogsa: [{ eksamen: "Høst 2024", nr: 177 }]
   },
   {
     id: "O24-014", eksamen: "Høst 2024", nr: 14, tema: "Psykisk helse, mestring og stigma", poeng: 1,
@@ -185,7 +185,7 @@ OPPGAVER.push(
       "lateralisering"
     ],
     riktig: 2, forklaring: "Nevroplastisitet er nervesystemets evne til å endre struktur og funksjon som følge av erfaring eller skade.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 2, ogsa: [{ eksamen: "Øvingssett", nr: 27 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 2, ogsa: [{ eksamen: "Høst 2024", nr: 127 }]
   },
   {
     id: "O24-032", eksamen: "Høst 2024", nr: 32, tema: "Psykisk helse, mestring og stigma", poeng: 1,
@@ -224,7 +224,7 @@ OPPGAVER.push(
       "Å utvikle nye ferdigheter for å kompensere for tap av kroppslige ressurser"
     ],
     riktig: 2, forklaring: "Seleksjon er å velge ut de viktigste målene. Hjelpemidler og hjelp fra andre er kompensasjon.",
-    fasit: "generert", sikkerhet: "høy", ogsa: [{ eksamen: "Øvingssett", nr: 66 }]
+    fasit: "generert", sikkerhet: "høy", ogsa: [{ eksamen: "Høst 2024", nr: 166 }]
   },
   {
     id: "O24-036", eksamen: "Høst 2024", nr: 36, tema: "Psykoakustikk", poeng: 1,
@@ -302,7 +302,7 @@ OPPGAVER.push(
       "Informasjonskontroll betyr at hørselshemmede bevisst benytter stigmasymbol, for eksempel høreapparat, for å håndtere stigma"
     ],
     riktig: 2, forklaring: "Informasjonskontroll er å styre hva andre får vite om egenskapen, f.eks. ved å styre samtalen eller plassere seg gunstig så hørselstapet ikke merkes.",
-    fasit: "generert", sikkerhet: "middels", ogsa: [{ eksamen: "Øvingssett", nr: 80 }]
+    fasit: "generert", sikkerhet: "middels", ogsa: [{ eksamen: "Høst 2024", nr: 180 }]
   },
   {
     id: "O24-045", eksamen: "Høst 2024", nr: 45, tema: "Statistikk", poeng: 1,
@@ -393,7 +393,7 @@ OPPGAVER.push(
       "...svekkelse av motivasjon"
     ],
     riktig: 0, forklaring: "Arbeidsminnet og prosesseringshastigheten svekkes med alderen. Krystallisert intelligens holder seg godt.",
-    fasit: "generert", sikkerhet: "middels", kandidatsvar: 1, ogsa: [{ eksamen: "Øvingssett", nr: 61 }]
+    fasit: "generert", sikkerhet: "middels", kandidatsvar: 1, ogsa: [{ eksamen: "Høst 2024", nr: 161 }]
   },
   {
     id: "O24-055", eksamen: "Høst 2024", nr: 55, tema: "Aldring og kognisjon", poeng: 1,
@@ -432,7 +432,7 @@ OPPGAVER.push(
       "…lydstyrkeendring («loudness change») tilsvarende som hos normalthørende"
     ],
     riktig: 1, forklaring: "Ved cochleært tap vokser hørestyrken unormalt raskt (recruitment), så samme intensitetsendring gir større opplevd endring.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1, ogsa: [{ eksamen: "Øvingssett", nr: 5 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1, ogsa: [{ eksamen: "Høst 2024", nr: 105 }]
   },
   {
     id: "O24-059", eksamen: "Høst 2024", nr: 59, tema: "Folkehelse og epidemiologi", poeng: 1,
@@ -497,7 +497,7 @@ OPPGAVER.push(
       "… en erklæring om forventede resultater"
     ],
     riktig: 1, forklaring: "Nullhypotesen sier at det ikke er noen forskjell eller sammenheng.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1, ogsa: [{ eksamen: "Øvingssett", nr: 106 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1, ogsa: [{ eksamen: "Høst 2024", nr: 206 }]
   },
   {
     id: "O24-069", eksamen: "Høst 2024", nr: 69, tema: "Statistikk", poeng: 1,
@@ -510,7 +510,7 @@ OPPGAVER.push(
       "type II-feil (betafeil)"
     ],
     riktig: 3, forklaring: "Testen oversåg en tilstand som faktisk var der. Det er et falskt negativt funn, altså en type II-feil.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 3, ogsa: [{ eksamen: "Øvingssett", nr: 108 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 3, ogsa: [{ eksamen: "Høst 2024", nr: 208 }]
   },
   {
     id: "O24-070", eksamen: "Høst 2024", nr: 70, tema: "Aldring og kognisjon", poeng: 1,
@@ -523,7 +523,7 @@ OPPGAVER.push(
       "Kognisjon er sansing, minner, tanker og språk"
     ],
     riktig: 3, forklaring: "Kognisjon er et samlebegrep for mentale prosesser som sansing og persepsjon, hukommelse, tenkning og språk. A kan også forsvares. Sjekk definisjonen i pensum.",
-    fasit: "generert", sikkerhet: "lav", ogsa: [{ eksamen: "Øvingssett", nr: 60 }]
+    fasit: "generert", sikkerhet: "lav", ogsa: [{ eksamen: "Høst 2024", nr: 160 }]
   },
   {
     id: "O24-072", eksamen: "Høst 2024", nr: 72, tema: "Psykoakustikk", poeng: 1,
@@ -614,7 +614,7 @@ OPPGAVER.push(
       "Indre hårceller"
     ],
     riktig: 1, forklaring: "Type II-fibrene er tynne, umyeliniserte fibre fra de ytre hårcellene. Type I (ca. 90 %) kommer fra de indre hårcellene.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 3, ogsa: [{ eksamen: "Øvingssett", nr: 4 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 3, ogsa: [{ eksamen: "Høst 2024", nr: 104 }]
   },
   {
     id: "O24-093", eksamen: "Høst 2024", nr: 93, tema: "Psykisk helse, mestring og stigma", poeng: 1,

@@ -69,14 +69,9 @@ function lastInn() {
 
 // Gjør om data lagret av eldre versjoner av appen til dagens format.
 function oppgraderLagring() {
-  // «Eksamensark» het en periode «Høst 2024», men er et øvingssett. «Høst 2024» er nå den
-  // offisielle eksamenen (fra 12.11.2026). Runder fra før det med «Høst 2024» gjaldt øvingssettet.
-  Object.values(lagret.endringer).forEach(x => {
-    if (x.eksamen === "Eksamensark") x.eksamen = "Øvingssett";
-  });
+  // «Eksamensark» og «Øvingssett» er nå en del av «Høst 2024» (se tilpass()).
   lagret.resultater.forEach(r => {
-    r.beskrivelse = r.beskrivelse.replace("Eksamensark", "Øvingssett");
-    if (r.dato < "2026-11-12") r.beskrivelse = r.beskrivelse.replace("Høst 2024", "Øvingssett");
+    r.beskrivelse = r.beskrivelse.replace("Eksamensark", "Høst 2024").replace("Øvingssett", "Høst 2024");
   });
   flyttKortfremgang();
   // Tidligere «slettet» er nå «skjult for meg».
@@ -166,12 +161,17 @@ function sammensatt(type, grunnlag) {
     .map(x => tilpass(lagret.innhold[x.id] ? { ...lagret.innhold[x.id].data, id: x.id } : (lagret.endringer[x.id] || x), x));
 }
 
-// Redigerte kopier (fra admin eller eldre lokale endringer) er lagret før datafilene fikk
-// kilden «ogsa» og før øvingssettet fikk nytt navn. Her får de det samme som datafilene.
+// Redigerte kopier (fra admin eller eldre lokale endringer) kan være lagret før datafilene fikk
+// kilden «ogsa», og før øvingsspørsmålene (EA-/KE-) ble en del av «Høst 2024» med nr 101–220.
+// Her får de kilde og nummer fra datafilene.
 function tilpass(x, original) {
   const ut = { ...x };
   if (!ut.ogsa && original.ogsa) ut.ogsa = original.ogsa;
-  if (/^(EA-|KE)/.test(ut.id) && ut.eksamen === "Høst 2024") ut.eksamen = "Øvingssett";
+  if (/^(EA-|KE)/.test(ut.id) && ut.id === original.id) {
+    ut.eksamen = original.eksamen;
+    if ("nr" in original) ut.nr = original.nr;
+    if ("oppgaver" in original) ut.oppgaver = original.oppgaver;
+  }
   return ut;
 }
 

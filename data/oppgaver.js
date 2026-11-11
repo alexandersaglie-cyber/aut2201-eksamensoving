@@ -44,7 +44,7 @@ const OPPGAVER = [
     figur: null,
     alternativer: ["Metode", "Introduksjon", "Diskusjon", "Resultat"],
     riktig: 0, forklaring: "Utvalg, inklusjonskriterier og rekruttering beskrives i metodedelen (IMRaD).",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 0, ogsa: [{ eksamen: "Øvingssett", nr: 120 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 0, ogsa: [{ eksamen: "Høst 2024", nr: 220 }]
   },
   {
     id: "H25-004", eksamen: "Høst 2025", nr: 4, tema: "Statistikk", poeng: 1,
@@ -57,7 +57,7 @@ const OPPGAVER = [
       "... en forsker konkluderer med at funnene ikke er signifikante når forskjellen eller korrelasjonen faktisk var signifikant"
     ],
     riktig: 1, forklaring: "Type 1-feil = falsk positiv: man forkaster en sann nullhypotese. Det motsatte (overse en reell effekt) er type 2-feil.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1, ogsa: [{ eksamen: "Høst 2024", nr: 77 }, { eksamen: "Øvingssett", nr: 107 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1, ogsa: [{ eksamen: "Høst 2024", nr: 77 }, { eksamen: "Høst 2024", nr: 207 }]
   },
   {
     id: "H25-005", eksamen: "Høst 2025", nr: 5, tema: "Binaural hørsel og lokalisering", poeng: 1,
@@ -83,7 +83,7 @@ const OPPGAVER = [
       "Paret t-test (paired sample t test)"
     ],
     riktig: 3, forklaring: "Samme personer måles to ganger (avhengige målinger) og dataene er normalfordelte, altså parametrisk test for parede data: paret t-test.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 3, ogsa: [{ eksamen: "Øvingssett", nr: 118 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 3, ogsa: [{ eksamen: "Høst 2024", nr: 218 }]
   },
   {
     id: "H25-007", eksamen: "Høst 2025", nr: 7, tema: "Aldring og kognisjon", poeng: 1,
@@ -206,7 +206,7 @@ const OPPGAVER = [
       "\"Jeg må bare forsøke å se humoren i det hele.\""
     ],
     riktig: 3, forklaring: "Følelsesfokusert mestring endrer hvordan man har det med situasjonen (f.eks. humor), mens problemfokusert mestring prøver å endre selve situasjonen.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 3, ogsa: [{ eksamen: "Øvingssett", nr: 82 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 3, ogsa: [{ eksamen: "Høst 2024", nr: 182 }]
   },
   {
     id: "H25-018", eksamen: "Høst 2025", nr: 18, tema: "Aldring og kognisjon", poeng: 1,
@@ -227,7 +227,7 @@ const OPPGAVER = [
       "Frekvensområdene hvor deltonene har ekstra kraftig amplitude"
     ],
     riktig: 3, forklaring: "Vokaler kjennes igjen på formantene, altså frekvensområder med forsterkede deltoner (særlig F1 og F2).",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 3, ogsa: [{ eksamen: "Høst 2024", nr: 84 }, { eksamen: "Øvingssett", nr: 42 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 3, ogsa: [{ eksamen: "Høst 2024", nr: 84 }, { eksamen: "Høst 2024", nr: 142 }]
   },
   {
     id: "H25-020", eksamen: "Høst 2025", nr: 20, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
@@ -261,7 +261,7 @@ const OPPGAVER = [
       "Økt risiko for nedsatt funksjon i det perifere hørselssystem"
     ],
     riktig: 1, forklaring: "Hørselstap er en kjent risikofaktor for demens og kognitiv svikt. Isolasjon er en sosial konsekvens, ikke en kognitiv.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1, ogsa: [{ eksamen: "Øvingssett", nr: 65 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1, ogsa: [{ eksamen: "Høst 2024", nr: 165 }]
   },
   {
     id: "H25-023", eksamen: "Høst 2025", nr: 23, tema: "Psykisk helse, mestring og stigma", poeng: 1,
@@ -290,7 +290,7 @@ const OPPGAVER = [
       "Øke forsterkningen for å kompensere for tapet"
     ],
     riktig: 2, forklaring: "Forsterkning langt inn i en død region gir lite nytte og kan forverre taleforståelse og lydkvalitet. Anbefalingen er å begrense forsterkningen over ca. 1,7 × grensefrekvensen.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 2, ogsa: [{ eksamen: "Øvingssett", nr: 12 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 2, ogsa: [{ eksamen: "Høst 2024", nr: 112 }]
   },
   {
     id: "H25-026", eksamen: "Høst 2025", nr: 26, tema: "Statistikk", poeng: 1,
@@ -332,7 +332,7 @@ const OPPGAVER = [
     figur: null,
     alternativer: ["Indre hårceller", "Cochleariskjernen", "Basilarmembranen", "Ytre hårceller"],
     riktig: 0, forklaring: "Type I-fibrene er myeliniserte og innerverer de indre hårcellene. Type II-fibrene (5–10 %) går til de ytre hårcellene.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 0, ogsa: [{ eksamen: "Øvingssett", nr: 3 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 0, ogsa: [{ eksamen: "Høst 2024", nr: 103 }]
   },
   {
     id: "H25-030", eksamen: "Høst 2025", nr: 30, tema: "Statistikk", poeng: 1,
@@ -340,7 +340,7 @@ const OPPGAVER = [
     figur: null,
     alternativer: ["Intervallskalerte", "Ratioskalerte", "Nominalskalerte", "Ordinalskalerte"],
     riktig: 0, forklaring: "dB HL har like intervaller, men 0 dB HL er ikke et absolutt nullpunkt (det finnes negative verdier). Derfor er skalaen intervallskala.",
-    fasit: "generert", sikkerhet: "middels", kandidatsvar: 0, ogsa: [{ eksamen: "Høst 2024", nr: 85 }, { eksamen: "Øvingssett", nr: 117 }]
+    fasit: "generert", sikkerhet: "middels", kandidatsvar: 0, ogsa: [{ eksamen: "Høst 2024", nr: 85 }, { eksamen: "Høst 2024", nr: 217 }]
   },
   {
     id: "H25-031", eksamen: "Høst 2025", nr: 31, tema: "Forskningsmetode", poeng: 1,
@@ -348,7 +348,7 @@ const OPPGAVER = [
     figur: null,
     alternativer: ["Observasjon og spørreskjema", "Eksperiment og tverrsnittstudier", "Spørreskjema og intervju", "Intervju og observasjon"],
     riktig: 3, forklaring: "Intervju og observasjon er de klassiske kvalitative metodene. Spørreskjema er hovedsakelig kvantitativt.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 2, ogsa: [{ eksamen: "Øvingssett", nr: 113 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 2, ogsa: [{ eksamen: "Høst 2024", nr: 213 }]
   },
   {
     id: "H25-032", eksamen: "Høst 2025", nr: 32, tema: "Statistikk", poeng: 1,
@@ -356,7 +356,7 @@ const OPPGAVER = [
     figur: null,
     alternativer: ["Ordinalskalerte", "Nominalskalerte", "Intervallskalerte", "Ratioskalerte"],
     riktig: 0, forklaring: "Kategoriene har en naturlig rekkefølge (mildt < moderat < alvorlig), men avstandene mellom dem er ikke like. Det gir ordinalskala.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 0, ogsa: [{ eksamen: "Høst 2024", nr: 89 }, { eksamen: "Øvingssett", nr: 115 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 0, ogsa: [{ eksamen: "Høst 2024", nr: 89 }, { eksamen: "Høst 2024", nr: 215 }]
   },
   {
     id: "H25-033", eksamen: "Høst 2025", nr: 33, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
@@ -369,7 +369,7 @@ const OPPGAVER = [
       "... overlappende akustiske og språklige signaler"
     ],
     riktig: 2, forklaring: "Intrinsisk redundans ligger i nervesystemet selv (mange parallelle baner). Ekstrinsisk redundans ligger i talesignalet (overlappende akustiske og språklige signaler).",
-    fasit: "generert", sikkerhet: "middels", kandidatsvar: 2, ogsa: [{ eksamen: "Øvingssett", nr: 38 }]
+    fasit: "generert", sikkerhet: "middels", kandidatsvar: 2, ogsa: [{ eksamen: "Høst 2024", nr: 138 }]
   },
   {
     id: "H25-034", eksamen: "Høst 2025", nr: 34, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
@@ -377,7 +377,7 @@ const OPPGAVER = [
     figur: null,
     alternativer: ["Den laterale lemnisken", "Corpus callosum", "Inferior colliculus", "Medial geniculate body"],
     riktig: 3, forklaring: "Corpus geniculatum mediale (MGB) i thalamus er siste obligatoriske omkobling før auditiv cortex. Inferior colliculus ligger i midthjernen.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 3, ogsa: [{ eksamen: "Høst 2024", nr: 49 }, { eksamen: "Øvingssett", nr: 23 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 3, ogsa: [{ eksamen: "Høst 2024", nr: 49 }, { eksamen: "Høst 2024", nr: 123 }]
   },
   {
     id: "H25-035", eksamen: "Høst 2025", nr: 35, tema: "Diagnostikk og måling", poeng: 1,
@@ -403,7 +403,7 @@ const OPPGAVER = [
       "Den gradvise prosessen med kroppslige endringer som skjer med økende alder"
     ],
     riktig: 3, forklaring: "Primær aldring er de normale og uunngåelige kroppslige endringene. Sekundær aldring skyldes sykdom, livsstil og miljø.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 3, ogsa: [{ eksamen: "Høst 2024", nr: 86 }, { eksamen: "Øvingssett", nr: 56 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 3, ogsa: [{ eksamen: "Høst 2024", nr: 86 }, { eksamen: "Høst 2024", nr: 156 }]
   },
   {
     id: "H25-037", eksamen: "Høst 2025", nr: 37, tema: "Vestibulært", poeng: 1,
@@ -437,7 +437,7 @@ const OPPGAVER = [
     figur: null,
     alternativer: ["Måling av kompleansen i trommehinnen", "Måling av akustisk refleks", "Språktilegnelse", "Lydbølgeforplantning"],
     riktig: 2, forklaring: "Språktilegnelse avhenger av auditiv stimulering i sensitive perioder, mens hjernen er plastisk. De andre er mekaniske eller refleksbaserte prosesser.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 2, ogsa: [{ eksamen: "Øvingssett", nr: 40 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 2, ogsa: [{ eksamen: "Høst 2024", nr: 140 }]
   },
   {
     id: "H25-040", eksamen: "Høst 2025", nr: 40, tema: "Statistikk", poeng: 1,
@@ -479,7 +479,7 @@ const OPPGAVER = [
     figur: null,
     alternativer: ["Auditive cortex", "Cochlea", "Hørselsnerven", "Superior olivary complex (SOC)"],
     riktig: 0, forklaring: "Plastisiteten er størst i de høyere nivåene, særlig i auditiv cortex, som reorganiseres etter erfaring og sansetap.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 0, ogsa: [{ eksamen: "Øvingssett", nr: 28 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 0, ogsa: [{ eksamen: "Høst 2024", nr: 128 }]
   },
   {
     id: "H25-044", eksamen: "Høst 2025", nr: 44, tema: "Binaural hørsel og lokalisering", poeng: 1,
@@ -544,7 +544,7 @@ const OPPGAVER = [
       "Opplevelse av stigma har betydning for motivasjonen til å ta i bruk hjelpemidler. Jo mer opplevd stigma, jo mer motivert er den hørselshemmede for å ta i bruk høreapparater"
     ],
     riktig: 2, forklaring: "Stigma påvirker erkjennelse og aksept av hørselstapet, valg av apparat og når det brukes. Både egne holdninger og omgivelsenes reaksjoner spiller inn, og mer stigma gir lavere motivasjon.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 2, ogsa: [{ eksamen: "Høst 2024", nr: 29 }, { eksamen: "Øvingssett", nr: 79 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 2, ogsa: [{ eksamen: "Høst 2024", nr: 29 }, { eksamen: "Høst 2024", nr: 179 }]
   },
   {
     id: "H25-049", eksamen: "Høst 2025", nr: 49, tema: "Psykisk helse, mestring og stigma", poeng: 1,
@@ -570,7 +570,7 @@ const OPPGAVER = [
       "Aktiviteter er alltid observerbare, mens deltakelse er subjektivt og ikke målbart"
     ],
     riktig: 2, forklaring: "I ICF er aktivitet individets utførelse av en oppgave eller handling, mens deltakelse er involvering i livssituasjoner.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 2, ogsa: [{ eksamen: "Øvingssett", nr: 86 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 2, ogsa: [{ eksamen: "Høst 2024", nr: 186 }]
   },
   {
     id: "H25-051", eksamen: "Høst 2025", nr: 51, tema: "Forskningsmetode", poeng: 1,
@@ -583,7 +583,7 @@ const OPPGAVER = [
       "Utvalget blir oftest strategisk trukket ut, basert på hva problemstillingen søker kunnskap om"
     ],
     riktig: 3, forklaring: "Kvalitative studier bruker strategiske (formålstjenlige) utvalg av personer som kan belyse problemstillingen. Det er ikke tilfeldige eller store utvalg.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 3, ogsa: [{ eksamen: "Øvingssett", nr: 114 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 3, ogsa: [{ eksamen: "Høst 2024", nr: 214 }]
   },
   {
     id: "H25-052", eksamen: "Høst 2025", nr: 52, tema: "Diagnostikk og måling", poeng: 1,
@@ -596,7 +596,7 @@ const OPPGAVER = [
       "TEOAE, men ikke DPOAE, kan måles hos nyfødte barn"
     ],
     riktig: 1, forklaring: "Støy skader de ytre hårcellene, og DPOAE-amplituden synker. Ved otosklerose dempes OAE av mellomøret. DPOAE er bedre enn TEOAE for basen (høye frekvenser), og begge kan måles hos nyfødte.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1, ogsa: [{ eksamen: "Høst 2024", nr: 51 }, { eksamen: "Øvingssett", nr: 15 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1, ogsa: [{ eksamen: "Høst 2024", nr: 51 }, { eksamen: "Høst 2024", nr: 115 }]
   },
   {
     id: "H25-053", eksamen: "Høst 2025", nr: 53, tema: "Psykisk helse, mestring og stigma", poeng: 1,
@@ -609,7 +609,7 @@ const OPPGAVER = [
       "Grad av produktivitet, prestasjon og evne til konsentrasjon"
     ],
     riktig: 1, forklaring: "Forutsigbarhet, sosial støtte og opplevd kontroll er de klassiske faktorene som demper stressopplevelsen.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1, ogsa: [{ eksamen: "Høst 2024", nr: 13 }, { eksamen: "Øvingssett", nr: 83 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1, ogsa: [{ eksamen: "Høst 2024", nr: 13 }, { eksamen: "Høst 2024", nr: 183 }]
   },
   {
     id: "H25-054", eksamen: "Høst 2025", nr: 54, tema: "Binaural hørsel og lokalisering", poeng: 1,
@@ -648,7 +648,7 @@ const OPPGAVER = [
       "Conform - Det er viktig at en er tilpasningsdyktig, at en er i stand til å endre adferd, tanker og følelser"
     ],
     riktig: 1, forklaring: "ABC = Act (gjør noe aktivt), Belong (gjør noe sammen med andre), Commit (gjør noe meningsfullt).",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1, ogsa: [{ eksamen: "Høst 2024", nr: 38 }, { eksamen: "Øvingssett", nr: 69 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1, ogsa: [{ eksamen: "Høst 2024", nr: 38 }, { eksamen: "Høst 2024", nr: 169 }]
   },
   {
     id: "H25-057", eksamen: "Høst 2025", nr: 57, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
@@ -669,7 +669,7 @@ const OPPGAVER = [
     figur: null,
     alternativer: ["Interhemisfærisk kommunikasjon", "Reflekser", "Høreterskler", "Språktilegnelse"],
     riktig: 0, forklaring: "Corpus callosum forbinder hjernehalvdelene. Modningen bedrer overføringen mellom dem, noe som blant annet ses i dikotisk lytting.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 0, ogsa: [{ eksamen: "Øvingssett", nr: 29 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 0, ogsa: [{ eksamen: "Høst 2024", nr: 129 }]
   },
   {
     id: "H25-059", eksamen: "Høst 2025", nr: 59, tema: "Anatomi og hørselsfysiologi", poeng: 1,
@@ -685,7 +685,7 @@ const OPPGAVER = [
     figur: null,
     alternativer: ["Nominalskalerte", "Intervallskalerte", "Ordinalskalerte", "Ratioskalerte"],
     riktig: 0, forklaring: "Screeningkonklusjonen er «bestått/ikke bestått» (pass/refer), altså kategorier uten rekkefølge: nominalskala.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 0, ogsa: [{ eksamen: "Høst 2024", nr: 23 }, { eksamen: "Øvingssett", nr: 116 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 0, ogsa: [{ eksamen: "Høst 2024", nr: 23 }, { eksamen: "Høst 2024", nr: 216 }]
   },
   {
     id: "H25-061", eksamen: "Høst 2025", nr: 61, tema: "Forskningsmetode", poeng: 1,
@@ -719,7 +719,7 @@ const OPPGAVER = [
       "Øk utvalgsstørrelsen"
     ],
     riktig: 1, forklaring: "p < α betyr at resultatet er statistisk signifikant, og da forkastes nullhypotesen.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1, ogsa: [{ eksamen: "Øvingssett", nr: 109 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1, ogsa: [{ eksamen: "Høst 2024", nr: 209 }]
   },
   {
     id: "H25-064", eksamen: "Høst 2025", nr: 64, tema: "Høreapparat og forsterkning", poeng: 1,
@@ -868,7 +868,7 @@ const OPPGAVER = [
       "Gjennomsnitt og median vil bli identisk"
     ],
     riktig: 1, forklaring: "Ved positiv skjevhet (lang hale mot høyre) trekker de høye verdiene gjennomsnittet opp, så gjennomsnitt > median.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 0, ogsa: [{ eksamen: "Øvingssett", nr: 105 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 0, ogsa: [{ eksamen: "Høst 2024", nr: 205 }]
   },
   {
     id: "H25-077", eksamen: "Høst 2025", nr: 77, tema: "Anatomi og hørselsfysiologi", poeng: 1,
@@ -881,7 +881,7 @@ const OPPGAVER = [
       "Fysiologiske endringer i den apikale delen av cochlea"
     ],
     riktig: 2, forklaring: "Høye frekvenser kodes i basis av cochlea, der aldersrelatert hårcelletap typisk starter (presbyacusis).",
-    fasit: "generert", sikkerhet: "middels", kandidatsvar: 2, ogsa: [{ eksamen: "Øvingssett", nr: 59 }]
+    fasit: "generert", sikkerhet: "middels", kandidatsvar: 2, ogsa: [{ eksamen: "Høst 2024", nr: 159 }]
   },
   {
     id: "H25-078", eksamen: "Høst 2025", nr: 78, tema: "Psykisk helse, mestring og stigma", poeng: 1,
@@ -928,7 +928,7 @@ const OPPGAVER = [
       "Inneholder nevronceller, dendritter og umyeliniserte aksoner"
     ],
     riktig: 3, forklaring: "Grå substans består av cellekropper, dendritter og umyeliniserte aksoner. Hvit substans består av myeliniserte aksoner som leder raskt over lange avstander.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 2, ogsa: [{ eksamen: "Øvingssett", nr: 39 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 2, ogsa: [{ eksamen: "Høst 2024", nr: 139 }]
   },
   {
     id: "H25-082", eksamen: "Høst 2025", nr: 82, tema: "Diagnostikk og måling", poeng: 1,
@@ -967,7 +967,7 @@ const OPPGAVER = [
       "Prosessen med uunngåelige kroppslige endringer som skjer med alderen"
     ],
     riktig: 1, forklaring: "Sekundær aldring er endringer som skyldes sykdom, livsstil og miljø. Uunngåelige endringer er primær aldring.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1, ogsa: [{ eksamen: "Høst 2024", nr: 76 }, { eksamen: "Øvingssett", nr: 57 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1, ogsa: [{ eksamen: "Høst 2024", nr: 76 }, { eksamen: "Høst 2024", nr: 157 }]
   },
   {
     id: "H25-085", eksamen: "Høst 2025", nr: 85, tema: "Anatomi og hørselsfysiologi", poeng: 1,
@@ -993,7 +993,7 @@ const OPPGAVER = [
       "DPOAE er et subjektivt mål på funksjonen til de ytre hårcellene"
     ],
     riktig: 2, forklaring: "DPOAE er et objektivt mål på de ytre hårcellenes ikke-lineære funksjon. Det kan måles i store deler av cochlea, også i basis (høye frekvenser).",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 2, ogsa: [{ eksamen: "Høst 2024", nr: 97 }, { eksamen: "Øvingssett", nr: 14 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 2, ogsa: [{ eksamen: "Høst 2024", nr: 97 }, { eksamen: "Høst 2024", nr: 114 }]
   },
   {
     id: "H25-087", eksamen: "Høst 2025", nr: 87, tema: "Binaural hørsel og lokalisering", poeng: 1,
@@ -1027,7 +1027,7 @@ const OPPGAVER = [
       "... man ønsker store utvalg for å undersøke gjennomsnitt"
     ],
     riktig: 0, forklaring: "Kvalitativ metode brukes for å forstå meninger og erfaringer. Omfang, effekt, signifikans og gjennomsnitt er kvantitative mål.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 0, ogsa: [{ eksamen: "Øvingssett", nr: 112 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 0, ogsa: [{ eksamen: "Høst 2024", nr: 212 }]
   },
   {
     id: "H25-090", eksamen: "Høst 2025", nr: 90, tema: "Psykisk helse, mestring og stigma", poeng: 1,
@@ -1048,7 +1048,7 @@ const OPPGAVER = [
     figur: null,
     alternativer: ["Ved 2000 Hz", "Ved 500 Hz", "Ved 100 Hz for kvinner og 200 Hz for menn", "Ved 100 Hz for menn og 200 Hz for kvinner"],
     riktig: 1, forklaring: "Taleenergien er størst rundt 250–500 Hz og faller av mot høye frekvenser.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1, ogsa: [{ eksamen: "Høst 2024", nr: 94 }, { eksamen: "Øvingssett", nr: 45 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1, ogsa: [{ eksamen: "Høst 2024", nr: 94 }, { eksamen: "Høst 2024", nr: 145 }]
   },
   {
     id: "H25-092", eksamen: "Høst 2025", nr: 92, tema: "Vestibulært", poeng: 1,
@@ -1056,7 +1056,7 @@ const OPPGAVER = [
     figur: null,
     alternativer: ["Morbus Ménière", "Otosklerose", "Superior canal dehiscence (SCD)", "BPPV"],
     riktig: 2, forklaring: "Ved SCD gir «det tredje vinduet» økt følsomhet for lyd i det vestibulære systemet, med store VEMP-amplituder og lave terskler.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 2, ogsa: [{ eksamen: "Høst 2024", nr: 95 }, { eksamen: "Øvingssett", nr: 98 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 2, ogsa: [{ eksamen: "Høst 2024", nr: 95 }, { eksamen: "Høst 2024", nr: 198 }]
   },
   {
     id: "H25-093", eksamen: "Høst 2025", nr: 93, tema: "Statistikk", poeng: 1,
@@ -1085,7 +1085,7 @@ const OPPGAVER = [
     figur: null,
     alternativer: ["Randomisert kontrollert studie", "Tversnittstudier", "Metaanalyser", "Kohortstudier"],
     riktig: 1, forklaring: "Prevalens er andelen med en tilstand på et gitt tidspunkt, og det måles med tverrsnittstudier. Kohortstudier måler insidens over tid.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1, ogsa: [{ eksamen: "Høst 2024", nr: 41 }, { eksamen: "Øvingssett", nr: 111 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1, ogsa: [{ eksamen: "Høst 2024", nr: 41 }, { eksamen: "Høst 2024", nr: 211 }]
   },
   {
     id: "H25-096", eksamen: "Høst 2025", nr: 96, tema: "Diagnostikk og måling", poeng: 1,
@@ -1098,7 +1098,7 @@ const OPPGAVER = [
       "Den maskerte terskelen må være minst 10 dB høyere enn TEN støynivået, men kan ligge under den absolutte terskelen"
     ],
     riktig: 1, forklaring: "Moores kriterium: den maskerte terskelen skal ligge ≥ 10 dB over TEN-nivået og ≥ 10 dB over den absolutte terskelen.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1, ogsa: [{ eksamen: "Øvingssett", nr: 10 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1, ogsa: [{ eksamen: "Høst 2024", nr: 110 }]
   },
   {
     id: "H25-097", eksamen: "Høst 2025", nr: 97, tema: "Statistikk", poeng: 1,
@@ -1106,7 +1106,7 @@ const OPPGAVER = [
     figur: "figurer/oppg097.jpg",
     alternativer: ["Høreterskler", "Kjønn", "Alder", "Frekvens"],
     riktig: 0, forklaring: "Hørselsterskelen er utfallet som måles (y-aksen). Kjønn, alder og frekvens er uavhengige variabler som den sees i forhold til.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 0, ogsa: [{ eksamen: "Høst 2024", nr: 71 }, { eksamen: "Øvingssett", nr: 119 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 0, ogsa: [{ eksamen: "Høst 2024", nr: 71 }, { eksamen: "Høst 2024", nr: 219 }]
   },
   {
     id: "H25-098", eksamen: "Høst 2025", nr: 98, tema: "Tale og akustikk", poeng: 1,
@@ -1140,6 +1140,6 @@ const OPPGAVER = [
       "At sosial isolasjon er den ledende årsaken til kognitiv svikt ved hørselstap"
     ],
     riktig: 0, forklaring: "Common cause-hypotesen sier at én felles underliggende prosess (f.eks. aldersrelatert nevral degenerasjon) svekker både hørsel og kognisjon. At hørselstap direkte forverrer kognisjon er derimot «cascade»-hypotesen.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 0, ogsa: [{ eksamen: "Øvingssett", nr: 64 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 0, ogsa: [{ eksamen: "Høst 2024", nr: 164 }]
   }
 ];
