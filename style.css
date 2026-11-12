@@ -409,3 +409,39 @@ legend { font-weight: 600; font-size: 0.95rem; padding: 0 4px; }
 }
 .menyvalg:hover { background: var(--bakgrunn); }
 .menyvalg.aktiv { color: var(--aksent); font-weight: 600; }
+
+/* ---------- Avkrysningslister for tema og eksamen ---------- */
+
+.filterfelt { margin: 10px 0; }
+.filteretikett { display: block; font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; }
+.flervalgfilter {
+  border: 1px solid var(--kant);
+  border-radius: 8px;
+  background: var(--bakgrunn);
+}
+.flervalgfilter summary {
+  cursor: pointer;
+  padding: 8px 10px;
+  list-style-position: inside;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.filtervalg {
+  border-top: 1px solid var(--kant);
+  padding: 4px 0;
+  max-height: 320px;
+  overflow-y: auto;
+}
+.filterlinje {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 8px 10px;
+  font-weight: normal;
+  cursor: pointer;
+}
+.filterlinje:hover { background: var(--flate); }
+.filterlinje input { width: 18px; height: 18px; margin: 0; flex: none; }
+.filterlinje.alle { border-bottom: 1px solid var(--kant); font-weight: 600; }

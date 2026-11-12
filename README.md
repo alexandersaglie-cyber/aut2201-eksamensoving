@@ -9,7 +9,7 @@ Dobbeltklikk på `index.html`, så åpnes appen i nettleseren. Den trenger ingen
 - **Flashcards:** Snu kortet og svar «Kunne», «Usikker» eller «Kunne ikke». Kort du ikke kan, kommer oftere igjen. Forsiden viser hvor mange kort som ligger på hvert nivå, fra «Kan ikke» via «Lærer», «Halvveis» og «Nesten» til «Kan».
 - **Flervalg:** Eksamensspørsmål med stokkede alternativer, forklaring etter hvert svar, og karakter (A–F) og svake tema til slutt. Svarene lagres underveis, så lukker man appen midt i en runde, kan man trykke «Fortsett der du slapp» på forsiden – også på en annen enhet.
 - **Mine resultater:** Alle fullførte flervalgsrunder lagres med karakter. Siden viser utvikling over tid, snitt, beste karakter og svake tema samlet. Karakteren følger NTNUs prosentskala: A ≥ 89 %, B ≥ 77 %, C ≥ 65 %, D ≥ 53 %, E ≥ 41 %, F under 41 %.
-- **Filter:** Velg tema eller eksamen på forsiden. Filteret gjelder begge modusene.
+- **Filter:** Kryss av for ett eller flere tema og eksamener på forsiden. Ingen kryss betyr alle. Filteret gjelder begge modusene.
 - **Skjul for meg / Meld feil:** Skjul kort og spørsmål du ikke vil se, eller meld fra om feil i et bestemt kort til administrator.
 - **Meny (☰):** De tre strekene øverst til høyre viser kontoen, lar deg bytte fag, og har innstillingene: tilbakemelding, skjulte kort, sikkerhetskopi, nullstilling og «Logg ut».
 - **Send tilbakemelding:** I menyen kan alle sende generelle tilbakemeldinger og forslag til administrator.

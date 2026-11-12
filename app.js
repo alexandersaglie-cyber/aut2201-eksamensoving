@@ -210,16 +210,55 @@ function eksamener() {
 // Resultater (fullførte flervalgsrunder) i faget som er valgt.
 function mineResultater() { return lagret.resultater.filter(r => (r.emne || "AUT2201") === lagret.valgtFag); }
 
-// Filteret på forsiden gjelder både flashcards og flervalg.
-let filter = { tema: "", eksamen: "" };
+// Filteret på forsiden gjelder både flashcards og flervalg. Man kan krysse av for flere tema og
+// eksamener. En tom liste betyr «alle».
+let filter = { tema: [], eksamen: [] };
+// Hvilken av avkrysningslistene som er åpen ("tema", "eksamen" eller null), så den holdes åpen
+// når forsiden tegnes på nytt etter et kryss.
+let apentFilter = null;
 // Hvor mange spørsmål en flervalgsrunde har. Spørsmålene trekkes tilfeldig fra utvalget.
 const ANTALL_VALG = ["25", "50", "100"];
 let antallValgt = "100";
 
 function filtrert(liste) {
   return liste.filter(x =>
-    (!filter.tema || x.tema === filter.tema) &&
-    (!filter.eksamen || eksamenerFor(x).includes(filter.eksamen)));
+    (!filter.tema.length || filter.tema.includes(x.tema)) &&
+    (!filter.eksamen.length || eksamenerFor(x).some(e => filter.eksamen.includes(e))));
+}
+
+// Avkrysningsliste for tema eller eksamen på forsiden.
+// felt er "tema" eller "eksamen", alle er alle valgene, alleTekst f.eks. "Alle tema".
+function flervalgFilter(felt, etikett, alle, alleTekst) {
+  const valgt = filter[felt];
+  const sammendrag = !valgt.length ? alleTekst
+    : valgt.length === 1 ? valgt[0]
+    : `${valgt.length} valgt`;
+  return `
+    <div class="filterfelt">
+      <span class="filteretikett">${etikett}</span>
+      <details class="flervalgfilter" data-felt="${felt}" ${apentFilter === felt ? "open" : ""}>
+        <summary>${esc(sammendrag)}</summary>
+        <div class="filtervalg">
+          <label class="filterlinje alle"><input type="checkbox" data-filter="${felt}" value="" ${valgt.length ? "" : "checked"}> ${esc(alleTekst)}</label>
+          ${alle.map(v => `
+            <label class="filterlinje"><input type="checkbox" data-filter="${felt}" value="${esc(v)}" ${valgt.includes(v) ? "checked" : ""}> ${esc(v)}</label>`).join("")}
+        </div>
+      </details>
+    </div>`;
+}
+
+// Et kryss i en avkrysningsliste. «Alle» tømmer lista. Er alt krysset av, blir det «alle».
+function endreFilter(felt, verdi, pa) {
+  const alle = felt === "tema" ? temaer() : eksamener();
+  let valgt = verdi === "" ? [] : pa ? [...filter[felt], verdi] : filter[felt].filter(v => v !== verdi);
+  valgt = alle.filter(v => valgt.includes(v)); // samme rekkefølge som i lista, uten doble
+  if (valgt.length === alle.length) valgt = [];
+  filter[felt] = valgt;
+  apentFilter = felt;
+  // Tegn forsiden på nytt uten å hoppe til toppen.
+  const y = window.scrollY;
+  visHjem();
+  window.scrollTo(0, y);
 }
 
 // Et spørsmål kan ha gått igjen på flere eksamener. «ogsa» lister de andre kildene,
@@ -307,6 +346,7 @@ let skjerm = "hjem";
 
 function vis(navn, html) {
   skjerm = navn;
+  if (navn !== "hjem") apentFilter = null;
   app.innerHTML = html;
   hjemKnapp.hidden = navn === "hjem" || maLoggeInn();
   menyKnapp.hidden = maLoggeInn();
@@ -402,10 +442,6 @@ function visHjem() {
   const kan = iBoks[5];
   const sisteRunde = mineResultater().at(-1);
 
-  const temaValg = temaer().map(t =>
-    `<option ${t === filter.tema ? "selected" : ""}>${esc(t)}</option>`).join("");
-  const eksamenValg = eksamener().map(e =>
-    `<option ${e === filter.eksamen ? "selected" : ""}>${esc(e)}</option>`).join("");
   const antallValg = ANTALL_VALG.map(a =>
     `<option value="${a}" ${a === antallValgt ? "selected" : ""}>${a} spørsmål</option>`).join("");
   // Har utvalget (f.eks. ett tema) færre spørsmål enn valgt, blir runden kortere.
@@ -419,12 +455,8 @@ function visHjem() {
     <section class="panel">
       <h2>Hva vil du øve på?</h2>
       <div class="filtre">
-        <label>Tema
-          <select id="filter-tema"><option value="">Alle tema</option>${temaValg}</select>
-        </label>
-        <label>Eksamen
-          <select id="filter-eksamen"><option value="">Alle eksamener</option>${eksamenValg}</select>
-        </label>
+        ${flervalgFilter("tema", "Tema", temaer(), "Alle tema")}
+        ${flervalgFilter("eksamen", "Eksamen", eksamener(), "Alle eksamener")}
       </div>
       <p class="dempet">${kort.length} flashcards og ${oppgaver.length} flervalgsspørsmål i utvalget.</p>
     </section>
@@ -704,7 +736,9 @@ function forkastPabegyntRunde() {
 }
 
 function beskrivFilter() {
-  return `${filter.tema || "Alle tema"} · ${filter.eksamen || "Alle eksamener"}`;
+  const tekst = (valgt, alle, flertall) =>
+    !valgt.length ? alle : valgt.length <= 2 ? valgt.join(" og ") : `${valgt.length} ${flertall}`;
+  return `${tekst(filter.tema, "Alle tema", "tema")} · ${tekst(filter.eksamen, "Alle eksamener", "eksamener")}`;
 }
 
 function visSporsmal() {
@@ -1634,13 +1668,13 @@ const HANDLINGER = {
     forkastPabegyntRunde();
   },
   "ov-tema": el => {
-    filter = { tema: el.dataset.tema, eksamen: "" };
+    filter = { tema: [el.dataset.tema], eksamen: [] };
     HANDLINGER["start-flervalg"]();
   },
   "mine-resultater": () => visMineResultater(),
   "velg-fag": el => {
     lagret.valgtFag = el.dataset.fag;
-    filter = { tema: "", eksamen: "" }; // temaer og eksamener er forskjellige i hvert fag
+    filter = { tema: [], eksamen: [] }; // temaer og eksamener er forskjellige i hvert fag
     lagreLokalt();
     visHjem();
   },
@@ -1733,12 +1767,19 @@ document.addEventListener("click", hendelse => {
 
 menyKnapp.addEventListener("click", () => meny.hidden ? apneMeny() : lukkMeny());
 
+// Husk hvilken avkrysningsliste på forsiden som er åpen («toggle» bobler ikke, derfor true).
+document.addEventListener("toggle", hendelse => {
+  const d = hendelse.target;
+  if (!d.classList?.contains("flervalgfilter")) return;
+  if (d.open) apentFilter = d.dataset.felt;
+  else if (apentFilter === d.dataset.felt) apentFilter = null;
+}, true);
+
 document.addEventListener("change", hendelse => {
   if (!hendelse.target.closest("#app, #meny")) return;
   if (hendelse.target.id === "importer") lukkMeny();
   const el = hendelse.target;
-  if (el.id === "filter-tema") { filter.tema = el.value; visHjem(); }
-  if (el.id === "filter-eksamen") { filter.eksamen = el.value; visHjem(); }
+  if (el.dataset.filter) endreFilter(el.dataset.filter, el.value, el.checked);
   if (el.id === "antall") { antallValgt = el.value; visHjem(); }
   if (el.id === "importer" && el.files[0]) importer(el.files[0]);
   if (el.classList.contains("vis-passord")) {
