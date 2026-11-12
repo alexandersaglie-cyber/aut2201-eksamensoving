@@ -62,7 +62,7 @@ Appen ligger på GitHub Pages: https://alexandersaglie-cyber.github.io/aut2201-e
 | `data/oppgaver.js` | De 100 oppgavene fra eksamen høst 2025 med fasit og forklaring |
 | `data/oppgaver-host2024-offisiell.js` | 50 oppgaver fra den offisielle eksamenen høst 2024. De andre 50 var like oppgaver fra høst 2025 og står der med begge kildene (feltet `ogsa`) |
 | `data/oppgaver-host2024.js` | Øvingsspørsmål til høst 2024 (eksamensark.docx): 72 korte spørsmål med nr 101–220 under «Høst 2024». 48 som lå dobbelt, er slått sammen inn i eksamensoppgavene |
-| `data/oppgaver-pensum.js` | Pensumspørsmål: 85 KI-genererte spørsmål ut fra forelesningene (Majas øvingseksamen 2026), med oppgitt fasit. 15 som fantes fra før, har fått kilden `ogsa` i stedet |
+| `data/oppgaver-pensum.js` | Pensumspørsmål: 85 KI-genererte spørsmål ut fra forelesningene (Majas øvingseksamen 2026), med oppgitt fasit. 15 som fantes fra før i andre eksamener, er tatt ut av settet |
 | `data/kort.js` | 89 flashcards fra høst 2025 |
 | `data/kort-host2024.js` | 38 flashcards fra øvingsspørsmålene til høst 2024 |
 | `data/kort-host2024-offisiell.js` | 30 flashcards med nye begreper fra høst 2024 |

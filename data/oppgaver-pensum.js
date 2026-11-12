@@ -1,8 +1,8 @@
 // Pensumspørsmål for AUT2201: 100 flervalgsspørsmål generert med KI ut fra forelesningene
 // (Majas øvingseksamen 2026, med fasit og forklaringer). Ikke en offisiell eksamen.
 // Fasiten er oppgitt i fasitarket og kontrollert. Pensumhenvisningen står bak forklaringen.
-// 15 spørsmål fantes allerede i banken og ligger ikke her. De har fått kilden
-// «Pensumspørsmål, oppg. N» i feltet ogsa: 2 (EA-033), 6 (EA-052), 8 (O24-098), 9 (O24-061), 12 (EA-034), 29 (EA-100), 36 (EA-050), 38 (EA-103), 49 (EA-092), 69 (EA-096), 70 (O24-047), 71 (EA-054), 88 (H25-092), 91 (EA-006), 100 (O24-069).
+// 15 spørsmål fantes allerede i banken og er tatt ut av settet (nr og spørsmålet
+// som finnes fra før): 2 (EA-033), 6 (EA-052), 8 (O24-098), 9 (O24-061), 12 (EA-034), 29 (EA-100), 36 (EA-050), 38 (EA-103), 49 (EA-092), 69 (EA-096), 70 (O24-047), 71 (EA-054), 88 (H25-092), 91 (EA-006), 100 (O24-069).
 // Bygd fra kilder/pensum-2026.txt med kilder/bygg-pensum.pl. Samme felter som i data/oppgaver.js.
 
 OPPGAVER.push(

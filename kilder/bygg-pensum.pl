@@ -1,7 +1,7 @@
 use utf8; use open qw(:std :encoding(UTF-8));
 # Lager data/oppgaver-pensum.js fra kilder/pensum-2026.txt (Majas AI-genererte øvingseksamen
-# med fasit, basert på pensum i AUT2201). Spørsmål som allerede fantes i banken, legges ikke inn
-# på nytt. I stedet får det eksisterende spørsmålet kilden «Pensumspørsmål, oppg. N» (ogsa).
+# med fasit, basert på pensum i AUT2201). Spørsmål som allerede fantes i banken, er tatt ut av
+# pensumsettet. Spørsmålene i de andre eksamenene er ikke endret.
 # Bruk (fra prosjektmappa): perl kilder/bygg-pensum.pl
 # Linjeformat i kildefila: nr|riktig(0-3)|tekst|A;;B;;C;;D|forklaring|pensum
 my $NAVN = 'Pensumspørsmål';
@@ -49,22 +49,11 @@ close $h;
 my $js = "// Pensumspørsmål for AUT2201: 100 flervalgsspørsmål generert med KI ut fra forelesningene\n"
   . "// (Majas øvingseksamen 2026, med fasit og forklaringer). Ikke en offisiell eksamen.\n"
   . "// Fasiten er oppgitt i fasitarket og kontrollert. Pensumhenvisningen står bak forklaringen.\n"
-  . "// " . scalar(keys %finnes) . " spørsmål fantes allerede i banken og ligger ikke her. De har fått kilden\n"
-  . "// «Pensumspørsmål, oppg. N» i feltet ogsa: " . join(', ', map { "$_ ($finnes{$_})" } sort { $a <=> $b } keys %finnes) . ".\n"
+  . "// " . scalar(keys %finnes) . " spørsmål fantes allerede i banken og er tatt ut av settet (nr og spørsmålet\n"
+  . "// som finnes fra før): " . join(', ', map { "$_ ($finnes{$_})" } sort { $a <=> $b } keys %finnes) . ".\n"
   . "// Bygd fra kilder/pensum-2026.txt med kilder/bygg-pensum.pl. Samme felter som i data/oppgaver.js.\n\n"
   . "OPPGAVER.push(\n" . join(",\n", @ut) . "\n);\n";
 skriv('data/oppgaver-pensum.js', $js);
 
-# Legg til kilden i spørsmålene som fantes fra før.
-my $lagt = 0;
-for my $f ('data/oppgaver.js', 'data/oppgaver-host2024.js', 'data/oppgaver-host2024-offisiell.js') {
-  my $t = les($f); my $for = $t;
-  for my $id (keys %ogsaFor) {
-    my $ny = join(', ', map { "{ eksamen: \"$NAVN\", nr: $_ }" } @{$ogsaFor{$id}});
-    next if $t =~ /id: "$id".*?eksamen: "$NAVN"/s && $t =~ /id: "$id"(?:(?!\n  \}).)*eksamen: "$NAVN"/s; # allerede lagt til
-    if ($t =~ s/(id: "$id"(?:(?!\n  \}).)*?ogsa: \[[^\]]*)\]/$1, $ny]/s) { $lagt++; next; }
-    $lagt++ if $t =~ s/(id: "$id"(?:(?!\n  \}).)*?fasit: "[^"]*", sikkerhet: "[^"]*"(?:, kandidatsvar: \d)?)(\n  \})/$1, ogsa: [$ny]$2/s;
-  }
-  skriv($f, $t) if $t ne $for;
-}
-print "Nye spørsmål: ", scalar(@ut), ", kilde lagt til i ", $lagt, " av ", scalar(keys %ogsaFor), " eksisterende\n";
+# Spørsmålene i de andre eksamenene røres ikke.
+print "Nye spørsmål: ", scalar(@ut), ", tatt ut fordi de fantes fra før: ", scalar(keys %ogsaFor), "\n";

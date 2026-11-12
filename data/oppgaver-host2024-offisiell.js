@@ -341,7 +341,7 @@ OPPGAVER.push(
       "Den kontralaterale dorsale nucleus av den laterale lemnisken"
     ],
     riktig: 2, forklaring: "MSO sender hovedsakelig til ipsilateral inferior colliculus (via lateral lemniscus).",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 2, ogsa: [{ eksamen: "Pensumspørsmål", nr: 70 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 2
   },
   {
     id: "O24-048", eksamen: "Høst 2024", nr: 48, tema: "Sentrale hørselsbaner og plastisitet", poeng: 1,
@@ -471,7 +471,7 @@ OPPGAVER.push(
       "VEMPs kan utløses med vilje"
     ],
     riktig: 1, forklaring: "VEMP er myogene potensialer: endringer i muskelaktiviteten (sternocleidomastoideus eller øyemuskler) utløst via vestibulærsystemet.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 3, ogsa: [{ eksamen: "Pensumspørsmål", nr: 9 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 3
   },
   {
     id: "O24-062", eksamen: "Høst 2024", nr: 62, tema: "Binaural hørsel og lokalisering", poeng: 1,
@@ -510,7 +510,7 @@ OPPGAVER.push(
       "type II-feil (betafeil)"
     ],
     riktig: 3, forklaring: "Testen oversåg en tilstand som faktisk var der. Det er et falskt negativt funn, altså en type II-feil.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 3, ogsa: [{ eksamen: "Høst 2024", nr: 208 }, { eksamen: "Pensumspørsmål", nr: 100 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 3, ogsa: [{ eksamen: "Høst 2024", nr: 208 }]
   },
   {
     id: "O24-070", eksamen: "Høst 2024", nr: 70, tema: "Aldring og kognisjon", poeng: 1,
@@ -640,7 +640,7 @@ OPPGAVER.push(
       "Ordinalskalerte"
     ],
     riktig: 0, forklaring: "Volum har et absolutt nullpunkt og like intervaller. Det er ratioskala.",
-    fasit: "generert", sikkerhet: "høy", ogsa: [{ eksamen: "Pensumspørsmål", nr: 8 }]
+    fasit: "generert", sikkerhet: "høy"
   },
   {
     id: "O24-099", eksamen: "Høst 2024", nr: 99, tema: "Høreapparat og forsterkning", poeng: 1,

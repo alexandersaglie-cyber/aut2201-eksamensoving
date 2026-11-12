@@ -1056,7 +1056,7 @@ const OPPGAVER = [
     figur: null,
     alternativer: ["Morbus Ménière", "Otosklerose", "Superior canal dehiscence (SCD)", "BPPV"],
     riktig: 2, forklaring: "Ved SCD gir «det tredje vinduet» økt følsomhet for lyd i det vestibulære systemet, med store VEMP-amplituder og lave terskler.",
-    fasit: "generert", sikkerhet: "høy", kandidatsvar: 2, ogsa: [{ eksamen: "Høst 2024", nr: 95 }, { eksamen: "Høst 2024", nr: 198 }, { eksamen: "Pensumspørsmål", nr: 88 }]
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 2, ogsa: [{ eksamen: "Høst 2024", nr: 95 }, { eksamen: "Høst 2024", nr: 198 }]
   },
   {
     id: "H25-093", eksamen: "Høst 2025", nr: 93, tema: "Statistikk", poeng: 1,
