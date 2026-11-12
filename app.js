@@ -31,6 +31,7 @@ const LAGRINGSNOKKEL = "aut2201-eksamensoving";
 // resultater: fullførte flervalgsrunder med karakter (se lagreRunde()).
 // pagaendeRunde: flervalgsrundene man er midt i, per fag ({ AUT2201: runde, … }), så de kan
 //             fortsettes etter at appen er lukket, også på en annen enhet (se lagreRundeTilstand()).
+// fagliste:   fagene fra databasen (kode, navn, status, rekkefolge), så de finnes også uten nett.
 // valgtFag:   koden til faget man øver på (f.eks. "AUT2201"). Appen åpner i dette faget neste gang.
 // pagaendeRundeTid: når den påbegynte runden sist endret seg (brukes til å avgjøre hva som er nyest ved synk).
 // nullstilt:  når fremgangen / resultathistorikken sist ble nullstilt: { fremgang, resultater }.
@@ -175,15 +176,29 @@ function tilpass(x, original) {
   return ut;
 }
 
-// Fagene i appen. Et nytt fag legges til her og får egne datafiler med emne: "<kode>".
-const FAG = [
-  { kode: "AUT1000", navn: "Audiologisk grunnkurs 1" },
-  { kode: "AUT2201", navn: "Audiologisk grunnkurs 2" }
+// Fagene styres av admin i tabellen «fag» i Supabase (se supabase/06_fagliste.sql), med status
+// utkast / publisert / skjult. Lista hentes ved innlogging og huskes i lagret.fagliste.
+// Denne lista brukes bare før lista er hentet første gang (f.eks. uten nett).
+// Spørsmål og kort til et fag ligger i egne datafiler med emne: "<kode>".
+const STANDARD_FAG = [
+  { kode: "AUT1000", navn: "Audiologisk grunnkurs 1", status: "publisert", rekkefolge: 1 },
+  { kode: "AUT2201", navn: "Audiologisk grunnkurs 2", status: "publisert", rekkefolge: 2 }
 ];
+const FAGSTATUS = { utkast: "Utkast", publisert: "Publisert", skjult: "Skjult" };
+
+// Alle fag appen kjenner til, i riktig rekkefølge.
+function alleFag() {
+  const liste = lagret.fagliste?.length ? lagret.fagliste : STANDARD_FAG;
+  return [...liste].sort((a, b) => a.rekkefolge - b.rekkefolge || a.kode.localeCompare(b.kode));
+}
+// Fagene brukeren får velge: publiserte, og for admin også utkast og skjulte.
+function synligeFag() { return alleFag().filter(f => f.status === "publisert" || erAdmin()); }
+// Liten merkelapp for admin på fag som ikke er publisert.
+function fagMerke(f) { return f.status === "publisert" ? "" : ` <span class="merke">${esc(FAGSTATUS[f.status] || f.status)}</span>`; }
 
 // Innhold uten emne-felt (de første datafilene) hører til AUT2201.
 function fagFor(x) { return x.emne || "AUT2201"; }
-function valgtFag() { return FAG.find(f => f.kode === lagret.valgtFag) || null; }
+function valgtFag() { return synligeFag().find(f => f.kode === lagret.valgtFag) || null; }
 function iValgtFag(liste) { return liste.filter(x => fagFor(x) === lagret.valgtFag); }
 
 // Kort og spørsmål i faget som er valgt, uten de man har skjult for seg selv.
@@ -380,9 +395,9 @@ function menyInnhold() {
     <div class="menydel">${profil}</div>
     <div class="menydel">
       <h3>Fag</h3>
-      ${FAG.map(f => `
+      ${synligeFag().map(f => `
         <button class="menyvalg ${f.kode === lagret.valgtFag ? "aktiv" : ""}" data-handling="velg-fag" data-fag="${f.kode}">
-          ${esc(f.kode)} ${esc(f.navn)}${f.kode === lagret.valgtFag ? " ✓" : ""}
+          ${esc(f.kode)} ${esc(f.navn)}${fagMerke(f)}${f.kode === lagret.valgtFag ? " ✓" : ""}
         </button>`).join("")}
     </div>
     <div class="menydel">
@@ -522,7 +537,7 @@ function visVelgFag() {
       <h2>Velg fag</h2>
       <p class="dempet">Hvilket fag vil du øve på? Appen husker valget, og du kan bytte i menyen (☰) øverst til høyre.</p>
     </section>
-    ${FAG.map(f => {
+    ${synligeFag().map(f => {
       const opp = alleOpp.filter(x => fagFor(x) === f.kode);
       const kort = alleK.filter(x => fagFor(x) === f.kode);
       const eks = [...new Set(opp.flatMap(eksamenerFor))];
@@ -531,8 +546,8 @@ function visVelgFag() {
       return `
         <button class="panel fagvalg ${f.kode === lagret.valgtFag ? "aktiv" : ""}" data-handling="velg-fag" data-fag="${f.kode}">
           <span class="fagkode">${esc(f.kode)}</span>
-          <b>${esc(f.navn)}</b>
-          <span class="dempet">${opp.length} spørsmål · ${kort.length} flashcards · ${esc(eks.join(", "))}</span>
+          <b>${esc(f.navn)}${fagMerke(f)}</b>
+          <span class="dempet">${opp.length} spørsmål · ${kort.length} flashcards${eks.length ? " · " + esc(eks.join(", ")) : ""}</span>
           <span class="dempet">${runder} runder fullført · ${ovd} kort øvd</span>
         </button>`;
     }).join("")}
@@ -1045,7 +1060,7 @@ function adminFaner(aktiv) {
     <section class="panel">
       <h2>Adminpanel</h2>
       <p class="dempet">Innholdet gjelder ${esc(lagret.valgtFag)}. Bytt fag i menyen (☰) for å redigere et annet fag.</p>
-      <div class="faner">${fane("brukere", "Brukere")}${fane("innhold", "Innhold")}${fane("feil", "Meldinger")}</div>
+      <div class="faner">${fane("brukere", "Brukere")}${fane("innhold", "Innhold")}${fane("feil", "Meldinger")}${fane("fag", "Fag")}</div>
     </section>`;
 }
 
@@ -1316,6 +1331,75 @@ function vedInnholdHentet() {
   if (skjerm === "hjem") visHjem();
 }
 
+// ---------- Fag ----------
+
+// Kalles fra sky.js når faglista er hentet. Er det valgte faget ikke lenger synlig
+// (f.eks. skjult av admin), må brukeren velge et annet.
+function vedFagHentet() {
+  if (skjerm === "hjem" || skjerm === "velgfag") visHjem();
+  if (skjerm === "admin-fag") visAdminFag();
+}
+
+function visAdminFag() {
+  const rad = f => `
+    <div class="fagrad" data-kode="${esc(f.kode)}">
+      <div class="fagrad-felt">
+        <label>Kode<input type="text" value="${esc(f.kode)}" disabled></label>
+        <label>Navn<input type="text" name="navn" value="${esc(f.navn)}"></label>
+        <label>Status
+          <select name="status">${Object.entries(FAGSTATUS).map(([v, t]) =>
+            `<option value="${v}" ${v === f.status ? "selected" : ""}>${t}</option>`).join("")}</select>
+        </label>
+        <label>Rekkefølge<input type="number" name="rekkefolge" value="${f.rekkefolge}"></label>
+      </div>
+      <button data-handling="lagre-fag" data-kode="${esc(f.kode)}">Lagre</button>
+    </div>`;
+  vis("admin-fag", adminFaner("fag") + `
+    <section class="panel">
+      <h2>Fag</h2>
+      <p class="dempet">Utkast og skjulte fag ser bare admin. Publiserte fag ser alle. Spørsmål og flashcards
+        legges i datafiler med samme fagkode, eller under Innhold når faget er valgt.</p>
+      ${alleFag().map(rad).join("")}
+    </section>
+    <section class="panel">
+      <h2>Nytt fag</h2>
+      <form id="nyttfagskjema">
+        <div class="fagrad-felt">
+          <label>Kode<input type="text" name="kode" placeholder="f.eks. AUT2200" required></label>
+          <label>Navn<input type="text" name="navn" placeholder="f.eks. Klinisk audiologi 2" required></label>
+        </div>
+        <p class="dempet">Nye fag starter som utkast.</p>
+        <button class="hoved" type="submit">Opprett fag</button>
+        <p class="skjemamelding"></p>
+      </form>
+    </section>`);
+}
+
+async function lagreFagrad(kode) {
+  const rad = app.querySelector(`.fagrad[data-kode="${CSS.escape(kode)}"]`);
+  const gammel = alleFag().find(f => f.kode === kode);
+  const ny = {
+    kode,
+    navn: rad.querySelector("[name=navn]").value.trim() || gammel.navn,
+    status: rad.querySelector("[name=status]").value,
+    rekkefolge: Number(rad.querySelector("[name=rekkefolge]").value) || 0
+  };
+  const feil = await lagreFag(ny);
+  if (feil) return melding(feil);
+  melding(`${kode} er lagret.`);
+}
+
+async function opprettFag(skjema) {
+  const data = new FormData(skjema);
+  const kode = data.get("kode").trim().toUpperCase();
+  const navn = data.get("navn").trim();
+  if (alleFag().some(f => f.kode === kode)) return skjemaMelding(skjema, `${kode} finnes allerede.`, true);
+  const rekkefolge = Math.max(0, ...alleFag().map(f => f.rekkefolge)) + 1;
+  const feil = await lagreFag({ kode, navn, status: "utkast", rekkefolge });
+  if (feil) return skjemaMelding(skjema, feil, true);
+  visAdminFag();
+}
+
 // ---------- Feilmeldinger ----------
 
 async function visAdminFeil() {
@@ -1488,7 +1572,7 @@ function vedInnloggingEndret() {
     if (!["logginn", "nyttpassord"].includes(skjerm)) visHjem();
     return;
   }
-  const paAdminside = ["admin-brukere", "admin-feil", "liste", "rediger"].includes(skjerm);
+  const paAdminside = ["admin-brukere", "admin-feil", "admin-fag", "liste", "rediger"].includes(skjerm);
   if (["hjem", "laster", "logginn"].includes(skjerm) || (paAdminside && !erAdmin())) visHjem();
   publiserLokaleEndringer();
 }
@@ -1696,7 +1780,9 @@ const HANDLINGER = {
     if (fane === "brukere") visAdminBrukere();
     if (fane === "innhold") visRedigerListe();
     if (fane === "feil") visAdminFeil();
+    if (fane === "fag") visAdminFag();
   },
+  "lagre-fag": el => lagreFagrad(el.dataset.kode),
   "admin-bruker": el => utforAdminHandling(el),
   "fane": el => { listeValg.type = el.dataset.type; listeValg.slettede = false; visRedigerListe(); },
   "vis-slettede": () => { listeValg.slettede = !listeValg.slettede; visRedigerListe(); },
@@ -1801,6 +1887,7 @@ app.addEventListener("submit", hendelse => {
   if (skjema.id === "redigerskjema") lagreRedigering(skjema);
   else if (skjema.id === "meldskjema") sendMeldFeil(skjema);
   else if (skjema.id === "tilbakemeldingskjema") sendTilbakemelding(skjema);
+  else if (skjema.id === "nyttfagskjema") opprettFag(skjema);
   else sendKontoskjema(skjema);
 });
 

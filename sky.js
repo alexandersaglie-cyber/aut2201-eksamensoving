@@ -8,7 +8,7 @@
 // Supabase husker innloggingen på enheten, så man forblir innlogget til man logger ut.
 //
 // Bruker disse fra app.js: lagret, lagreLokalt(), tomLokalFremgang(), naa(),
-// vedInnloggingEndret(), vedSynkFerdig(), vedInnholdHentet(), visNyttPassord().
+// vedInnloggingEndret(), vedSynkFerdig(), vedInnholdHentet(), vedFagHentet(), visNyttPassord().
 
 "use strict";
 
@@ -63,7 +63,7 @@ function startSky() {
     // Supabase anbefaler å ikke vente på andre kall inne i denne funksjonen.
     setTimeout(() => behandleInnlogging(hendelse, sesjon), 0);
   });
-  window.addEventListener("online", () => { synk(); hentInnhold(); });
+  window.addEventListener("online", () => { synk(); hentInnhold(); hentFag(); });
   hentInnhold();
 }
 
@@ -107,6 +107,7 @@ async function behandleInnlogging(hendelse, sesjon) {
   }
   vedInnloggingEndret();
   synk();
+  hentFag();
 }
 
 // =====================================================================
@@ -458,7 +459,33 @@ async function fjernInnhold(id) {
 }
 
 // =====================================================================
+// Fag
+// =====================================================================
+// Faglista ligger i tabellen «fag». Vanlige brukere får bare publiserte fag (databasen
+// sjekker det), admin får alle. Mangler tabellen, brukes STANDARD_FAG i app.js.
+
+async function hentFag() {
+  if (!sky || !bruker || !navigator.onLine) return;
+  const { data, error } = await sky.from("fag").select("kode, navn, status, rekkefolge");
+  if (error) return console.warn("Fikk ikke hentet faglista:", error);
+  if (!data.length) return; // tom tabell: behold lista vi har
+  lagret.fagliste = data;
+  lagreLokalt();
+  vedFagHentet();
+}
+
+// Oppretter eller endrer et fag. Bare admin får lov (sjekkes i databasen).
+async function lagreFag(fag) {
+  const { error } = await sky.from("fag").upsert({ ...fag, oppdatert: naa() });
+  if (error) return oversettFeil(error);
+  lagret.fagliste = [...alleFag().filter(f => f.kode !== fag.kode), fag];
+  lagreLokalt();
+  return null;
+}
+
+// =====================================================================
 // Admin: brukere og feilmeldinger
+
 // =====================================================================
 // Databasen og serverfunksjonen sjekker selv at den som spør er admin.
 

@@ -24,16 +24,17 @@ Det første man ser, er innloggingen. Man må logge inn eller lage konto før ma
 Fremgang, resultater, skjulte kort og påbegynte flervalgsrunder synkroniseres med Supabase og følger deg mellom PC og mobil. Alt lagres først i nettleseren (localStorage), så appen virker også uten nett når man har vært innlogget på enheten før. Første gang man logger inn, flyttes fremgang som allerede ligger på enheten over til kontoen.
 
 - `config.js` har Supabase-adressen og den offentlige nøkkelen. De er ikke hemmelige, siden tilgangsreglene i databasen beskytter dataene. Service role-nøkkelen skal aldri inn i appen.
-- `supabase/01_innlogging.sql` setter opp tabeller og tilgangsregler, `supabase/03_pagaende_runde.sql` tabellen for påbegynte runder, `supabase/04_slettinger.sql` tabellen som husker nullstillinger og slettede runder, så de ikke kommer tilbake fra andre enheter, og `supabase/05_fag.sql` fag-feltet på resultatene. De kjøres én gang i Supabases SQL Editor.
+- `supabase/01_innlogging.sql` setter opp tabeller og tilgangsregler, `supabase/03_pagaende_runde.sql` tabellen for påbegynte runder, `supabase/04_slettinger.sql` tabellen som husker nullstillinger og slettede runder, så de ikke kommer tilbake fra andre enheter, og `supabase/05_fag.sql` fag-feltet på resultatene. `supabase/06_fagliste.sql` lager faglista som admin styrer (utkast, publisert, skjult). De kjøres én gang i Supabases SQL Editor.
 - `sky.js` står for innlogging og synk.
 
 ## Admin
 
-Kontoen alexandersaglie@gmail.com er admin. Admin får «Adminpanel» i menyen, med tre faner:
+Kontoen alexandersaglie@gmail.com er admin. Admin får «Adminpanel» i menyen, med fire faner:
 
 - **Brukere:** e-post, registrert, sist aktiv og enkel statistikk. Her kan admin gjøre andre til admin, fjerne admin-rollen, blokkere, oppheve blokkering og slette brukere. Alt ber om bekreftelse først.
 - **Innhold:** redigere, legge til og slette flashcards og flervalgsspørsmål. Endringene gjelder for alle brukere, og slettede kan gjenopprettes.
 - **Meldinger:** feil brukerne har meldt fra om og generelle tilbakemeldinger, med knapper for å redigere elementet og merke meldingen som løst.
+- **Fag:** opprette fag, endre navn og rekkefølge, og sette status. Utkast og skjulte fag ser bare admin.
 
 Rollen sjekkes på serveren, ikke bare i appen:
 

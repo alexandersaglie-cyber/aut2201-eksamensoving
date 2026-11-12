@@ -445,3 +445,16 @@ legend { font-weight: 600; font-size: 0.95rem; padding: 0 4px; }
 .filterlinje:hover { background: var(--flate); }
 .filterlinje input { width: 18px; height: 18px; margin: 0; flex: none; }
 .filterlinje.alle { border-bottom: 1px solid var(--kant); font-weight: 600; }
+
+/* ---------- Adminpanel: fag ---------- */
+
+.fagrad { border-top: 1px solid var(--kant); padding: 10px 0; }
+.fagrad:first-of-type { border-top: none; }
+.fagrad-felt { display: grid; grid-template-columns: 1fr 2fr 1fr 1fr; gap: 0 10px; }
+.fagrad-felt label { margin: 4px 0; }
+.fagrad-felt input[type="text"], .fagrad-felt input[type="number"] {
+  display: block; width: 100%; margin-top: 4px; font: inherit; font-weight: normal;
+  padding: 8px 10px; border-radius: 8px; border: 1px solid var(--kant);
+  background: var(--bakgrunn); color: var(--tekst);
+}
+@media (max-width: 560px) { .fagrad-felt { grid-template-columns: 1fr 1fr; } }
