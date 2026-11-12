@@ -4,3 +4,7 @@ _tmp/
 .env.*
 _config.bak
 backup/
+
+# Kursfiler (NTNU-materiale) skal ikke på GitHub
+AUT2200-26H-*/
+emner/*/filer/
