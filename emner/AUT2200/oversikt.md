@@ -140,3 +140,16 @@ Gruppeoversikter (6 filer), `Obligatorisk tilstedeværelse` (3), `Oppmøte og pa
   - Videoen om tilleggsutstyr.
   - Lærebøkene: Dillon, Tye-Murray, Clark & English, Lassen og Mueller.
   - Ferdighetstreningen om smittevern og pasientsikkerhet.
+
+## Usikkerheter i det genererte innholdet
+
+Oppdateres etter hvert som innholdet lages. Det jeg er usikker på, står også i appen.
+
+**Forsterkningsberegning og REM (de to første forelesningene):**
+- **Hvor dypt sondeslangen skal inn:** Forelesningen sier 28 mm for kvinner og 31 mm for menn (i praksis 27 og 30). REM-manualen fra ferdighetstreningen sier 26–28 mm for kvinner og 28–31 mm for menn, målt fra intertragal notch. Kortet bruker forelesningens tall og nevner manualen. Kortet er merket «middels» sikkerhet.
+- **Svar som går litt utover foilene,** merket i teksten:
+  - hvorfor binaural tilpasning gir mindre forsterkning (binaural summasjon fra AUT2201)
+  - hvorfor et mekanisk tap trenger mindre kompresjon
+  - hva en negativ REIG betyr
+- **Hvorfor akkurat 75 % av luft-bein-gapet:** står ikke i foilene. Oppfølgingssvaret sier det.
+- **Figurer:** Kurvene som sammenligner NAL, DSL og POGO (foil 16 og 28) og målingene fra masteroppgaven (foil 44–46) er ikke gjort om til oppgaver. De har bare kurver uten tall som er lette å lese av.

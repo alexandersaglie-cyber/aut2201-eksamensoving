@@ -279,10 +279,13 @@ function endreFilter(felt, verdi, pa) {
 // Et spørsmål kan ha gått igjen på flere eksamener. «ogsa» lister de andre kildene,
 // f.eks. [{ eksamen: "Høst 2024", nr: 1 }], så spørsmålet vises under alle eksamenene.
 function eksamenerFor(x) { return [x.eksamen, ...(x.ogsa || []).map(k => k.eksamen)]; }
+// Innhold generert fra forelesninger (f.eks. AUT2200) har en egen kildetekst i feltet kilde.
 function kildeOppgave(o) {
+  if (o.kilde) return o.kilde;
   return [o, ...(o.ogsa || [])].map(k => `${k.eksamen}, oppg. ${k.nr}`).join(" + ");
 }
 function kildeKort(k) {
+  if (k.kilde) return k.kilde;
   const egen = k.oppgaver?.length ? `${k.eksamen}, oppg. ${k.oppgaver.join(", ")}` : k.eksamen;
   return [egen, ...(k.ogsa || []).map(o => `${o.eksamen}, oppg. ${o.nr}`)].join(" + ");
 }
