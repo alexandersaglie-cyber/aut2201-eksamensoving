@@ -43,7 +43,7 @@ OPPGAVER.push(
       "Det påvirkes ikke"
     ],
     riktig: 1, forklaring: "Uten de ytre hårcellenes aktive forsterkning blir tuningen bredere, altså bredere auditive filtre.",
-    fasit: "generert", sikkerhet: "høy"
+    fasit: "generert", sikkerhet: "høy", ogsa: [{ eksamen: "Pensumspørsmål", nr: 91 }]
   },
   {
     id: "EA-007", eksamen: "Høst 2024", nr: 107, tema: "Psykoakustikk", poeng: 1,
@@ -290,7 +290,7 @@ OPPGAVER.push(
       "At nevroner bare sender ett signal per sekund"
     ],
     riktig: 1, forklaring: "Volley-prinsippet: flere fibre fyrer på hver sin periode, slik at gruppen samlet følger lydens periodisitet.",
-    fasit: "generert", sikkerhet: "høy"
+    fasit: "generert", sikkerhet: "høy", ogsa: [{ eksamen: "Pensumspørsmål", nr: 2 }]
   },
   {
     id: "EA-034", eksamen: "Høst 2024", nr: 134, tema: "Anatomi og hørselsfysiologi", poeng: 1,
@@ -303,7 +303,7 @@ OPPGAVER.push(
       "At lyd ikke kan behandles i hjernestammen"
     ],
     riktig: 0, forklaring: "Fasekobling betyr at nevronene fyrer på en bestemt fase av lydbølgen.",
-    fasit: "generert", sikkerhet: "høy"
+    fasit: "generert", sikkerhet: "høy", ogsa: [{ eksamen: "Pensumspørsmål", nr: 12 }]
   },
   {
     id: "EA-035", eksamen: "Høst 2024", nr: 135, tema: "Anatomi og hørselsfysiologi", poeng: 1,
@@ -446,7 +446,7 @@ OPPGAVER.push(
       "Corpus callosum alene"
     ],
     riktig: 2, forklaring: "Lokalisering i vertikalplanet bygger på spektrale endringer fra øremuslingen (pinna).",
-    fasit: "generert", sikkerhet: "høy"
+    fasit: "generert", sikkerhet: "høy", ogsa: [{ eksamen: "Pensumspørsmål", nr: 36 }]
   },
   {
     id: "EA-051", eksamen: "Høst 2024", nr: 151, tema: "Binaural hørsel og lokalisering", poeng: 1,
@@ -472,7 +472,7 @@ OPPGAVER.push(
       "Redusert høreterskel ved bruk av ørepropper"
     ],
     riktig: 1, forklaring: "BMLD er hvor mye bedre et signal oppdages i støy når signal og støy har ulike binaurale forskjeller, f.eks. SπN0 sammenlignet med S0N0.",
-    fasit: "generert", sikkerhet: "høy"
+    fasit: "generert", sikkerhet: "høy", ogsa: [{ eksamen: "Pensumspørsmål", nr: 6 }]
   },
   {
     id: "EA-053", eksamen: "Høst 2024", nr: 153, tema: "Binaural hørsel og lokalisering", poeng: 1,
@@ -498,7 +498,7 @@ OPPGAVER.push(
       "Å bestemme lydens hastighet"
     ],
     riktig: 1, forklaring: "Arbeidsminnet holder og bearbeider informasjon mens vi tolker tale, særlig når signalet er dårlig.",
-    fasit: "generert", sikkerhet: "høy"
+    fasit: "generert", sikkerhet: "høy", ogsa: [{ eksamen: "Pensumspørsmål", nr: 71 }]
   },
   {
     id: "EA-055", eksamen: "Høst 2024", nr: 155, tema: "Aldring og kognisjon", poeng: 1,
@@ -784,7 +784,7 @@ OPPGAVER.push(
       "Auditive cortex"
     ],
     riktig: 1, forklaring: "Otolittorganene (utriculus og sacculus) registrerer lineær akselerasjon og hodets stilling i forhold til tyngdekraften.",
-    fasit: "generert", sikkerhet: "høy"
+    fasit: "generert", sikkerhet: "høy", ogsa: [{ eksamen: "Pensumspørsmål", nr: 49 }]
   },
   {
     id: "EA-093", eksamen: "Høst 2024", nr: 193, tema: "Vestibulært", poeng: 1,
@@ -836,7 +836,7 @@ OPPGAVER.push(
       "Fullstendig fravær av vestibulære symptomer"
     ],
     riktig: 1, forklaring: "Ménières sykdom gir anfall med vertigo og ofte fluktuerende hørselstap, tinnitus og trykkfølelse.",
-    fasit: "generert", sikkerhet: "høy"
+    fasit: "generert", sikkerhet: "høy", ogsa: [{ eksamen: "Pensumspørsmål", nr: 69 }]
   },
   {
     id: "EA-097", eksamen: "Høst 2024", nr: 197, tema: "Vestibulært", poeng: 1,
@@ -875,7 +875,7 @@ OPPGAVER.push(
       "Måling av otoakustiske emisjoner"
     ],
     riktig: 0, forklaring: "GVS stimulerer vestibulærsystemet med svak elektrisk strøm over mastoidene.",
-    fasit: "generert", sikkerhet: "høy"
+    fasit: "generert", sikkerhet: "høy", ogsa: [{ eksamen: "Pensumspørsmål", nr: 29 }]
   },
   {
     id: "EA-101", eksamen: "Høst 2024", nr: 201, tema: "Statistikk", poeng: 1,
@@ -914,7 +914,7 @@ OPPGAVER.push(
       "Den høyeste verdien"
     ],
     riktig: 1, forklaring: "Standardavviket viser spredningen rundt gjennomsnittet.",
-    fasit: "generert", sikkerhet: "høy"
+    fasit: "generert", sikkerhet: "høy", ogsa: [{ eksamen: "Pensumspørsmål", nr: 38 }]
   },
   {
     id: "EA-104", eksamen: "Høst 2024", nr: 204, tema: "Statistikk", poeng: 1,

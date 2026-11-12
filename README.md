@@ -1,6 +1,6 @@
 # Audiologi eksamensøving
 
-Øvingsapp for audiologifagene ved NTNU: AUT2201 Audiologisk grunnkurs 2 (eksamen høst 2025 og høst 2024) og AUT1000 Audiologisk grunnkurs 1 (eksamen høst 2025 og høst 2023). Etter innlogging velger man fag, og appen husker valget. Hvert fag har egne spørsmål, flashcards, resultater og påbegynte runder.
+Øvingsapp for audiologifagene ved NTNU: AUT2201 Audiologisk grunnkurs 2 (eksamen høst 2025 og høst 2024, og pensumspørsmål) og AUT1000 Audiologisk grunnkurs 1 (eksamen høst 2025 og høst 2023). Etter innlogging velger man fag, og appen husker valget. Hvert fag har egne spørsmål, flashcards, resultater og påbegynte runder.
 
 ## Slik bruker du den
 
@@ -62,13 +62,14 @@ Appen ligger på GitHub Pages: https://alexandersaglie-cyber.github.io/aut2201-e
 | `data/oppgaver.js` | De 100 oppgavene fra eksamen høst 2025 med fasit og forklaring |
 | `data/oppgaver-host2024-offisiell.js` | 50 oppgaver fra den offisielle eksamenen høst 2024. De andre 50 var like oppgaver fra høst 2025 og står der med begge kildene (feltet `ogsa`) |
 | `data/oppgaver-host2024.js` | Øvingsspørsmål til høst 2024 (eksamensark.docx): 72 korte spørsmål med nr 101–220 under «Høst 2024». 48 som lå dobbelt, er slått sammen inn i eksamensoppgavene |
+| `data/oppgaver-pensum.js` | Pensumspørsmål: 85 KI-genererte spørsmål ut fra forelesningene (Majas øvingseksamen 2026), med oppgitt fasit. 15 som fantes fra før, har fått kilden `ogsa` i stedet |
 | `data/kort.js` | 89 flashcards fra høst 2025 |
 | `data/kort-host2024.js` | 38 flashcards fra øvingsspørsmålene til høst 2024 |
 | `data/kort-host2024-offisiell.js` | 30 flashcards med nye begreper fra høst 2024 |
 | `data/aut1000-h25-oppgaver.js`, `data/aut1000-h23-oppgaver.js` | AUT1000: 100 + 100 spørsmål fra høst 2025 og høst 2023 |
 | `data/aut1000-kort.js` | 43 flashcards for AUT1000 |
 | `figurer/` | Figurene til figuroppgavene |
-| `kilder/` | Kildetekst og skript for høst 2024-eksamenen |
+| `kilder/` | Kildetekst og skript for høst 2024-eksamenen og pensumspørsmålene |
 | `duplikat-rapport.md` | Sammenligningen av høst 2024 mot resten av spørsmålsbanken, med beslutningene |
 
 Fasiten er **generert** (det fantes ingen offisiell fasit). Spørsmål og kort merket «Usikker fasit» bør sjekkes i pensum.
