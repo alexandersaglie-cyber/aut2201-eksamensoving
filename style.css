@@ -458,3 +458,23 @@ legend { font-weight: 600; font-size: 0.95rem; padding: 0 4px; }
   background: var(--bakgrunn); color: var(--tekst);
 }
 @media (max-width: 560px) { .fagrad-felt { grid-template-columns: 1fr 1fr; } }
+
+/* ---------- Muntlig øving ---------- */
+
+.muntligkort .forside { font-size: 1.15rem; font-weight: 600; margin: 10px 0; }
+.muntligkort h3 { font-size: 1rem; margin: 14px 0 6px; }
+.tidtakerboks {
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+  background: var(--bakgrunn); border-radius: 10px; padding: 10px 12px; margin: 10px 0;
+}
+.tidtakerboks .knapperad { margin-top: 0; }
+.tidtaker { font-size: 2rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.tidtaker.ute { color: var(--feil); font-size: 1.3rem; }
+.sjekkliste { list-style: none; padding: 0; margin: 0; }
+.sjekkliste li { border-bottom: 1px solid var(--kant); }
+.sjekkliste label {
+  display: flex; gap: 10px; align-items: flex-start; margin: 0; padding: 9px 2px;
+  font-weight: normal; cursor: pointer;
+}
+.sjekkliste input { width: 20px; height: 20px; margin: 2px 0 0; flex: none; }
+.oppfolging { font-size: 1.05rem; font-weight: 600; }

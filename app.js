@@ -365,6 +365,7 @@ let skjerm = "hjem";
 function vis(navn, html) {
   skjerm = navn;
   if (navn !== "hjem") apentFilter = null;
+  if (navn !== "muntlig") stoppTidtaker();
   app.innerHTML = html;
   hjemKnapp.hidden = navn === "hjem" || maLoggeInn();
   menyKnapp.hidden = maLoggeInn();
@@ -505,6 +506,8 @@ function visHjem() {
       ${sisteRunde ? `<p class="dempet">Siste runde: <b>${sisteRunde.karakter}</b> (${sisteRunde.prosent} %) · ${esc(formaterDato(sisteRunde.dato))}</p>` : ""}
       <div class="knapperad liten"><button data-handling="mine-resultater">Mine resultater${mineResultater().length ? ` (${mineResultater().length})` : ""}</button></div>
     </section>
+
+    ${muntligPanel()}
   `);
 }
 
@@ -658,6 +661,212 @@ function fortsettKort() {
   } else {
     nesteKort(); // kortet ble slettet
   }
+}
+
+// =====================================================================
+// 4b. Muntlig øving
+// =====================================================================
+// Forklar-kort og praktiske scenarier (lista MUNTLIG, se f.eks. data/aut2200-muntlig.js).
+// Man forklarer høyt med tidtaker, krysser av i sjekklisten, svarer på oppfølgingsspørsmål
+// og vurderer seg selv. Egenvurderingen flytter kortet mellom boksene, som for flashcards,
+// og lagres og synkes på samme måte (lagret.bokser). Modusen vises bare i fag som har innhold.
+
+const TIDSVALG = ["2", "3", "4", "5", "8", "10"]; // minutter
+let muntligMinutter = "4";
+let muntligType = ""; // "" = alle, "forklar" eller "scenario"
+
+// Pågående økt: kortene i utvalget, kortet som vises, hvor man er i kortet (fase),
+// avkryssede punkter, hvilket oppfølgingsspørsmål som vises, tidtakeren og telling av svar.
+let muntlig = null;
+
+function alleMuntlige() { return iValgtFag(window.MUNTLIG || []).filter(x => !erSkjult(x.id)); }
+function muntligUtvalg() { return filtrert(alleMuntlige()).filter(x => !muntligType || x.type === muntligType); }
+
+function startMuntlig() {
+  muntlig = { kort: muntligUtvalg(), naa: null, telling: { klarte: 0, delvis: 0, ikke: 0 }, tid: null };
+  if (!muntlig.kort.length) return visHjem();
+  nesteMuntlig();
+}
+
+function nesteMuntlig() {
+  stoppTidtaker();
+  const kandidater = muntlig.kort.length > 1 ? muntlig.kort.filter(k => k.id !== muntlig.naa?.id) : muntlig.kort;
+  const sum = kandidater.reduce((s, k) => s + VEKT[boks(k.id)], 0);
+  let tall = Math.random() * sum;
+  muntlig.naa = kandidater.find(k => (tall -= VEKT[boks(k.id)]) < 0) || kandidater[0];
+  muntlig.fase = "forklar";         // forklar → sjekk → oppfolging → vurder
+  muntlig.huket = [];               // indeksene til punktene man har krysset av
+  muntlig.oppIndeks = 0;            // hvilket oppfølgingsspørsmål som vises
+  muntlig.visSvar = false;
+  muntlig.tid = { gjenstar: Number(muntligMinutter) * 60, kjorer: false };
+  visMuntlig();
+}
+
+// ---------- Tidtaker ----------
+
+let tidtakerIntervall = null;
+
+function formaterTid(sek) {
+  const m = Math.floor(sek / 60), s = sek % 60;
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+
+function oppdaterTidtaker() {
+  const el = document.getElementById("tidtaker");
+  if (!el || !muntlig?.tid) return;
+  el.textContent = muntlig.tid.gjenstar > 0 ? formaterTid(muntlig.tid.gjenstar) : "Tiden er ute!";
+  el.classList.toggle("ute", muntlig.tid.gjenstar === 0);
+  const knapp = document.getElementById("tidtaker-knapp");
+  if (knapp) knapp.textContent = muntlig.tid.kjorer ? "Pause" : (muntlig.tid.gjenstar < Number(muntligMinutter) * 60 ? "Fortsett" : "Start tidtaker");
+}
+
+function startTidtaker() {
+  if (!muntlig?.tid || muntlig.tid.gjenstar === 0) return;
+  muntlig.tid.kjorer = true;
+  clearInterval(tidtakerIntervall);
+  tidtakerIntervall = setInterval(() => {
+    muntlig.tid.gjenstar = Math.max(0, muntlig.tid.gjenstar - 1);
+    if (muntlig.tid.gjenstar === 0) {
+      stoppTidtaker();
+      if (navigator.vibrate) navigator.vibrate(300);
+    }
+    oppdaterTidtaker();
+  }, 1000);
+  oppdaterTidtaker();
+}
+
+function stoppTidtaker() {
+  clearInterval(tidtakerIntervall);
+  tidtakerIntervall = null;
+  if (muntlig?.tid) muntlig.tid.kjorer = false;
+  oppdaterTidtaker();
+}
+
+// ---------- Visning ----------
+
+function visMuntlig() {
+  const k = muntlig.naa;
+  const t = muntlig.telling;
+  const erScenario = k.type === "scenario";
+  const punkter = (erScenario ? k.steg : k.sjekkliste) || [];
+  const opp = k.oppfolging || [];
+  const fase = muntlig.fase;
+
+  const tidtaker = `
+    <div class="tidtakerboks">
+      <span id="tidtaker" class="tidtaker">${formaterTid(muntlig.tid.gjenstar)}</span>
+      <div class="knapperad liten">
+        <button id="tidtaker-knapp" data-handling="tidtaker">Start tidtaker</button>
+        <button data-handling="tidtaker-nullstill">Start på nytt</button>
+      </div>
+    </div>`;
+
+  let innhold = "";
+  if (fase === "forklar") {
+    innhold = `
+      <p class="dempet">${erScenario
+        ? "Beskriv høyt hva du gjør, steg for steg, og hvorfor."
+        : "Forklar høyt, som om du snakker til sensor. Start tidtakeren når du begynner."}</p>
+      <button class="hoved" data-handling="muntlig-fase" data-fase="sjekk">${erScenario ? "Vis fremgangsmåten" : "Vis sjekklisten"}</button>`;
+  }
+  if (fase === "sjekk") {
+    innhold = `
+      <h3>${erScenario ? "Fremgangsmåte – kryss av stegene du fikk med" : "Sjekkliste – kryss av det du fikk med"}</h3>
+      <ul class="sjekkliste">
+        ${punkter.map((p, i) => `
+          <li><label><input type="checkbox" data-punkt="${i}" ${muntlig.huket.includes(i) ? "checked" : ""}>
+            <span>${erScenario ? `<b>${i + 1}.</b> ` : ""}${esc(p)}</span></label></li>`).join("")}
+      </ul>
+      <p class="dempet" id="sjekktelling">Du fikk med ${muntlig.huket.length} av ${punkter.length}.</p>
+      <button class="hoved" data-handling="muntlig-fase" data-fase="${opp.length ? "oppfolging" : "vurder"}">
+        ${opp.length ? "Videre til oppfølgingsspørsmål" : "Vurder deg selv"}</button>`;
+  }
+  if (fase === "oppfolging") {
+    const o = opp[muntlig.oppIndeks];
+    const siste = muntlig.oppIndeks === opp.length - 1;
+    innhold = `
+      <h3>Oppfølgingsspørsmål ${muntlig.oppIndeks + 1} av ${opp.length}</h3>
+      <p class="oppfolging">${esc(o.sporsmal)}</p>
+      ${muntlig.visSvar
+        ? `<div class="forklaringsboks"><p>${esc(o.svar)}</p></div>`
+        : `<p class="dempet">Svar høyt først, og se så på svaret.</p>
+           <button data-handling="muntlig-svar">Vis svar</button>`}
+      <button class="hoved" data-handling="${siste ? "muntlig-fase" : "muntlig-neste-opp"}" data-fase="vurder">
+        ${siste ? "Vurder deg selv" : "Neste oppfølgingsspørsmål"}</button>`;
+  }
+  if (fase === "vurder") {
+    innhold = `
+      <h3>Hvordan gikk det?</h3>
+      ${punkter.length ? `<p class="dempet">Du fikk med ${muntlig.huket.length} av ${punkter.length} ${erScenario ? "steg" : "punkter"}.</p>` : ""}
+      <div class="svarknapper">
+        <button class="ikke" data-handling="vurder-muntlig" data-svar="ikke">Klarte ikke</button>
+        <button class="usikker" data-handling="vurder-muntlig" data-svar="delvis">Delvis</button>
+        <button class="kunne" data-handling="vurder-muntlig" data-svar="klarte">Klarte det</button>
+      </div>
+      <p class="dempet">«Klarte ikke» kommer oftest igjen, «Klarte det» sjeldnest.</p>`;
+  }
+
+  vis("muntlig", `
+    <div class="statuslinje">
+      <span>Klarte ${t.klarte} · Delvis ${t.delvis} · Klarte ikke ${t.ikke}</span>
+      <span>${BOKSNAVN[boks(k.id)]}</span>
+    </div>
+    <article class="panel muntligkort">
+      <div><span class="merke">${erScenario ? "Scenario" : "Forklar"}</span> <span class="merke">${esc(k.tema)}</span></div>
+      <p class="forside">${esc(k.sporsmal)}</p>
+      ${tidtaker}
+      ${innhold}
+      <p class="kilde">Kilde: ${esc(k.kilde || k.eksamen)}</p>
+    </article>
+    <div class="knapperad liten">
+      <button data-handling="muntlig-hopp">Hopp over</button>
+      <button data-handling="hjem">Avslutt</button>
+    </div>
+  `);
+  oppdaterTidtaker();
+}
+
+// Egenvurderingen flytter kortet mellom boksene, akkurat som «Kunne / Usikker / Kunne ikke».
+function vurderMuntlig(svar) {
+  const id = muntlig.naa.id;
+  const b = boks(id);
+  if (svar === "klarte") lagret.bokser[id] = b === 0 ? 2 : Math.min(5, b + 1);
+  if (svar === "delvis") lagret.bokser[id] = Math.max(1, b - 1);
+  if (svar === "ikke") lagret.bokser[id] = 1;
+  lagret.boksTid[id] = naa();
+  muntlig.telling[svar]++;
+  lagre();
+  nesteMuntlig();
+}
+
+// Panelet på forsiden. Vises bare når faget har muntlig innhold.
+function muntligPanel() {
+  const alle = alleMuntlige();
+  if (!alle.length) return "";
+  const utvalg = muntligUtvalg();
+  const iFilter = filtrert(alle);
+  const forklar = iFilter.filter(x => x.type === "forklar").length;
+  const scenario = iFilter.filter(x => x.type === "scenario").length;
+  const iBoks = [0, 0, 0, 0, 0, 0];
+  utvalg.forEach(k => iBoks[boks(k.id)]++);
+  const typeValg = [["", "Alle"], ["forklar", "Forklar-kort"], ["scenario", "Scenarier"]]
+    .map(([v, t]) => `<option value="${v}" ${v === muntligType ? "selected" : ""}>${t}</option>`).join("");
+  const tidValg = TIDSVALG.map(m => `<option value="${m}" ${m === muntligMinutter ? "selected" : ""}>${m} minutter</option>`).join("");
+  return `
+    <section class="panel">
+      <h2>Muntlig øving</h2>
+      <p class="dempet">Øv som til muntlig eksamen: forklar høyt mens tidtakeren går, sjekk hva du fikk med,
+        svar på oppfølgingsspørsmål og vurder deg selv.</p>
+      <p class="dempet">${forklar} forklar-kort og ${scenario} scenarier i utvalget.</p>
+      <div class="bokser">
+        ${BOKSNAVN.map((navn, i) => `<div class="niva${i}"><b>${iBoks[i]}</b><span>${navn}</span></div>`).join("")}
+      </div>
+      <div class="filtre">
+        <label>Type <select id="muntlig-type">${typeValg}</select></label>
+        <label>Tid <select id="muntlig-tid">${tidValg}</select></label>
+      </div>
+      <button class="hoved" data-handling="start-muntlig" ${utvalg.length ? "" : "disabled"}>Start muntlig øving</button>
+    </section>`;
 }
 
 // =====================================================================
@@ -1742,6 +1951,14 @@ function importer(fil) {
 const HANDLINGER = {
   "hjem": () => visHjem(),
   "start-kort": () => startKort(),
+  "start-muntlig": () => startMuntlig(),
+  "tidtaker": () => (muntlig?.tid?.kjorer ? stoppTidtaker() : startTidtaker()),
+  "tidtaker-nullstill": () => { stoppTidtaker(); muntlig.tid.gjenstar = Number(muntligMinutter) * 60; oppdaterTidtaker(); },
+  "muntlig-fase": el => { muntlig.fase = el.dataset.fase; muntlig.visSvar = false; visMuntlig(); },
+  "muntlig-svar": () => { muntlig.visSvar = true; visMuntlig(); },
+  "muntlig-neste-opp": () => { muntlig.oppIndeks++; muntlig.visSvar = false; visMuntlig(); },
+  "muntlig-hopp": () => nesteMuntlig(),
+  "vurder-muntlig": el => vurderMuntlig(el.dataset.svar),
   "snu": () => { if (!okt.snudd) { okt.snudd = true; visKort(); } },
   "svar-kort": el => svarKort(el.dataset.svar),
   "start-flervalg": () => {
@@ -1870,6 +2087,14 @@ document.addEventListener("change", hendelse => {
   const el = hendelse.target;
   if (el.dataset.filter) endreFilter(el.dataset.filter, el.value, el.checked);
   if (el.id === "antall") { antallValgt = el.value; visHjem(); }
+  if (el.id === "muntlig-type") { muntligType = el.value; visHjem(); }
+  if (el.id === "muntlig-tid") { muntligMinutter = el.value; visHjem(); }
+  if (el.dataset.punkt !== undefined && muntlig) {
+    const i = Number(el.dataset.punkt);
+    muntlig.huket = el.checked ? [...new Set([...muntlig.huket, i])] : muntlig.huket.filter(x => x !== i);
+    const alle = (muntlig.naa.type === "scenario" ? muntlig.naa.steg : muntlig.naa.sjekkliste).length;
+    document.getElementById("sjekktelling").textContent = `Du fikk med ${muntlig.huket.length} av ${alle}.`;
+  }
   if (el.id === "importer" && el.files[0]) importer(el.files[0]);
   if (el.classList.contains("vis-passord")) {
     el.form.querySelector("input[name=passord]").type = el.checked ? "text" : "password";

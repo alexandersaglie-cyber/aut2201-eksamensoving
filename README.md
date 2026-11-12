@@ -8,6 +8,7 @@ Dobbeltklikk på `index.html`, så åpnes appen i nettleseren. Den trenger ingen
 
 - **Flashcards:** Snu kortet og svar «Kunne», «Usikker» eller «Kunne ikke». Kort du ikke kan, kommer oftere igjen. Forsiden viser hvor mange kort som ligger på hvert nivå, fra «Kan ikke» via «Lærer», «Halvveis» og «Nesten» til «Kan».
 - **Flervalg:** Eksamensspørsmål med stokkede alternativer, forklaring etter hvert svar, og karakter (A–F) og svake tema til slutt. Svarene lagres underveis, så lukker man appen midt i en runde, kan man trykke «Fortsett der du slapp» på forsiden – også på en annen enhet.
+- **Muntlig øving:** Forklar-kort og praktiske scenarier (foreløpig i AUT2200). Start tidtakeren (standard 4 minutter) og forklar høyt, kryss av i sjekklisten eller fremgangsmåten, svar på oppfølgingsspørsmålene og vurder deg selv med «Klarte det / Delvis / Klarte ikke». Vurderingen styrer hvor ofte kortet kommer igjen, akkurat som for flashcards. Modusen vises bare i fag som har slikt innhold (lista MUNTLIG, f.eks. `data/aut2200-muntlig.js`).
 - **Mine resultater:** Alle fullførte flervalgsrunder lagres med karakter. Siden viser utvikling over tid, snitt, beste karakter og svake tema samlet. Karakteren følger NTNUs prosentskala: A ≥ 89 %, B ≥ 77 %, C ≥ 65 %, D ≥ 53 %, E ≥ 41 %, F under 41 %.
 - **Filter:** Kryss av for ett eller flere tema og eksamener på forsiden. Ingen kryss betyr alle. Filteret gjelder begge modusene.
 - **Skjul for meg / Meld feil:** Skjul kort og spørsmål du ikke vil se, eller meld fra om feil i et bestemt kort til administrator.
@@ -70,6 +71,7 @@ Appen ligger på GitHub Pages: https://alexandersaglie-cyber.github.io/aut2201-e
 | `data/kort-pensum.js` | 43 flashcards med nye begreper fra pensumspÃ¸rsmÃ¥lene |
 | `data/aut1000-h25-oppgaver.js`, `data/aut1000-h23-oppgaver.js` | AUT1000: 100 + 100 spørsmål fra høst 2025 og høst 2023 |
 | `data/aut1000-kort.js` | 43 flashcards for AUT1000 |
+| `data/aut2200-oppgaver.js`, `data/aut2200-kort.js`, `data/aut2200-muntlig.js` | AUT2200: flervalg, flashcards og muntlig øving generert fra forelesningsfoilene (se `emner/AUT2200/`) |
 | `figurer/` | Figurene til figuroppgavene |
 | `kilder/` | Kildetekst og skript for høst 2024-eksamenen og pensumspørsmålene |
 | `duplikat-rapport.md` | Sammenligningen av høst 2024 mot resten av spørsmålsbanken, med beslutningene |
