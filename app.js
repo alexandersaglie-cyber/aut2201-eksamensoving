@@ -456,7 +456,7 @@ function visHjem() {
       <h2>Hva vil du øve på?</h2>
       <div class="filtre">
         ${flervalgFilter("tema", "Tema", temaer(), "Alle tema")}
-        ${flervalgFilter("eksamen", "Eksamen", eksamener(), "Alle eksamener")}
+        ${flervalgFilter("eksamen", "Eksamen/Pensum", eksamener(), "Alle eksamener")}
       </div>
       <p class="dempet">${kort.length} flashcards og ${oppgaver.length} flervalgsspørsmål i utvalget.</p>
     </section>
