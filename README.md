@@ -66,6 +66,7 @@ Appen ligger på GitHub Pages: https://alexandersaglie-cyber.github.io/aut2201-e
 | `data/kort.js` | 89 flashcards fra høst 2025 |
 | `data/kort-host2024.js` | 38 flashcards fra øvingsspørsmålene til høst 2024 |
 | `data/kort-host2024-offisiell.js` | 30 flashcards med nye begreper fra høst 2024 |
+| `data/kort-pensum.js` | 43 flashcards med nye begreper fra pensumspÃ¸rsmÃ¥lene |
 | `data/aut1000-h25-oppgaver.js`, `data/aut1000-h23-oppgaver.js` | AUT1000: 100 + 100 spørsmål fra høst 2025 og høst 2023 |
 | `data/aut1000-kort.js` | 43 flashcards for AUT1000 |
 | `figurer/` | Figurene til figuroppgavene |
