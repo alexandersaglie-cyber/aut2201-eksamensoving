@@ -619,7 +619,8 @@ function fortsettKort() {
 let runde = null;
 
 // beskrivelse: hva runden besto av, f.eks. «Statistikk · Alle eksamener». Lagres i historikken.
-function startFlervalg(liste, antall, beskrivelse) {
+// ovelse = true for «Øv på feilene»: runden lagres ikke i Mine resultater.
+function startFlervalg(liste, antall, beskrivelse, ovelse = false) {
   const utvalg = stokk(liste).slice(0, antall);
   runde = {
     sporsmal: utvalg.map(o => ({ o, rekkefolge: stokk([0, 1, 2, 3]), svar: null })),
@@ -627,6 +628,7 @@ function startFlervalg(liste, antall, beskrivelse) {
     valgt: null,
     resultater: [],
     beskrivelse,
+    ovelse,
     startet: naa(),
     lagret: false
   };
@@ -659,6 +661,7 @@ function settPabegyntRunde(verdi) {
 function lagreRundeTilstand() {
   settPabegyntRunde({
     beskrivelse: runde.beskrivelse,
+    ovelse: runde.ovelse,
     startet: runde.startet,
     sporsmal: runde.sporsmal.map(s => ({ id: s.o.id, rekkefolge: s.rekkefolge, svar: s.svar }))
   });
@@ -685,6 +688,7 @@ function fortsettPabegyntRunde() {
     valgt: null,
     resultater: sporsmal.filter(s => s.svar !== null).map(s => ({ o: s.o, riktig: s.svar === s.o.riktig })),
     beskrivelse: p.beskrivelse,
+    ovelse: Boolean(p.ovelse),
     startet: p.startet,
     lagret: false
   };
@@ -829,6 +833,10 @@ function temaStolper(temaListe, klikkbar) {
 function lagreRunde(antallRiktig, prosent, karakter, perTema) {
   if (runde.lagret) return;
   runde.lagret = true;
+  if (runde.ovelse) { // øvingsrunder lagres ikke i Mine resultater
+    settPabegyntRunde(null);
+    return;
+  }
   lagret.resultater.push({
     id: lagNyId(),
     emne: lagret.valgtFag,
@@ -871,6 +879,7 @@ function visResultat() {
   vis("resultat", `
     <section class="panel resultat">
       <h2>Resultat</h2>
+      ${runde.ovelse ? `<p class="dempet">Dette var en øvingsrunde på feilene. Den lagres ikke i Mine resultater.</p>` : ""}
       <div class="karakterlinje">
         <span class="karakter karakter-${karakter}">${karakter}</span>
         <div>
@@ -1646,7 +1655,7 @@ const HANDLINGER = {
   },
   "velg": el => velgAlternativ(Number(el.dataset.nr)),
   "neste": () => nesteSporsmal(),
-  "ov-feil": () => startFlervalg(runde.feil, runde.feil.length, "Øv på feilene"),
+  "ov-feil": () => startFlervalg(runde.feil, runde.feil.length, "Øv på feilene", true),
   "admin": () => visAdminBrukere(),
   "admin-fane": el => {
     const fane = el.dataset.fane;
