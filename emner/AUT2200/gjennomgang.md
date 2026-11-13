@@ -263,7 +263,7 @@ Laget automatisk fra alle `data/aut2200*.js`-filene.
 
 | Forside | Bakside |
 |---|---|
-| Hva er kompresjon i et høreapparat, og hvorfor trengs det? | En funksjon som automatisk senker forsterkningen når inputnivået øker: svake lyder forsterkes mer og sterke mindre. Det trengs fordi dynamikkområdet er redusert ved sensorinevralt tap. <br>*Målene er komfort (sterke lyder blir ikke ubehagelige), forståelighet (svake talelyder blir hørbare) og lydkvalitet.* |
+| Hva er kompresjon i et høreapparat, og hvorfor trengs det? | En funksjon som automatisk senker forsterkningen når inputnivået øker: svake lyder forsterkes mer og sterke mindre. Det trengs fordi dynamikkområdet er redusert ved sensorinevralt tap. <br>*Målene er komfort (sterke lyder blir ikke ubehagelige), forståelighet (svake talelyder blir hørbare) og lydkvalitet. Kompressoren skal ikke endre formen (spekteret) på bølgeformen.* |
 | Hva er kompresjonsterskel (knepunkt) og kompresjonsratio? | Kompresjonsterskelen er inputnivået der kompresjonen starter, «der apparatet begynner å bremse». Kompresjonsratioen er hvor mange dB inputen må øke for at outputen skal øke 1 dB, altså helningen på I/O-kurven. <br>*Eksempel: input øker 20 dB og output 10 dB gir 2:1. Ratio over 1 er kompresjon, ratio under 1 er ekspansjon, og 1:1 er lineært.* |
 | Hva er attack time og release time? | Attack time (innkoblingstid) er tiden kompressoren bruker på å reagere når signalet øker. Release time (utkoblingstid) er tiden den bruker når signalet minker. <br>*Dette er de dynamiske egenskapene til kompressoren: hvor raskt den reagerer på endringer.* |
 | Hva kjennetegner WDRC (wide dynamic range compression)? | Kort attack time (under 5 ms), kort release time (20–100 ms), lav kompresjonsterskel (under 50 dB SPL) og lav kompresjonsratio (under 5:1). <br>*Også kalt syllabisk eller fonemisk kompresjon. Den gjør svake lyder hørbare og sterke komfortable.* |
@@ -966,7 +966,7 @@ Laget automatisk fra alle `data/aut2200*.js`-filene.
 
 ## Hearing aid components (19.08)
 
-6 flashcards · 3 flervalg · 1 forklar-kort · 0 scenarier
+5 flashcards · 3 flervalg · 1 forklar-kort · 0 scenarier
 
 ### Forklar-kort og scenarier
 
@@ -1031,7 +1031,6 @@ Laget automatisk fra alle `data/aut2200*.js`-filene.
 | Forside | Bakside |
 |---|---|
 | Hvordan virker en elektretmikrofon? | Lydbølgene treffer en tynn membran som beveger seg. Bak et lite luftrom sitter en bakplate med elektret. Bevegelsen gir en spenning som blir det elektriske signalet. <br>*Mikrofonen er lineær: dobles lydtrykket, dobles spenningen. Frekvensresponsen er relativt flat, ofte med basskutt under 500 Hz.* |
-| Hva gjør en kompressor i høreapparatet, og hva skal den IKKE gjøre? | Den demper forsterkningen når inputsignalet blir sterkere, slik at et redusert dynamikkområde utnyttes. Den skal ikke endre formen (spekteret) på bølgeformen. <br>*Svake lyder forsterkes mer enn sterke.* |
 | Hva skjer i A/D-omformeren, og hvorfor betyr samplingsfrekvensen noe? | Spenningen fra mikrofonen måles med jevne mellomrom (sampling), og hver måling får en tallverdi (kvantisering). Jo flere målinger per sekund, desto mer nøyaktig gjengis den analoge bølgeformen. <br>*Fordeler med digital signalbehandling: lavere egenstøy, automatisk justering etter lydmiljøet, mindre størrelse og fleksibilitet. Ulemper: tidsforsinkelse og strømforbruk, som begge er redusert over tid.* |
 | Hva er telespole, DAI og akustiske dempere? | Telespole: liten kobberspole som fanger opp magnetiske signaler fra en induksjonsslynge (innstillinger T, M og MT). DAI: direkte kabeltilkobling fra eksternt utstyr. Akustiske dempere: jevner ut topper og bunner i frekvensresponsen. <br>*Ikke alle apparat har telespole.* |
 | Hva betyr mAh på et høreapparatbatteri? | Kapasiteten i milliampere-timer. Et batteri på 100 mAh kan gi 0,5 mA i 200 timer, 1 mA i 100 timer eller 2 mA i 50 timer. <br>*Sink-luft er vanligst og gir ca. 1,4 V uansett størrelse. Større batterier varer lenger.* |

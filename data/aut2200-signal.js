@@ -7,10 +7,10 @@ window.MUNTLIG = MUNTLIG;
 
 KORT.push(
   { id: "K22-KO01", emne: "AUT2200", tema: "Kompresjon", eksamen: "Compression (12.10)", oppgaver: [], sikkerhet: "høy",
-    kilde: "Generert fra forelesning: Compression (12.10)",
+    kilde: "Generert fra forelesningene: Compression (12.10) og Hearing aid components (19.08)",
     forside: "Hva er kompresjon i et høreapparat, og hvorfor trengs det?",
     bakside: "En funksjon som automatisk senker forsterkningen når inputnivået øker: svake lyder forsterkes mer og sterke mindre. Det trengs fordi dynamikkområdet er redusert ved sensorinevralt tap.",
-    forklaring: "Målene er komfort (sterke lyder blir ikke ubehagelige), forståelighet (svake talelyder blir hørbare) og lydkvalitet." },
+    forklaring: "Målene er komfort (sterke lyder blir ikke ubehagelige), forståelighet (svake talelyder blir hørbare) og lydkvalitet. Kompressoren skal ikke endre formen (spekteret) på bølgeformen." },
   { id: "K22-KO02", emne: "AUT2200", tema: "Kompresjon", eksamen: "Compression (12.10)", oppgaver: [], sikkerhet: "høy",
     kilde: "Generert fra forelesning: Compression (12.10)",
     forside: "Hva er kompresjonsterskel (knepunkt) og kompresjonsratio?",

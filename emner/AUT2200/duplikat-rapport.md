@@ -33,7 +33,7 @@ forklaringen, og fjern K22-HA08.
 (K22-HA02, «Hvorfor holder ikke lik forsterkning for alle inputnivåer?», handler om det samme temaet
 fra en annen vinkel, nemlig hvorfor lineær forsterkning ikke fungerer. Den bør beholdes.)
 
-**Min beslutning:**
+**Min beslutning:** Følg anbefalingen. Utført: K22-HA08 er fjernet, og poenget om bølgeformen er flyttet inn i forklaringen på K22-KO01.
 
 ---
 
@@ -51,7 +51,7 @@ det andre om ulempen, så de har ulikt riktig svar.
 
 **Anbefaling:** Behold alle tre. De utfyller hverandre.
 
-**Min beslutning:**
+**Min beslutning:** Følg anbefalingen (behold).
 
 ---
 
@@ -67,7 +67,7 @@ EA04 gir formelen.
 
 **Anbefaling:** Behold begge.
 
-**Min beslutning:**
+**Min beslutning:** Følg anbefalingen (behold).
 
 ---
 
@@ -84,7 +84,7 @@ diskantforsterkning, ventilering og feedback.
 
 **Anbefaling:** Behold alle. De har ulikt fokus og er i ulik form.
 
-**Min beslutning:**
+**Min beslutning:** Følg anbefalingen (behold).
 
 ---
 
@@ -96,7 +96,7 @@ diskantforsterkning, ventilering og feedback.
 
 **Anbefaling:** Behold begge. Det ene kortet forklarer hva okklusjon er, det andre spør om et tall.
 
-**Min beslutning:**
+**Min beslutning:** Følg anbefalingen (behold).
 
 ---
 
@@ -108,7 +108,7 @@ diskantforsterkning, ventilering og feedback.
 
 **Anbefaling:** Behold begge. Det ene spør hvordan utbyttet vurderes, det andre når.
 
-**Min beslutning:**
+**Min beslutning:** Følg anbefalingen (behold).
 
 ---
 
@@ -123,4 +123,4 @@ Disse ble flagget fordi teksten er nesten lik, men tallene og svarene er forskje
 
 **Anbefaling:** Behold alle.
 
-**Min beslutning:**
+**Min beslutning:** Følg anbefalingen (behold).
