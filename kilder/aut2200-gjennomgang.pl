@@ -4,22 +4,22 @@ use utf8; use open qw(:std :encoding(UTF-8));
 sub les { my $f = shift; local $/; open my $h, '<', $f or die "$f: $!"; my $t = <$h>; close $h; $t }
 sub str { my $s = shift; $s =~ s/\\"/"/g; $s }
 my @linjer = ("# AUT2200 – gjennomgang av generert innhold", "",
-  "Laget automatisk fra `data/aut2200-kort.js`, `data/aut2200-oppgaver.js` og `data/aut2200-muntlig.js`.", "");
+  "Laget automatisk fra alle `data/aut2200*.js`-filene.", "");
 
 # Flashcards
-my $k = les('data/aut2200-kort.js'); my %kort;
+my $alle = join("\n", map { les($_) } sort glob("data/aut2200*.js")); my $k = $alle; my %kort;
 while ($k =~ /\{ id: "([^"]+)".*?tema: "([^"]+)", eksamen: "([^"]+)".*?kilde: "((?:[^"\\]|\\.)*)",\s*forside: "((?:[^"\\]|\\.)*)",\s*bakside: "((?:[^"\\]|\\.)*)",\s*forklaring: "((?:[^"\\]|\\.)*)" \}/sg) {
   push @{$kort{$3}}, [$1, $2, str($4), str($5), str($6), str($7)];
 }
 # Flervalg
-my $o = les('data/aut2200-oppgaver.js'); my %spm;
+my $o = $alle; my %spm;
 while ($o =~ /id: "([^"]+)", emne: "AUT2200", eksamen: "([^"]+)", nr: \d+, tema: "([^"]+)".*?kilde: "((?:[^"\\]|\\.)*)",\s*tekst: "((?:[^"\\]|\\.)*)",.*?alternativer: \[(.*?)\],\s*riktig: (\d), forklaring: "((?:[^"\\]|\\.)*)"/sg) {
   my ($id, $eks, $tema, $kilde, $tekst, $alt, $riktig, $forkl) = ($1, $2, $3, $4, $5, $6, $7, $8);
   my @a; push @a, str($1) while $alt =~ /"((?:[^"\\]|\\.)*)"/g;
   push @{$spm{$eks}}, [$id, $tema, str($kilde), str($tekst), \@a, $riktig, str($forkl)];
 }
 # Muntlig
-my $m = les('data/aut2200-muntlig.js'); my %munt;
+my $m = $alle; my %munt;
 while ($m =~ /\{\s*id: "([^"]+)", emne: "AUT2200", type: "(\w+)", tema: "([^"]+)", eksamen: "([^"]+)",\s*kilde: "((?:[^"\\]|\\.)*)",\s*sporsmal: "((?:[^"\\]|\\.)*)",\s*(sjekkliste|steg): \[(.*?)\],\s*oppfolging: \[(.*?)\]\s*\}/sg) {
   my ($id, $type, $tema, $eks, $kilde, $sp, $lt, $liste, $opp) = ($1, $2, $3, $4, $5, $6, $7, $8, $9);
   my @l; push @l, str($1) while $liste =~ /"((?:[^"\\]|\\.)*)"/g;

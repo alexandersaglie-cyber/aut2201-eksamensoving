@@ -153,3 +153,12 @@ Oppdateres etter hvert som innholdet lages. Det jeg er usikker på, står også 
   - hva en negativ REIG betyr
 - **Hvorfor akkurat 75 % av luft-bein-gapet:** står ikke i foilene. Oppfølgingssvaret sier det.
 - **Figurer:** Kurvene som sammenligner NAL, DSL og POGO (foil 16 og 28) og målingene fra masteroppgaven (foil 44–46) er ikke gjort om til oppgaver. De har bare kurver uten tall som er lette å lese av.
+
+**De øvrige forelesningene:**
+- **MT-innstillingen (S22-HA04, middels):** Foilene nevner M, T og MT, men forklarer ikke MT i detalj. Svaret bygger på vanlig bruk: MT gir både mikrofon og slynge.
+- **Luftbobler i avtrykket (S22-OP06, middels):** Foilene sier at bobler kan tolereres «etter andre sving». Ordlyden er litt uklar, så spørsmålet følger foilene ordrett.
+- **Henvisningskriterier for CI (K22-CI02, middels):** Tallene kommer fra en Cochlear-foil som gjengir OUS-kriteriene. Forelesningen sier selv at det ikke finnes absolutte grenser.
+- **Studien om CI og alder:** Foilen viser resultater før og etter implantasjon (CNC og AzBio), men tallene er vanskelige å lese. Derfor brukes bare konklusjonen («alder er ikke en signifikant faktor»).
+- **Leverandører (K22-LE01, middels):** Navnene på programvaren kommer fra fagsidene, ikke fra en forelesning. Bare ett kort, som avtalt («ikke deepdive»).
+- **Rådgivning:** Rådgivningsbøkene finnes ikke blant kursfilene, så temaet bygger bare på foilene og er tynnere dekket.
+- **Svar som går litt utover foilene** er merket i forklaringen («utover foilene» / «fra AUT2201»).
