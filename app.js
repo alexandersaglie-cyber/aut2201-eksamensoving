@@ -312,9 +312,10 @@ function stokk(liste) {
   return kopi;
 }
 
-// Små merkelapper over et kort/spørsmål: tema, usikker fasit, redigert.
-function merker(x) {
+// Små merkelapper over et kort/spørsmål: tema, (for flervalg) hvor det er hentet fra, usikker fasit, redigert.
+function merker(x, medKilde = false) {
   let html = `<span class="merke">${esc(x.tema)}</span>`;
+  if (medKilde) html += `<span class="merke kildemerke">${esc([...new Set(eksamenerFor(x))].join(" + "))}</span>`;
   if (x.sikkerhet === "lav") html += `<span class="merke varsel">Usikker fasit – sjekk i pensum</span>`;
   if (x.redigert) html += `<span class="merke">Redigert</span>`;
   return html;
@@ -1026,7 +1027,7 @@ function visSporsmal() {
       <span>${runde.resultater.filter(r => r.riktig).length} riktige</span>
     </div>
     <section class="panel">
-      <div>${merker(o)}</div>
+      <div>${merker(o, true)}</div>
       ${o.figur ? `<a href="${esc(o.figur)}" target="_blank" title="Åpne figuren i full størrelse">
         <img class="figur" src="${esc(o.figur)}" alt="Figur til oppgave ${o.nr}"></a>` : ""}
       <p class="oppgavetekst">${esc(o.tekst)}</p>
