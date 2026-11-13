@@ -177,23 +177,23 @@ function tilpass(x, original) {
 }
 
 // Fagene styres av admin i tabellen «fag» i Supabase (se supabase/06_fagliste.sql), med status
-// utkast / publisert / skjult. Lista hentes ved innlogging og huskes i lagret.fagliste.
+// utkast / prove (prøveversjon) / publisert / skjult. Lista hentes ved innlogging og huskes i lagret.fagliste.
 // Denne lista brukes bare før lista er hentet første gang (f.eks. uten nett).
 // Spørsmål og kort til et fag ligger i egne datafiler med emne: "<kode>".
 const STANDARD_FAG = [
   { kode: "AUT1000", navn: "Audiologisk grunnkurs 1", status: "publisert", rekkefolge: 1 },
   { kode: "AUT2201", navn: "Audiologisk grunnkurs 2", status: "publisert", rekkefolge: 2 }
 ];
-const FAGSTATUS = { utkast: "Utkast", publisert: "Publisert", skjult: "Skjult" };
+const FAGSTATUS = { utkast: "Utkast", prove: "Prøveversjon", publisert: "Publisert", skjult: "Skjult" };
 
 // Alle fag appen kjenner til, i riktig rekkefølge.
 function alleFag() {
   const liste = lagret.fagliste?.length ? lagret.fagliste : STANDARD_FAG;
   return [...liste].sort((a, b) => a.rekkefolge - b.rekkefolge || a.kode.localeCompare(b.kode));
 }
-// Fagene brukeren får velge: publiserte, og for admin også utkast og skjulte.
-function synligeFag() { return alleFag().filter(f => f.status === "publisert" || erAdmin()); }
-// Liten merkelapp for admin på fag som ikke er publisert.
+// Fagene brukeren får velge: publiserte og prøveversjoner, og for admin også utkast og skjulte.
+function synligeFag() { return alleFag().filter(f => f.status === "publisert" || f.status === "prove" || erAdmin()); }
+// Liten merkelapp på fag som ikke er publisert (prøveversjon ser alle, de andre bare admin).
 function fagMerke(f) { return f.status === "publisert" ? "" : ` <span class="merke">${esc(FAGSTATUS[f.status] || f.status)}</span>`; }
 
 // Innhold uten emne-felt (de første datafilene) hører til AUT2201.
@@ -470,6 +470,7 @@ function visHjem() {
   vis("hjem", `
     ${kontoPanel()}
     ${pabegyntPanel()}
+    ${provePanel()}
 
     <section class="panel">
       <h2>Hva vil du øve på?</h2>
@@ -524,6 +525,19 @@ function pabegyntPanel() {
       <p class="dempet">Startet ${esc(formaterDato(p.startet))}</p>
       <button class="hoved" data-handling="fortsett-runde">Fortsett der du slapp</button>
       <div class="knapperad liten"><button data-handling="forkast-runde">Forkast runden</button></div>
+    </section>`;
+}
+
+// På forsiden når faget er en prøveversjon: forklaring og knapp til vurderingsskjemaet.
+function provePanel() {
+  const f = valgtFag();
+  if (!f || f.status !== "prove") return "";
+  return `
+    <section class="panel prove">
+      <h2>${esc(f.kode)} er en prøveversjon</h2>
+      <p>Innholdet er nytt og laget ut fra forelesningene. Prøv det gjerne, og si fra hvordan det fungerer.
+        Da blir det bedre før faget publiseres for fullt.</p>
+      <button class="hoved" data-handling="vurder-fag">Vurder faget</button>
     </section>`;
 }
 
@@ -1630,8 +1644,10 @@ async function visAdminFeil() {
   meldinger.sort((a, b) => a.lost - b.lost); // uløste først
   const rad = m => {
     const erGenerell = m.element_id === TILBAKEMELDING;
-    const x = erGenerell ? null : finnElement(m.element_id);
+    const erVurdering = m.element_id.startsWith(VURDERING);
+    const x = erGenerell || erVurdering ? null : finnElement(m.element_id);
     const gjelder = erGenerell ? "<b>Tilbakemelding</b>"
+      : erVurdering ? `<b>Vurdering av ${esc(m.element_id.slice(VURDERING.length))}</b>`
       : x ? esc(x.forside ? kildeKort(x) : kildeOppgave(x)) : "Slettet element";
     return `
       <li class="${m.lost ? "lost" : ""}">
@@ -1639,7 +1655,7 @@ async function visAdminFeil() {
           · fra ${esc(m.profiler?.epost || "slettet bruker")} · ${esc(formaterDato(m.opprettet))}
           ${m.lost ? " · <b>løst</b>" : ""}</span><br>
         ${x ? `<i>${esc((x.forside || x.tekst).slice(0, 120))}</i><br>` : ""}
-        <b>«${esc(m.melding)}»</b>
+        ${erVurdering ? `<span class="melding-tekst">${esc(m.melding)}</span>` : `<b>«${esc(m.melding)}»</b>`}
         <div class="knapperad liten">
           ${x ? `<button data-handling="rediger" data-type="${typeFor(x)}" data-id="${x.id}">Rediger elementet</button>` : ""}
           <button data-handling="feil-lost" data-id="${m.id}" data-lost="${!m.lost}">${m.lost ? "Åpne igjen" : "Merk som løst"}</button>
@@ -1648,7 +1664,18 @@ async function visAdminFeil() {
       </li>`;
   };
 
+  // Snittkarakter per fag fra vurderingene av prøveversjoner.
+  const karakterer = {};
+  meldinger.filter(m => m.element_id.startsWith(VURDERING)).forEach(m => {
+    const k = Number(m.melding.match(/^Karakter: (\d)\/5/)?.[1]);
+    if (k) (karakterer[m.element_id.slice(VURDERING.length)] ||= []).push(k);
+  });
+  const snitt = Object.entries(karakterer).map(([fag, k]) =>
+    `<p><b>${esc(fag)}:</b> ${k.length} vurdering${k.length === 1 ? "" : "er"},
+      snitt ${(k.reduce((a, b) => a + b, 0) / k.length).toFixed(1).replace(".", ",")} av 5</p>`).join("");
+
   vis("admin-feil", adminFaner("feil") + `
+    ${snitt ? `<section class="panel"><h2>Vurderinger av prøveversjoner</h2>${snitt}</section>` : ""}
     <section class="panel">
       <p class="dempet">${meldinger.filter(m => !m.lost).length} uløste av ${meldinger.length}.</p>
       <ul class="liste">${meldinger.length ? meldinger.map(rad).join("") : `<li class="dempet">Ingen meldinger.</li>`}</ul>
@@ -1903,6 +1930,55 @@ async function sendTilbakemelding(skjema) {
   visHjem();
 }
 
+// ---------- Vurdering av et fag i prøveversjon ----------
+// Lagres også i feilmeldinger, med element-id «vurdering:<fagkode>». Teksten har faste
+// linjer («Karakter: 4/5» osv.), så adminpanelet kan regne ut snittet.
+const VURDERING = "vurdering:";
+const VURDER_DELER = ["Flashcards", "Flervalg", "Muntlig øving"];
+const KARAKTERTEKST = ["", "Fungerer dårlig", "Ikke så bra", "Greit", "Bra", "Veldig bra"];
+
+function visVurdering() {
+  const f = valgtFag();
+  vis("vurdering", `
+    <form class="panel" id="vurderingskjema" data-fag="${esc(f.kode)}">
+      <h2>Vurder ${esc(f.kode)} ${esc(f.navn)}</h2>
+      <p class="dempet">Faget er en prøveversjon. Svarene dine hjelper med å gjøre det bedre.
+        Administrator får se vurderingen og hvem den er fra.</p>
+      <fieldset class="karakter">
+        <legend>Hvordan fungerer faget alt i alt?</legend>
+        ${[1, 2, 3, 4, 5].map(k => `
+          <label class="avkrysning"><input type="radio" name="karakter" value="${k}" required> ${k} – ${KARAKTERTEKST[k]}</label>`).join("")}
+      </fieldset>
+      <fieldset>
+        <legend>Hva har du prøvd?</legend>
+        ${VURDER_DELER.map(d => `<label class="avkrysning"><input type="checkbox" name="prove" value="${d}"> ${d}</label>`).join("")}
+      </fieldset>
+      <label>Hva fungerer bra?<textarea name="bra" rows="3" maxlength="800"></textarea></label>
+      <label>Hva bør bli bedre? (f.eks. feil, uklare spørsmål, noe som mangler)<textarea name="bedre" rows="3" maxlength="800"></textarea></label>
+      <p class="skjemamelding" role="status"></p>
+      <button class="hoved" type="submit">Send vurdering</button>
+    </form>
+  `);
+}
+
+async function sendVurdering(skjema) {
+  const data = new FormData(skjema);
+  const linjer = [
+    `Karakter: ${data.get("karakter")}/5`,
+    `Prøvd: ${data.getAll("prove").join(", ") || "ikke oppgitt"}`
+  ];
+  if (data.get("bra").trim()) linjer.push(`Fungerer bra: ${data.get("bra").trim()}`);
+  if (data.get("bedre").trim()) linjer.push(`Bør bli bedre: ${data.get("bedre").trim()}`);
+  const knapp = skjema.querySelector("button[type=submit]");
+  knapp.disabled = true;
+  skjemaMelding(skjema, "Sender …");
+  const feil = await sendFeilmelding(VURDERING + skjema.dataset.fag, linjer.join("\n"));
+  knapp.disabled = false;
+  if (feil) return skjemaMelding(skjema, feil, true);
+  await melding("Takk for vurderingen!");
+  visHjem();
+}
+
 // =====================================================================
 // 8. Sikkerhetskopi
 // =====================================================================
@@ -2039,6 +2115,7 @@ const HANDLINGER = {
   },
   "avbryt-melding": () => feilmeldingTilbake(),
   "tilbakemelding": () => visTilbakemelding(),
+  "vurder-fag": () => visVurdering(),
   "vis-logg-inn": () => { innloggingFane = "logg-inn"; visLoggInn(); },
   "last-pa-nytt": () => location.reload(),
   "innlogging-fane": el => { innloggingFane = el.dataset.fane; visLoggInn(); },
@@ -2115,6 +2192,7 @@ app.addEventListener("submit", hendelse => {
   if (skjema.id === "redigerskjema") lagreRedigering(skjema);
   else if (skjema.id === "meldskjema") sendMeldFeil(skjema);
   else if (skjema.id === "tilbakemeldingskjema") sendTilbakemelding(skjema);
+  else if (skjema.id === "vurderingskjema") sendVurdering(skjema);
   else if (skjema.id === "nyttfagskjema") opprettFag(skjema);
   else sendKontoskjema(skjema);
 });

@@ -319,6 +319,8 @@ label.avkrysning input { width: 20px; height: 20px; flex: none; margin-top: 2px;
 
 .pabegynt { border-color: var(--aksent); border-width: 2px; }
 .pabegynt p { margin: 4px 0; }
+.prove { border-color: var(--usikker); border-width: 2px; }
+.melding-tekst { white-space: pre-line; }
 .fremdrift { height: 8px; background: var(--bakgrunn); border-radius: 4px; overflow: hidden; margin: 8px 0; }
 .fremdrift div { height: 100%; background: var(--aksent); }
 
