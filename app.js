@@ -1950,7 +1950,7 @@ function visVurdering() {
       <h2>Vurder ${esc(f.kode)} ${esc(f.navn)}</h2>
       <p class="dempet">Faget er en prøveversjon. Svarene dine hjelper med å gjøre det bedre.
         Administrator får se vurderingen og hvem den er fra.</p>
-      <fieldset class="karakter">
+      <fieldset class="vurderingsvalg">
         <legend>Hvordan fungerer faget alt i alt?</legend>
         ${[1, 2, 3, 4, 5].map(k => `
           <label class="avkrysning"><input type="radio" name="karakter" value="${k}" required> ${k} – ${KARAKTERTEKST[k]}</label>`).join("")}
