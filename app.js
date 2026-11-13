@@ -243,6 +243,12 @@ function filtrert(liste) {
 
 // Avkrysningsliste for tema eller eksamen på forsiden.
 // felt er "tema" eller "eksamen", alle er alle valgene, alleTekst f.eks. "Alle tema".
+// I AUT2200 er «eksamenene» forelesninger i pensum (ingen tidligere eksamener), så filteret heter bare Pensum.
+const BARE_PENSUM = ["AUT2200"];
+function barePensum() { return BARE_PENSUM.includes(lagret.valgtFag); }
+function eksamenEtikett() { return barePensum() ? "Pensum" : "Eksamen/Pensum"; }
+function alleEksamenerTekst() { return barePensum() ? "Hele pensum" : "Alle eksamener"; }
+
 function flervalgFilter(felt, etikett, alle, alleTekst) {
   const valgt = filter[felt];
   const sammendrag = !valgt.length ? alleTekst
@@ -476,7 +482,7 @@ function visHjem() {
       <h2>Hva vil du øve på?</h2>
       <div class="filtre">
         ${flervalgFilter("tema", "Tema", temaer(), "Alle tema")}
-        ${flervalgFilter("eksamen", "Eksamen/Pensum", eksamener(), "Alle eksamener")}
+        ${flervalgFilter("eksamen", eksamenEtikett(), eksamener(), alleEksamenerTekst())}
       </div>
       <p class="dempet">${kort.length} flashcards og ${oppgaver.length} flervalgsspørsmål i utvalget.</p>
     </section>
@@ -979,7 +985,7 @@ function forkastPabegyntRunde() {
 function beskrivFilter() {
   const tekst = (valgt, alle, flertall) =>
     !valgt.length ? alle : valgt.length <= 2 ? valgt.join(" og ") : `${valgt.length} ${flertall}`;
-  return `${tekst(filter.tema, "Alle tema", "tema")} · ${tekst(filter.eksamen, "Alle eksamener", "eksamener")}`;
+  return `${tekst(filter.tema, "Alle tema", "tema")} · ${tekst(filter.eksamen, alleEksamenerTekst(), barePensum() ? "forelesninger" : "eksamener")}`;
 }
 
 function visSporsmal() {
