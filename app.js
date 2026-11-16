@@ -212,10 +212,34 @@ function finnElement(id) {
   return [...sammensatt("kort", KORT), ...sammensatt("sporsmal", OPPGAVER)].find(x => x.id === id);
 }
 
-// Temaer og eksamener i faget som er valgt. Regnes ut fra innholdet, så nye temaer fra admin kommer med.
-function temaer() {
+// Fag der temaene er samlet i større grupper, slik eksamen er delt inn (kakediagrammet for GK2).
+// Spørsmålene beholder sitt eget tema i datafilene; appen viser og filtrerer på gruppen.
+const TEMAGRUPPER = {
+  AUT2201: {
+    "Persepsjon og nedsatt funksjon": ["Psykoakustikk", "Binaural hørsel og lokalisering", "Tale og akustikk", "Diagnostikk og måling", "Høreapparat og forsterkning"],
+    "Hørselstap og psyke": ["Psykisk helse, mestring og stigma", "Folkehelse og epidemiologi"],
+    "AnaFysPat": ["Anatomi og hørselsfysiologi", "Vestibulært", "Sentrale hørselsbaner og plastisitet"],
+    "FoU": ["Statistikk", "Forskningsmetode"],
+    "Aldring": ["Aldring og kognisjon"]
+  }
+};
+// Gruppen et tema hører til i faget som er valgt (eller temaet selv hvis det ikke er gruppert).
+function gruppeFor(tema) {
+  const grupper = TEMAGRUPPER[lagret.valgtFag] || {};
+  return Object.keys(grupper).find(g => grupper[g].includes(tema)) || tema;
+}
+function temaFor(x) { return gruppeFor(x.tema); }
+
+// Temaene slik de står i datafilene (brukes når admin lager eller redigerer spørsmål).
+function egneTemaer() {
   const alle = iValgtFag([...sammensatt("sporsmal", OPPGAVER), ...sammensatt("kort", KORT)]);
   return [...new Set(alle.map(x => x.tema))].sort((a, b) => a.localeCompare(b, "no"));
+}
+
+// Temaer (grupper) og eksamener i faget som er valgt. Regnes ut fra innholdet, så nye temaer fra admin kommer med.
+function temaer() {
+  const alle = iValgtFag([...sammensatt("sporsmal", OPPGAVER), ...sammensatt("kort", KORT)]);
+  return [...new Set(alle.map(temaFor))].sort((a, b) => a.localeCompare(b, "no"));
 }
 function eksamener() {
   const alle = iValgtFag([...sammensatt("sporsmal", OPPGAVER), ...sammensatt("kort", KORT)]);
@@ -237,7 +261,7 @@ let antallValgt = "100";
 
 function filtrert(liste) {
   return liste.filter(x =>
-    (!filter.tema.length || filter.tema.includes(x.tema)) &&
+    (!filter.tema.length || filter.tema.includes(temaFor(x))) &&
     (!filter.eksamen.length || eksamenerFor(x).some(e => filter.eksamen.includes(e))));
 }
 
@@ -314,7 +338,7 @@ function stokk(liste) {
 
 // Små merkelapper over et kort/spørsmål: tema, (for flervalg) hvor det er hentet fra, usikker fasit, redigert.
 function merker(x, medKilde = false) {
-  let html = `<span class="merke">${esc(x.tema)}</span>`;
+  let html = `<span class="merke">${esc(temaFor(x))}</span>`;
   if (medKilde) html += `<span class="merke kildemerke">${esc([...new Set(eksamenerFor(x))].join(" + "))}</span>`;
   if (x.sikkerhet === "lav") html += `<span class="merke varsel">Usikker fasit – sjekk i pensum</span>`;
   if (x.redigert) html += `<span class="merke">Redigert</span>`;
@@ -833,7 +857,7 @@ function visMuntlig() {
       <span>${BOKSNAVN[boks(k.id)]}</span>
     </div>
     <article class="panel muntligkort">
-      <div><span class="merke">${erScenario ? "Scenario" : "Forklar"}</span> <span class="merke">${esc(k.tema)}</span></div>
+      <div><span class="merke">${erScenario ? "Scenario" : "Forklar"}</span> <span class="merke">${esc(temaFor(k))}</span></div>
       <p class="forside">${esc(k.sporsmal)}</p>
       ${tidtaker}
       ${innhold}
@@ -1148,9 +1172,10 @@ function visResultat() {
   // Tell riktige per tema.
   const perTema = {};
   resultater.forEach(r => {
-    perTema[r.o.tema] = perTema[r.o.tema] || { riktig: 0, totalt: 0 };
-    perTema[r.o.tema].totalt++;
-    if (r.riktig) perTema[r.o.tema].riktig++;
+    const tema = temaFor(r.o);
+    perTema[tema] = perTema[tema] || { riktig: 0, totalt: 0 };
+    perTema[tema].totalt++;
+    if (r.riktig) perTema[tema].riktig++;
   });
   const temaListe = temaOversikt(perTema);
   const svake = temaListe.filter(t => t.andel < SVAK_GRENSE);
@@ -1219,7 +1244,9 @@ function visMineResultater() {
 
   // Legg sammen riktige per tema fra alle rundene.
   const perTema = {};
-  liste.forEach(r => Object.entries(r.perTema).forEach(([tema, t]) => {
+  // Eldre runder er lagret med de opprinnelige temaene, så de legges inn i gruppen sin.
+  liste.forEach(r => Object.entries(r.perTema).forEach(([egetTema, t]) => {
+    const tema = gruppeFor(egetTema);
     perTema[tema] = perTema[tema] || { riktig: 0, totalt: 0 };
     perTema[tema].riktig += t.riktig;
     perTema[tema].totalt += t.totalt;
@@ -1421,7 +1448,7 @@ function lagListe() {
 
 // Et tomt kort/spørsmål når admin lager noe nytt.
 function nyttElement(type) {
-  const felles = { emne: lagret.valgtFag, eksamen: "Egne", tema: temaer()[0], sikkerhet: "høy", forklaring: "" };
+  const felles = { emne: lagret.valgtFag, eksamen: "Egne", tema: egneTemaer()[0], sikkerhet: "høy", forklaring: "" };
   if (type === "kort") {
     return { ...felles, id: "K-" + lagNyId(), oppgaver: [], forside: "", bakside: "" };
   }
@@ -1462,7 +1489,7 @@ function visRediger(type, id) {
         <label>Tema<input type="search" name="tema" list="temaliste" value="${esc(x.tema)}" required></label>
         <label>Eksamen<input type="search" name="eksamen" list="eksamenliste" value="${esc(x.eksamen)}" required></label>
       </div>
-      <datalist id="temaliste">${temaer().map(t => `<option value="${esc(t)}">`).join("")}</datalist>
+      <datalist id="temaliste">${egneTemaer().map(t => `<option value="${esc(t)}">`).join("")}</datalist>
       <datalist id="eksamenliste">${eksamener().map(e => `<option value="${esc(e)}">`).join("")}</datalist>
       ${felter}
       <p class="skjemamelding" role="status"></p>
