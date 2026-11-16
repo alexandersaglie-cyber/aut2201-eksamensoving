@@ -508,7 +508,6 @@ function visHjem() {
       <h2>Flervalg</h2>
       <p class="dempet">Eksamensspørsmål med stokkede alternativer. Du får forklaring etter hvert svar,
         og karakter og svake tema etter runden.</p>
-      ${fordelingTekst()}
       <label>Antall spørsmål <select id="antall">${antallValg}</select></label>
       ${forFa}
       <button class="hoved" data-handling="start-flervalg" ${oppgaver.length ? "" : "disabled"}>Start runde</button>
@@ -895,49 +894,6 @@ function muntligPanel() {
 // 5. Flervalg
 // =====================================================================
 
-// Fordelingen av temaer på eksamen (andel av hele eksamen), for fag som har en slik oversikt.
-const EKSAMENSFORDELING = {
-  AUT2201: [
-    { gruppe: "Persepsjon og nedsatt funksjon", andel: 0.40, temaer: ["Psykoakustikk", "Binaural hørsel og lokalisering", "Tale og akustikk", "Diagnostikk og måling", "Høreapparat og forsterkning"] },
-    { gruppe: "Hørselstap og psyke", andel: 0.20, temaer: ["Psykisk helse, mestring og stigma", "Folkehelse og epidemiologi"] },
-    { gruppe: "AnaFysPat", andel: 0.15, temaer: ["Anatomi og hørselsfysiologi", "Vestibulært", "Sentrale hørselsbaner og plastisitet"] },
-    { gruppe: "FoU", andel: 0.15, temaer: ["Statistikk", "Forskningsmetode"] },
-    { gruppe: "Aldring", andel: 0.10, temaer: ["Aldring og kognisjon"] }
-  ]
-};
-
-// Kort tekst på forsiden om at spørsmålene trekkes etter eksamensfordelingen.
-function fordelingTekst() {
-  const fordeling = EKSAMENSFORDELING[lagret.valgtFag];
-  if (!fordeling) return "";
-  return `<p class="dempet">Spørsmålene trekkes etter fordelingen på eksamen:
-    ${fordeling.map(g => `${esc(g.gruppe)} ${Math.round(g.andel * 100)} %`).join(", ")}.</p>`;
-}
-
-// Trekker spørsmål til en runde. Har faget en eksamensfordeling, får hver gruppe like stor andel
-// av runden som på eksamen (blant gruppene som er med i utvalget). Har en gruppe for få spørsmål,
-// fylles resten med tilfeldige spørsmål fra resten av utvalget.
-function trekkSporsmal(liste, antall) {
-  const fordeling = EKSAMENSFORDELING[lagret.valgtFag];
-  if (!fordeling) return stokk(liste).slice(0, antall);
-  const grupper = fordeling
-    .map(g => ({ ...g, sporsmal: stokk(liste.filter(o => g.temaer.includes(o.tema))) }))
-    .filter(g => g.sporsmal.length);
-  if (grupper.length < 2) return stokk(liste).slice(0, antall);
-
-  // Antall per gruppe: andelen av runden, rundet slik at summen blir riktig.
-  const sum = grupper.reduce((s, g) => s + g.andel, 0);
-  const n = Math.min(antall, liste.length);
-  grupper.forEach(g => { g.eksakt = n * g.andel / sum; g.antall = Math.floor(g.eksakt); });
-  let igjen = n - grupper.reduce((s, g) => s + g.antall, 0);
-  [...grupper].sort((a, b) => (b.eksakt - b.antall) - (a.eksakt - a.antall))
-    .forEach(g => { if (igjen > 0) { g.antall++; igjen--; } });
-
-  const valgt = grupper.flatMap(g => g.sporsmal.slice(0, g.antall));
-  const resten = stokk(liste.filter(o => !valgt.includes(o)));
-  return stokk([...valgt, ...resten.slice(0, n - valgt.length)]);
-}
-
 // Pågående runde: spørsmålene (hvert med stokket rekkefølge på alternativene og svaret man
 // har gitt, eller null), hvor langt vi har kommet, hva som er valgt nå, og resultatene så langt.
 let runde = null;
@@ -945,7 +901,7 @@ let runde = null;
 // beskrivelse: hva runden besto av, f.eks. «Statistikk · Alle eksamener». Lagres i historikken.
 // ovelse = true for «Øv på feilene»: runden lagres ikke i Mine resultater.
 function startFlervalg(liste, antall, beskrivelse, ovelse = false) {
-  const utvalg = ovelse ? stokk(liste).slice(0, antall) : trekkSporsmal(liste, antall);
+  const utvalg = stokk(liste).slice(0, antall);
   runde = {
     sporsmal: utvalg.map(o => ({ o, rekkefolge: stokk([0, 1, 2, 3]), svar: null })),
     i: 0,
