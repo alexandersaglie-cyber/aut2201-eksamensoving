@@ -1111,9 +1111,11 @@ function visOving() {
   if (vist) {
     const valgtSelv = s.svar !== "vis";
     const status = !valgtSelv ? "" : s.svar === o.riktig ? "<b>Riktig!</b> " : "<b>Feil.</b> ";
-    // feilforklaringer (valgfritt felt): én tekst per alternativ, i samme rekkefølge som alternativene.
-    const feil = (o.feilforklaringer || [])
-      .map((tekst, nr) => ({ tekst, nr }))
+    // Hvorfor de gale alternativene er feil: én tekst per alternativ, i samme rekkefølge som i
+    // spørsmålet. Står i feltet feilforklaringer eller i FEILFORKLARINGER (data/feilforklaringer-*.js).
+    const forklaringer = o.feilforklaringer || (window.FEILFORKLARINGER || {})[o.id] || [];
+    const feil = rekkefolge
+      .map(nr => ({ tekst: forklaringer[nr], nr }))
       .filter(f => f.tekst && f.nr !== o.riktig);
     svar = `
       <div class="forklaringsboks ${valgtSelv && s.svar !== o.riktig ? "ikke-ok" : ""}">
