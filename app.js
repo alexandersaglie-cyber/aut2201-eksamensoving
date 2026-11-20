@@ -534,7 +534,11 @@ function visHjem() {
         og karakter og svake tema etter runden.</p>
       <label>Antall spørsmål <select id="antall">${antallValg}</select></label>
       ${forFa}
-      <button class="hoved" data-handling="start-flervalg" ${oppgaver.length ? "" : "disabled"}>Start runde</button>
+      <div class="knapperad">
+        <button class="hoved" data-handling="start-flervalg" ${oppgaver.length ? "" : "disabled"}>Start runde</button>
+        <button data-handling="start-oving" ${oppgaver.length ? "" : "disabled"}>Øving</button>
+      </div>
+      <p class="dempet">Øving: bla gjennom spørsmålene og se riktig svar med forklaring. Registreres ikke.</p>
       ${sisteRunde ? `<p class="dempet">Siste runde: <b>${sisteRunde.karakter}</b> (${sisteRunde.prosent} %) · ${esc(formaterDato(sisteRunde.dato))}</p>` : ""}
       <div class="knapperad liten"><button data-handling="mine-resultater">Mine resultater${mineResultater().length ? ` (${mineResultater().length})` : ""}</button></div>
     </section>
@@ -924,10 +928,15 @@ let runde = null;
 
 // beskrivelse: hva runden besto av, f.eks. «Statistikk · Alle eksamener». Lagres i historikken.
 // ovelse = true for «Øv på feilene»: runden lagres ikke i Mine resultater.
+// Trekker spørsmål til en runde eller øving: tilfeldig utvalg av lista, hvert med stokket
+// rekkefølge på alternativene. Brukes av både vanlig runde og øving, så reglene er like.
+function trekkUtvalg(liste, antall) {
+  return stokk(liste).slice(0, antall).map(o => ({ o, rekkefolge: stokk([0, 1, 2, 3]), svar: null }));
+}
+
 function startFlervalg(liste, antall, beskrivelse, ovelse = false) {
-  const utvalg = stokk(liste).slice(0, antall);
   runde = {
-    sporsmal: utvalg.map(o => ({ o, rekkefolge: stokk([0, 1, 2, 3]), svar: null })),
+    sporsmal: trekkUtvalg(liste, antall),
     i: 0,
     valgt: null,
     resultater: [],
@@ -1070,6 +1079,82 @@ function velgAlternativ(nr) {
   runde.resultater.push({ o: gjeldende.o, riktig: nr === gjeldende.o.riktig });
   lagreRundeTilstand();
   visSporsmal();
+}
+
+// =====================================================================
+// Øving: bla gjennom flervalgsspørsmål og se riktig svar med forklaring.
+// Øvingen holdes helt adskilt fra runden over og lagrer ingenting: ingen svar, resultater,
+// påbegynt runde eller statistikk. Svarene finnes bare i minnet til øvingen lukkes.
+// =====================================================================
+
+let oving = null;
+
+function startOving() {
+  oving = { sporsmal: trekkUtvalg(filtrert(alleOppgaver()), Number(antallValgt)), i: 0 };
+  visOving();
+}
+
+function visOving() {
+  const s = oving.sporsmal[oving.i];
+  const { o, rekkefolge } = s;
+  const vist = s.svar !== null; // svar er nummeret på valgt alternativ, eller "vis" for «Vis svar»
+
+  const alternativer = rekkefolge.map(nr => {
+    let klasse = "";
+    if (vist && nr === o.riktig) klasse = "riktig";
+    else if (vist && nr === s.svar) klasse = "feil";
+    return `<button class="alternativ ${klasse}" data-handling="oving-velg" data-nr="${nr}" ${vist ? "disabled" : ""}>
+      ${esc(o.alternativer[nr])}</button>`;
+  }).join("");
+
+  let svar = `<button data-handling="oving-vis">Vis svar</button>`;
+  if (vist) {
+    const valgtSelv = s.svar !== "vis";
+    const status = !valgtSelv ? "" : s.svar === o.riktig ? "<b>Riktig!</b> " : "<b>Feil.</b> ";
+    // feilforklaringer (valgfritt felt): én tekst per alternativ, i samme rekkefølge som alternativene.
+    const feil = (o.feilforklaringer || [])
+      .map((tekst, nr) => ({ tekst, nr }))
+      .filter(f => f.tekst && f.nr !== o.riktig);
+    svar = `
+      <div class="forklaringsboks ${valgtSelv && s.svar !== o.riktig ? "ikke-ok" : ""}">
+        <p>${status}Riktig svar: <b>${esc(o.alternativer[o.riktig])}</b></p>
+        <p>${esc(o.forklaring)}</p>
+        ${feil.length ? `<p><b>Hvorfor de andre er feil:</b></p><ul>
+          ${feil.map(f => `<li><i>${esc(o.alternativer[f.nr])}</i>: ${esc(f.tekst)}</li>`).join("")}</ul>` : ""}
+        ${o.sikkerhet === "lav" ? `<p class="dempet">Merk: fasiten er generert og usikker – sjekk i pensum.</p>` : ""}
+        <p class="kilde">Kilde: ${esc(kildeOppgave(o))} · Fasit: ${esc(o.fasit)}</p>
+      </div>`;
+  }
+
+  const forste = oving.i === 0;
+  const siste = oving.i === oving.sporsmal.length - 1;
+  vis("oving", `
+    <div class="statuslinje">
+      <span>Spørsmål ${oving.i + 1} av ${oving.sporsmal.length}</span>
+      <span class="merke oving-merke">Øving – registreres ikke</span>
+    </div>
+    <section class="panel">
+      <div>${merker(o, true)}</div>
+      ${o.figur ? `<a href="${esc(o.figur)}" target="_blank" title="Åpne figuren i full størrelse">
+        <img class="figur" src="${esc(o.figur)}" alt="Figur til oppgave ${o.nr}"></a>` : ""}
+      <p class="oppgavetekst">${esc(o.tekst)}</p>
+      ${alternativer}
+      ${svar}
+    </section>
+    <div class="knapperad oving-nav">
+      <button data-handling="oving-forrige" ${forste ? "disabled" : ""}>← Forrige</button>
+      ${siste
+        ? `<button class="hoved" data-handling="oving-avslutt">Ferdig</button>`
+        : `<button class="hoved" data-handling="oving-neste">Neste →</button>`}
+    </div>
+    <div class="knapperad liten"><button data-handling="oving-avslutt">Avslutt øving</button></div>
+    <p class="dempet">Øvingen lagres ikke og teller ikke i resultatene dine.</p>
+  `);
+}
+
+function bladOving(steg) {
+  oving.i = Math.max(0, Math.min(oving.sporsmal.length - 1, oving.i + steg));
+  visOving();
 }
 
 function nesteSporsmal() {
@@ -2075,6 +2160,12 @@ const HANDLINGER = {
     const liste = filtrert(alleOppgaver());
     startNyRunde(liste, Number(antallValgt), beskrivFilter());
   },
+  "start-oving": () => startOving(),
+  "oving-velg": el => { oving.sporsmal[oving.i].svar = Number(el.dataset.nr); visOving(); },
+  "oving-vis": () => { oving.sporsmal[oving.i].svar = "vis"; visOving(); },
+  "oving-neste": () => bladOving(1),
+  "oving-forrige": () => bladOving(-1),
+  "oving-avslutt": () => { oving = null; visHjem(); },
   "fortsett-runde": () => fortsettPabegyntRunde(),
   "forkast-runde": async () => {
     const { besvart, totalt } = pabegyntStatus();

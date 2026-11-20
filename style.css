@@ -480,3 +480,8 @@ legend { font-weight: 600; font-size: 0.95rem; padding: 0 4px; }
 }
 .sjekkliste input { width: 20px; height: 20px; margin: 2px 0 0; flex: none; }
 .oppfolging { font-size: 1.05rem; font-weight: 600; }
+
+/* ---------- Øving i flervalg ---------- */
+.oving-merke { background: var(--usikker-bg); color: var(--usikker); border-color: transparent; font-weight: 600; }
+.oving-nav { justify-content: space-between; }
+.oving-nav button { flex: 1; }
