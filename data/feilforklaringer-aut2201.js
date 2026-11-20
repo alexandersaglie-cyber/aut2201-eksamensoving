@@ -1340,3 +1340,516 @@ feilforklaring("O24-098", [
 ]);
 // O24-099: fasiten er usikker (generert), så de gale alternativene er ikke forklart.
 feilforklaring("O24-099", ["", "", "", ""]);
+
+// ---------- Pensumspørsmål ----------
+
+feilforklaring("P26-001", [
+  "",
+  "Eldre er nettopp ulike, så identisk oppfølging passer dårlig.",
+  "Eldre kan beskrive egne mål, og forelesningen vektlegger å spørre dem selv.",
+  "Kronologisk alder sier lite om funksjon, ønsker og livssituasjon."
+]);
+feilforklaring("P26-003", [
+  "At TEN ligger over høreterskelen er en forutsetning for testen, ikke noe som utelukker død region. Det avgjørende er den maskerte terskelen.",
+  "",
+  "TEN-testen sier noe om indre hårceller og nevroner, ikke om ytre hårceller alene.",
+  "Luft-bein-gap skiller konduktivt fra sensorinevralt tap og trengs ikke for å tolke TEN-resultatet."
+]);
+feilforklaring("P26-004", [
+  "Å late som man forstår gir ingen bedre taleforståelse.",
+  "",
+  "Strategien skjuler problemene, så samtalepartnerne blir mindre oppmerksomme, ikke mer.",
+  "Den kan dempe opplevd stigma kortsiktig, men fjerner ikke stigma."
+]);
+feilforklaring("P26-005", [
+  "Testen skal kartlegge flere nivåer, ikke avsluttes ved 0 dB HL.",
+  "",
+  "Frekvensen holdes fast. Det er nivået som endres.",
+  "ABLB bruker toner, ikke bare støy."
+]);
+feilforklaring("P26-007", [
+  "En fast modell som ikke kan endres er en deduktiv tilnærming.",
+  "",
+  "Normalfordeling er et statistisk begrep og gjelder ikke intervjudata.",
+  "Gjennomsnitt per ord er en kvantitativ beregning, ikke kvalitativ analyse."
+]);
+feilforklaring("P26-010", [
+  "Blodtrykk reguleres av det autonome nervesystemet, ikke av cochleariskjernen.",
+  "OAE lages av de ytre hårcellene i cochlea.",
+  "Lineær akselerasjon registreres av otolittorganene i det vestibulære systemet.",
+  ""
+]);
+feilforklaring("P26-011", [
+  "Hjerneslag rammer hjernen, ikke ytre hårceller.",
+  "Tersklene er knapt endret, så de kan ikke forklare de store vanskene.",
+  "",
+  "Kognisjon og fatigue er svært relevante etter hjerneslag."
+]);
+feilforklaring("P26-013", [
+  "Støyen har tydelig innvirkning. Det er nettopp maskeringen som måles.",
+  "",
+  "Hårcellene har ulik karakteristisk frekvens langs cochlea (tonotopi).",
+  "Testtonen har en bestemt fysisk frekvens."
+]);
+feilforklaring("P26-014", [
+  "",
+  "Å late som man har forstått gir ingen oppklaring.",
+  "Å forlate samtalen løser ikke problemet.",
+  "Mer bakgrunnsstøy gjør det vanskeligere å høre."
+]);
+feilforklaring("P26-015", [
+  "20 dB er en stor endring som alle vil merke.",
+  "",
+  "En oktav er en frekvensendring, ikke en nivåendring.",
+  "100 dB er et enormt nivåsprang og ikke en liten økning."
+]);
+feilforklaring("P26-016", [
+  "Lave frekvenser bøyer seg rundt hodet og gir lite ILD. Rett forfra gir dessuten ingen forskjell mellom ørene.",
+  "Toner under 100 Hz gir svært lite hodeskygge, og fra midtlinjen er det ingen forskjell mellom ørene.",
+  "All lyd som når ørene passerer øremuslingen.",
+  ""
+]);
+feilforklaring("P26-017", [
+  "Her er eksponeringen allerede skjedd og hentes fra gamle data, så studien er ikke prospektiv.",
+  "",
+  "Ingen behandling blir randomisert her.",
+  "Ingen studier er uten mulige feilkilder. Retrospektive data har bl.a. risiko for mangelfull registrering."
+]);
+feilforklaring("P26-018", [
+  "En t-test sammenligner gjennomsnitt, og måler ikke korrelasjon.",
+  "",
+  "En type I-feil er en feilkonklusjon, ikke en metode.",
+  "Et stolpediagram er en visualisering og gir ikke et korrelasjonsmål."
+]);
+feilforklaring("P26-019", [
+  "",
+  "Høyt lydtrykk gir ikke posisjonsutløst svimmelhet.",
+  "Otolittmembranen fungerer fortsatt. Problemet er løse krystaller i en buegang.",
+  "OAE har ingenting med svimmelhet å gjøre."
+]);
+feilforklaring("P26-020", [
+  "Off-responser finnes, men forelesningen oppgir on-responser som vanligst.",
+  "Ventrale MGB er en hovedstasjon i hørselsbanen og svarer på lyd.",
+  "MGB er en auditiv struktur og svarer på lyd, ikke lys.",
+  ""
+]);
+feilforklaring("P26-021", [
+  "Å unngå nye arenaer gir mindre deltakelse, ikke mer.",
+  "Audiogrammet sier ingenting om hva som er meningsfullt for personen.",
+  "Oppfølgingen er en viktig del av rehabiliteringen og slutter ikke ved utdeling.",
+  ""
+]);
+feilforklaring("P26-022", [
+  "",
+  "ERB beskriver filterbredde i Hz, ikke hårceller, og hårceller for hørsel sitter i cochlea, ikke buegangene.",
+  "Forskjellen mellom luft- og beinledning er luft-bein-gapet.",
+  "VEMP-varighet har ingenting med auditive filtre å gjøre."
+]);
+feilforklaring("P26-023", [
+  "",
+  "En bratt helling er et mulig tegn, men ikke bevis. Den sier heller ikke at alle frekvenser er døde.",
+  "Et bratt fall er heller grunn til å mistenke cochleær patologi.",
+  "Timpanometri måler mellomøret og sier ingenting om indre hårceller."
+]);
+feilforklaring("P26-024", [
+  "Pasienten beholder retten til å ta egne beslutninger.",
+  "Pasienten skal fortsatt være sentral i rehabiliteringen.",
+  "",
+  "Audiogrammet endres ikke av at en nærperson er med."
+]);
+feilforklaring("P26-025", [
+  "",
+  "Når energien er samlet i ett kritisk bånd, er det ingen spektral summasjon, så det høres svakere ut.",
+  "Lik intensitet gir ikke nødvendigvis lik hørestyrke, nettopp på grunn av spektral summasjon.",
+  "Begge signalene er hørbare lyder."
+]);
+feilforklaring("P26-026", [
+  "Motsatt: det er den første lyden som bestemmer opplevd retning.",
+  "",
+  "Hørselen endrer ikke den fysiske frekvensen til lyden.",
+  "Korte forsinkelser smelter sammen med den direkte lyden. Bare lange forsinkelser høres som ekko."
+]);
+feilforklaring("P26-027", [
+  "Dikotisk maskering er et begrep fra hørselstesting.",
+  "",
+  "dBA er en lydmålingsvekting.",
+  "Ratioskala er et målenivå i kvantitative data."
+]);
+feilforklaring("P26-028", [
+  "12 er 25-persentilen (Q1), ikke IQR.",
+  "20 er 75-persentilen (Q3), ikke IQR.",
+  "32 er summen av Q1 og Q3. IQR er differansen.",
+  ""
+]);
+feilforklaring("P26-030", [
+  "Hårcellene sitter i cochlea, ikke i auditiv cortex.",
+  "",
+  "Buegangene og utriculus hører til det vestibulære systemet.",
+  "Hørselsfibrene går til hjernestammen, ikke ryggmargen, og core-belt gjelder cortex."
+]);
+feilforklaring("P26-031", [
+  "",
+  "Kognisjon har en tydelig forbindelse til hørsel og taleforståelse.",
+  "Rentoneaudiogrammet måler terskler, ikke arbeidsminne.",
+  "Taleforståelse avhenger av mye mer enn øremuslingen."
+]);
+feilforklaring("P26-032", [
+  "Tale beholder tidsvariasjonene sine når den når trommehinnen.",
+  "Øret registrerer både lydstyrke og frekvens.",
+  "Vokalenes varighet endres ikke av dårlig frekvensselektivitet.",
+  ""
+]);
+feilforklaring("P26-033", [
+  "fe handler om den døde regionen, ikke OAE.",
+  "fe har ingenting med hjertet å gjøre.",
+  "Forskjellen mellom høreterskel og ubehagsterskel er dynamikkområdet.",
+  ""
+]);
+feilforklaring("P26-034", [
+  "Tiltakene endrer ikke selve hørselstapet.",
+  "Hørselen blir ikke normal. Kommunikasjonen blir bare lettere.",
+  "Tiltakene hjelper også med høreapparat.",
+  ""
+]);
+feilforklaring("P26-035", [
+  "",
+  "Forsterkning normaliserer ikke tersklene. Den løfter bare lyden.",
+  "Høreapparater kan forsterke lave frekvenser.",
+  "Lineær forsterkning bedrer ikke frekvensselektiviteten i cochlea."
+]);
+feilforklaring("P26-037", [
+  "Single-subject-design bygger nettopp på gjentatte målinger.",
+  "Designet følger nettopp én persons utvikling.",
+  "",
+  "Designet har én eller få deltakere, ikke hundrevis."
+]);
+feilforklaring("P26-039", [
+  "Øynene beveger seg motsatt av hodet for å holde blikket stabilt.",
+  "VOR lukker ikke øynene. Den beveger dem.",
+  "",
+  "Ved horisontal rotasjon beveger øynene seg horisontalt, ikke oppover."
+]);
+feilforklaring("P26-040", [
+  "",
+  "Corpus callosum forbinder hjernehalvdelene og er ikke en del av cochleariskjernen.",
+  "Vestibulærgangliet hører til balansesystemet.",
+  "Sacculus er et vestibulært organ."
+]);
+feilforklaring("P26-041", [
+  "",
+  "Én test gir ikke sikker diagnose av demens, særlig ikke når hørselen kan påvirke resultatet.",
+  "Bakgrunnsstøy gjør det vanskeligere, særlig for dem med hørselstap.",
+  "dB SPL er en måleenhet for lydtrykk, ikke for kognisjon."
+]);
+feilforklaring("P26-042", [
+  "",
+  "Interaural nivåforskjell gjelder lokalisering, ikke talelyder.",
+  "Dette er ikke et etablert talebegrep.",
+  "Mellomøretrykk har ingenting med plosiver å gjøre."
+]);
+feilforklaring("P26-043", [
+  "TEOAE måler ikke taleforståelse.",
+  "TEOAE kommer fra de ytre hårcellene, så nevrale forstyrrelser (f.eks. auditiv nevropati) kan oversees.",
+  "TEOAE gir ikke terskler i dB HL.",
+  ""
+]);
+feilforklaring("P26-044", [
+  "Dette handler om høreapparater, ikke om perspektivet som mangler.",
+  "",
+  "Otoskopi ser på øregang og trommehinne og beskriver ikke hørselstapet.",
+  "Kommunikasjon påvirkes nettopp av sosiale arenaer."
+]);
+feilforklaring("P26-045", [
+  "Lave frekvenser er hørbare, men øret er mindre følsomt for dem ved moderate nivåer.",
+  "A-veiing gjelder hele frekvensområdet, ikke bare 8000 Hz.",
+  "Øret er ikke like følsomt for alle frekvenser. Det er grunnen til at A-veiing finnes.",
+  ""
+]);
+feilforklaring("P26-046", [
+  "Den totale energien er den samme. Det som endres, er fordelingen mellom ørene.",
+  "Talerens grunntone endres ikke av at støyen flyttes.",
+  "Hjernen bruker signalene fra begge ørene, og det er nettopp det som hjelper.",
+  ""
+]);
+feilforklaring("P26-047", [
+  "",
+  "Toneterskelmåling er en audiometrisk test, ikke en samtale.",
+  "ABR er en elektrofysiologisk måling.",
+  "Tilfeldig tildeling er et eksperimentelt design, ikke en samtale."
+]);
+feilforklaring("P26-048", [
+  "Programmet er den uavhengige variabelen som forskeren styrer.",
+  "Forskerens navn er ingen variabel i studien.",
+  "",
+  "Navnet på audiometeret er ingen variabel i studien."
+]);
+feilforklaring("P26-050", [
+  "Otokonier i utriculus hører til det vestibulære systemet.",
+  "",
+  "Sternocleidomastoideus er nakkemuskelen som brukes ved cVEMP.",
+  "N. facialis styrer stapediusmuskelen, ikke trommehinnen, og har ingenting med LOC å gjøre."
+]);
+feilforklaring("P26-051", [
+  "Sammenhengen er ikke bevis for at hørselstap er eneste årsak.",
+  "",
+  "Sammenhengen betyr ikke at alle med hørselstap har demens.",
+  "Alder og andre faktorer kan nettopp spille inn og må tas hensyn til."
+]);
+feilforklaring("P26-052", [
+  "Voks gir et konduktivt tap og ville også dempet OAE. Det forklarer ikke en avvikende ABR med god OAE.",
+  "Øremuslingens tykkelse har ingenting med nevral timing å gjøre.",
+  "Problemet er sviktende, ikke overdreven, fasekoding.",
+  ""
+]);
+feilforklaring("P26-053", [
+  "TEOAE kommer fra de ytre hårcellene i cochlea, ikke fra cortex.",
+  "TEOAE kan måles i alle aldre, også hos nyfødte.",
+  "Lyd ved 6 kHz forplanter seg fint gjennom luft.",
+  ""
+]);
+feilforklaring("P26-054", [
+  "",
+  "Tidsintegrasjon er et psykoakustisk begrep.",
+  "Adaptiv kompresjon er en høreapparatfunksjon.",
+  "Hørselssynkronisering er ikke et begrep hos Goffman."
+]);
+feilforklaring("P26-055", [
+  "MPO er høreapparatets maksimale utgangsnivå.",
+  "",
+  "Interaural demping (IA) er hvor mye lyd som dempes fra ett øre til det andre gjennom skallen.",
+  "Dette er ikke et etablert begrep innen hørestyrke."
+]);
+feilforklaring("P26-056", [
+  "BILD måles med begge ørene. Det er en binaural måling.",
+  "Tale har mange tidsvariasjoner.",
+  "BMLD avhenger av frekvens: den er størst ved lave frekvenser.",
+  ""
+]);
+feilforklaring("P26-057", [
+  "",
+  "Kalibrering hører til lydmåling, ikke kvalitativ tolkning.",
+  "Randomisering brukes i eksperimentelle studier.",
+  "OAE-måling har ingenting med intervjuer å gjøre."
+]);
+feilforklaring("P26-058", [
+  "Paret t-test sammenligner to målinger hos de samme personene, ikke tre uavhengige grupper.",
+  "Median er et deskriptivt mål og tester ikke forskjeller.",
+  "Kji-kvadrat brukes for kategoriske data, ikke for å sammenligne gjennomsnitt.",
+  ""
+]);
+feilforklaring("P26-059", [
+  "Endolymfen er væske og omdannes ikke til luft.",
+  "Otokonier sitter i otolittorganene og løsner ikke ved vanlig rotasjon.",
+  "",
+  "Trommehinnen er i mellomøret og har ingen forbindelse med cupula."
+]);
+feilforklaring("P26-060", [
+  "Barn har cochleariskjerner fra fødselen.",
+  "Lydens hastighet i luft er den samme for alle.",
+  "Hjernen behandler lyd fra før fødselen.",
+  ""
+]);
+feilforklaring("P26-061", [
+  "Kroniske sykdommer og mange medisiner er ikke primær aldring.",
+  "Binaural summasjon er et hørselsbegrep.",
+  "Spontane OAE er lyder fra cochlea.",
+  ""
+]);
+feilforklaring("P26-062", [
+  "Dybdeoppfatning gjelder synet.",
+  "",
+  "Kompleans er mellomørets stivhet, målt med timpanometri.",
+  "Langtidshukommelse måles ikke med korte opphold i støy."
+]);
+feilforklaring("P26-063", [
+  "",
+  "100 Hz er ikke 2f1−f2. Det er heller ikke f2−f1 (200 Hz).",
+  "1400 Hz er 2f2−f1, ikke 2f1−f2.",
+  "2200 Hz er f1 + f2."
+]);
+feilforklaring("P26-064", [
+  "",
+  "Fargen på høreapparatet har ingenting med fatigue å gjøre.",
+  "Å unngå kolleger gir isolasjon og løser ikke problemet.",
+  "Én terskel sier lite om belastningen i arbeidshverdagen."
+]);
+feilforklaring("P26-065", [
+  "Otoskopi ser på øregang og trommehinne, ikke hørestyrkeopplevelse.",
+  "Øregangsvolum sier ingenting om opplevd hørestyrke.",
+  "",
+  "Avstanden mellom ørene sier ingenting om opplevd hørestyrke."
+]);
+feilforklaring("P26-066", [
+  "Lyden kommer rett forfra, så ingen av ørene får den først.",
+  "",
+  "Lyden kommer rett forfra, så ingen av ørene får den først.",
+  "Maksimal ITD hos mennesker er rundt 0,6–0,7 ms. Rett forfra er den 0."
+]);
+feilforklaring("P26-067", [
+  "Funn presenteres etter at data er samlet inn.",
+  "",
+  "Man kan ikke konkludere uten data.",
+  "Analyser publiseres etter datainnsamling og analyse."
+]);
+feilforklaring("P26-068", [
+  "Trykkverdiene er tall, ikke kategorier.",
+  "Trykkverdiene har like intervaller, ikke bare en rangering.",
+  "",
+  "0 daPa er et referansenivå (atmosfæretrykket), ikke fravær av trykk. Negative verdier finnes."
+]);
+feilforklaring("P26-072", [
+  "Lengre tone gir lavere terskel, ikke høyere.",
+  "Opptil ca. 200–300 ms gir lengre varighet lavere terskel.",
+  "",
+  "Varigheten endrer ikke tonens frekvens."
+]);
+feilforklaring("P26-073", [
+  "Avflatningen viser nettopp at responsen ikke er lineær.",
+  "Høreterskelen endres ikke fra sekund til sekund.",
+  "",
+  "DPOAE måles over et stort nivåområde, ikke bare ved 0 dB SPL."
+]);
+feilforklaring("P26-074", [
+  "Psykisk helse er relevant uansett hvor godt høreapparatet fungerer.",
+  "",
+  "Man bør ikke anta en psykisk lidelse. Omgivelsene kan forklare mye.",
+  "Behovet for tilrettelegging avhenger av arbeidssituasjonen, ikke bare audiogrammet."
+]);
+feilforklaring("P26-075", [
+  "Spektral oppløsning er evnen til å skille frekvenser.",
+  "",
+  "Lydlokalisering handler om retning.",
+  "Dikotisk fusjon er når to ulike signaler til hvert øre smelter sammen."
+]);
+feilforklaring("P26-076", [
+  "Vokalene forsvinner ikke. De blir utsmurt i tid.",
+  "Etterklang påvirker ikke høreterskelen.",
+  "",
+  "Den direkte lyden har fortsatt sine interaurale forskjeller. Refleksjonene gjør dem bare mindre tydelige."
+]);
+feilforklaring("P26-077", [
+  "Gjentatte målinger over åtte år er ikke én enkelt måling.",
+  "En metaanalyse samler publiserte studier og har ingen egne deltakere.",
+  "Studien har deltakere og gjentatte målinger.",
+  ""
+]);
+feilforklaring("P26-078", [
+  "Konfidensintervallet gjelder gjennomsnittet, ikke enkeltpasientene.",
+  "Andre studier vil finne litt ulike verdier. 4 dB er bare midtpunktet.",
+  "Standardavvik beskriver spredningen i dataene. Konfidensintervallet beskriver usikkerheten i estimatet.",
+  ""
+]);
+feilforklaring("P26-079", [
+  "",
+  "Vestibulærsystemet er viktig for balansen. Her kompenserer de andre sansene.",
+  "Propriosepsjon kommer fra muskler, sener og ledd, ikke øregangen.",
+  "Synet er for tregt til å registrere raske hodebevegelser, og det fungerer ikke i mørket."
+]);
+feilforklaring("P26-080", [
+  "",
+  "Auditiv cortex får informasjon fra begge ører.",
+  "MGB får informasjon fra begge ører, etter krysning.",
+  "Corpus callosum forbinder hjernehalvdelene og er ikke en del av den første hørselsbanen."
+]);
+feilforklaring("P26-081", [
+  "Skalledemping er hvor mye lyd som dempes fra ett øre til det andre.",
+  "Høreterskel ved 250 Hz sier ikke noe om å bytte fokus.",
+  "",
+  "Stapediusmuskelen beskytter øret mot sterk lyd."
+]);
+feilforklaring("P26-082", [
+  "Øremuslingen endrer ikke størrelse etter støy.",
+  "Støy kan skade ytre hårceller, men de fungerer ikke bedre enn før.",
+  "Lyden går ikke raskere gjennom mellomøret etter støy.",
+  ""
+]);
+feilforklaring("P26-083", [
+  "En ren tone inneholder bare én frekvens.",
+  "",
+  "Basilarmembranen kan svinge med flere frekvenser samtidig.",
+  "Mikrofonen registrerer lyden. Den endrer ikke primærtonene."
+]);
+feilforklaring("P26-084", [
+  "Personen nevner også vennskap og å bidra, ikke bare lønn.",
+  "Arbeid er vanligvis bra for helsen, også ved hørselstap.",
+  "",
+  "Arbeid er tvert imot viktig for identitet og tilhørighet."
+]);
+feilforklaring("P26-085", [
+  "",
+  "2 soner er ved 50 dB SPL. Ved 60 dB dobles det igjen.",
+  "10 soner ville krevd over 30 dB økning.",
+  "20 soner ville krevd over 40 dB økning."
+]);
+feilforklaring("P26-086", [
+  "Mennesker har MSO.",
+  "ITD brukes i horisontalplanet, ikke vertikalplanet.",
+  "Fasekoding skjer i hørselsnerven, ikke i øremuslingen.",
+  ""
+]);
+feilforklaring("P26-087", [
+  "Typetall beskriver den vanligste verdien og forklarer ikke variasjon.",
+  "",
+  "Et kakediagram viser andeler og forklarer ikke variasjon.",
+  "En binær konklusjon gir ikke svar på hvor mye variabler forklarer."
+]);
+feilforklaring("P26-089", [
+  "MOC-aktivering endrer ikke frekvensen til OAE.",
+  "Luft-bein-gap har ingenting med MOC å gjøre.",
+  "",
+  "OAE er svært svake og alltid mye svakere enn primærtonene."
+]);
+feilforklaring("P26-090", [
+  "Aktiviteten støtter Act og Belong, ikke bare Commit.",
+  "ABC har ingenting med rentoneaudiometri å gjøre.",
+  "",
+  "ABC handler om psykisk helse, ikke biologisk aldring."
+]);
+feilforklaring("P26-092", [
+  "DPOAE dannes nær f2-stedet, som avhenger av primærtonene.",
+  "DPOAE dannes i cochlea, ikke på trommehinnen.",
+  "",
+  "Utriculus og sacculus er vestibulære organer."
+]);
+feilforklaring("P26-093", [
+  "Arbeidsgiver har en plikt til tilrettelegging (arbeidsmiljøloven og likestillings- og diskrimineringsloven).",
+  "Den ansatte har rett til å be om tilrettelegging.",
+  "",
+  "Arbeidsgiveren har ansvaret for tilrettelegging. NAV kan hjelpe, men har ikke eneansvaret."
+]);
+feilforklaring("P26-094", [
+  "",
+  "Ledningstap demper lyden og gjør den ikke ubehagelig.",
+  "Normal hørestyrkevekst gir ikke ubehag ved vanlige lyder.",
+  "Binaural summasjon er at lyd høres sterkere med to ører, ikke at den blir ubehagelig."
+]);
+feilforklaring("P26-095", [
+  "",
+  "Binaural behandling fortsetter. Det er nivåforskjellen som endres.",
+  "Ipsilateral input er eksitatorisk, så mer lyd der gir mer eksitasjon, ikke mindre.",
+  "LSO registrerer nivåforskjeller (ILD), ikke tidsforskjeller."
+]);
+feilforklaring("P26-096", [
+  "Antall sider sier ingenting om effektens betydning.",
+  "Alfabetisk rekkefølge har ingen betydning.",
+  "",
+  "Antall referanser sier ingenting om effektens betydning."
+]);
+feilforklaring("P26-097", [
+  "",
+  "Ved kaldt vann går den raske fasen mot motsatt side (COWS: Cold Opposite, Warm Same).",
+  "Kalorisk test av en horisontal buegang gir horisontal nystagmus.",
+  "Kalorisk stimulering gir normalt nystagmus med rask fase."
+]);
+feilforklaring("P26-098", [
+  "Oksygen tilføres via blodet, ikke via nevroner.",
+  "Øregangens volum er anatomi og bestemmes ikke av nevroner.",
+  "",
+  "Stigbøylen er festet til det ovale vinduet mekanisk, uten nevroner."
+]);
+feilforklaring("P26-099", [
+  "Gjennomsnittet trekkes kraftig opp av 30 (blir 10,4).",
+  "Summen er ikke et sentralmål og øker direkte med 30.",
+  "",
+  "Variasjonsbredden er et spredningsmål og blir mye større på grunn av 30."
+]);
