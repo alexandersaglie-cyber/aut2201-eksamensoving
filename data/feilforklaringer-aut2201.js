@@ -614,3 +614,438 @@ feilforklaring("H25-100", [
   "At hørselstap direkte forverrer kognisjonen er cascade-hypotesen.",
   "Sosial isolasjon som årsak er en del av cascade-hypotesen, ikke common cause."
 ]);
+
+// ---------- Eksamensøving ----------
+
+feilforklaring("EA-001", [
+  "Det er de indre hårcellene som sender hoveddelen av informasjonen. Ca. 90–95 % av nervefibrene går til dem.",
+  "",
+  "Mellomøret er luftfylt og har ikke væsketrykk som reguleres av hårcellene.",
+  "Hårcellene i cochlea er en del av hørselen, ikke det vestibulære systemet."
+]);
+feilforklaring("EA-002", [
+  "Myosin finnes i stereociliene og spiller en rolle i mekanotransduksjonen, men er ikke motorproteinet for elektromotilitet.",
+  "Otoferlin hører til ribbon-synapsene i de indre hårcellene.",
+  "",
+  "Keratin er et strukturprotein i hud, hår og negler."
+]);
+feilforklaring("EA-006", [
+  "Motsatt: uten de ytre hårcellenes aktive forsterkning blir filteret bredere.",
+  "",
+  "Filteret blir bredere og mindre skarpt, men forsvinner ikke.",
+  "De ytre hårcellene skjerper filteret, så skade på dem påvirker det."
+]);
+feilforklaring("EA-007", [
+  "Redusert frekvensselektivitet gjør ikke lave lyder uhørbare. Problemet er at frekvensene blandes.",
+  "",
+  "Lydens hastighet bestemmes av mediet (luften), ikke av øret.",
+  "Grunntonen finnes fortsatt i signalet. Bredere filtre gjør det bare vanskeligere å skille lydene fra hverandre."
+]);
+feilforklaring("EA-008", [
+  "Ytre øre har ingenting med døde regioner å gjøre. Begrepet gjelder cochlea.",
+  "",
+  "Døde regioner gir manglende følsomhet, ikke økt.",
+  "Basilarmembranen kan bevege seg som normalt. Det er registreringen (indre hårceller/nevroner) som svikter."
+]);
+feilforklaring("EA-009", [
+  "Mellomøretrykk måles med timpanometri.",
+  "Vestibularisnevritt diagnostiseres med vestibulære tester, f.eks. hodeimpulstest og kalorisk prøve.",
+  "",
+  "Stapediusrefleksen måles med refleksmåling (akustisk refleks)."
+]);
+feilforklaring("EA-011", [
+  "Off-frequency listening skjer i cochlea, ikke via det vestibulære systemet.",
+  "",
+  "Det gjelder ikke bare lave frekvenser. Tonen fanges opp av fungerende hårceller med en annen karakteristisk frekvens.",
+  "Hørselsnerven sender aksjonspotensialer, men fra et annet sted i cochlea enn tonens frekvens."
+]);
+feilforklaring("EA-013", [
+  "Elektriske signaler fra hørselsnerven måles med f.eks. ABR, ikke som OAE.",
+  "",
+  "Reflekser fra mellomøremusklene måles med akustisk refleksmåling.",
+  "OAE kommer fra de ytre hårcellene i cochlea, ikke fra vestibularisnerven."
+]);
+feilforklaring("EA-016", [
+  "Ribbon-synapsene regulerer ikke væsketrykk. De frigjør nevrotransmitter.",
+  "",
+  "Det er de ytre hårcellene som forsterker basilarmembranens bevegelser.",
+  "Endolymfen produseres av stria vascularis."
+]);
+feilforklaring("EA-017", [
+  "Dopamin finnes i noen efferente fibre (LOC), men er ikke hovedtransmitteren fra indre hårceller.",
+  "Serotonin er ikke hovedtransmitteren i synapsen mellom indre hårcelle og hørselsnerve.",
+  "",
+  "Acetylkolin brukes av de efferente fibrene, ikke av de indre hårcellene."
+]);
+feilforklaring("EA-018", [
+  "Intensitet over tid er en tidskurve, ikke en tuningkurve.",
+  "",
+  "Mellomøretrykk måles med timpanometri.",
+  "Taleforståelse ved ulike nivåer er en taleaudiometrisk kurve (f.eks. PI-kurve)."
+]);
+feilforklaring("EA-019", [
+  "Ulike frekvenser gir maksimalt utslag på ulike steder, så de behandles ikke likt over hele membranen.",
+  "",
+  "Motsatt: lave frekvenser representeres apikalt.",
+  "Frekvensanalysen starter allerede i cochlea."
+]);
+feilforklaring("EA-020", [
+  "Det blir smalere, ikke bredere, fordi terskelen stiger mens ubehagsgrensen står omtrent stille.",
+  "Terskelen stiger, så området mellom terskel og ubehagsgrense endres.",
+  "",
+  "Det blir smalere, men forsvinner ikke helt."
+]);
+feilforklaring("EA-021", [
+  "Motsatt: afferente baner går fra cochlea mot hjernen.",
+  "Motsatt: det er de afferente banene som fører lydinformasjonen til cortex.",
+  "",
+  "Begge går videre opp og ned i systemet, ikke bare mellom cochlea og hjernestammen."
+]);
+feilforklaring("EA-022", [
+  "MGB i thalamus er en senere stasjon, rett før cortex.",
+  "",
+  "Auditiv cortex er siste stasjon i den afferente banen.",
+  "Inferior colliculus i midthjernen kommer etter cochleariskjernene og olivekomplekset."
+]);
+feilforklaring("EA-024", [
+  "",
+  "Cochlea er det perifere sanseorganet, ikke en del av midthjernen.",
+  "Cortis organ ligger i cochlea.",
+  "Utriculus er et vestibulært organ i det indre øret."
+]);
+feilforklaring("EA-025", [
+  "LSO behandler interaurale nivåforskjeller (ILD).",
+  "",
+  "Stria vascularis produserer endolymfe og det endocochleære potensialet.",
+  "Sacculus er et vestibulært organ som registrerer lineær akselerasjon."
+]);
+feilforklaring("EA-026", [
+  "",
+  "MSO behandler interaurale tidsforskjeller (ITD).",
+  "Corpus callosum forbinder hjernehalvdelene og beregner ikke ILD.",
+  "Basilarmembranen gjør frekvensanalyse i hvert øre for seg og sammenligner ikke ørene."
+]);
+feilforklaring("EA-030", [
+  "Hos mennesker dannes det ikke nye hårceller etter fødselen.",
+  "",
+  "Myelin har ikke noe med væsken i cochlea å gjøre.",
+  "Nedbrytning av nevroner er degenerasjon, det motsatte av modning."
+]);
+feilforklaring("EA-031", [
+  "Motsatt: myelin øker ledningshastigheten.",
+  "",
+  "Myelin isolerer aksonet. Det lager ikke aksjonspotensialer selv.",
+  "Lydtrykket i mellomøret påvirkes av mellomøremusklene, ikke av myelin."
+]);
+feilforklaring("EA-032", [
+  "Dette beskriver stedskoding, ikke temporal koding.",
+  "",
+  "Temporal koding gjelder frekvens, ikke bare amplitude.",
+  "Frekvens representeres nevrologisk både med sted og timing."
+]);
+feilforklaring("EA-033", [
+  "Fibrene fyrer på ulike perioder, ikke alle samtidig. Det er poenget med volley-prinsippet.",
+  "",
+  "Volley-prinsippet handler om de lave og mellomhøye frekvensene, der fibrene kan følge lydbølgen.",
+  "Nevroner kan fyre flere hundre ganger i sekundet."
+]);
+feilforklaring("EA-034", [
+  "",
+  "Fasekobling betyr at fyringen følger fasen, ikke at nevronene fyrer kontinuerlig.",
+  "Motsatt: fasekoblingen er best ved lave frekvenser og forsvinner over noen få kHz.",
+  "Fasekoblet informasjon brukes nettopp i hjernestammen, f.eks. i MSO for ITD."
+]);
+feilforklaring("EA-035", [
+  "Temporal koding starter allerede i hørselsnerven.",
+  "",
+  "Temporal koding fungerer i hvert øre for seg og krever ikke binaural stimulering.",
+  "Temporal koding er en del av normal hørsel."
+]);
+feilforklaring("EA-036", [
+  "Lyd fra cochlea til hjernen er den afferente veien, altså bottom-up.",
+  "",
+  "Top-down-prosessering endrer ikke lydens frekvens.",
+  "Høreterskelen er et sensorisk mål og handler ikke om top-down-prosessering."
+]);
+feilforklaring("EA-037", [
+  "",
+  "Prosessering som bygger på forventninger er top-down.",
+  "Bottom-up beskriver en retning i prosesseringen, ikke en type hukommelse.",
+  "Vestibulære reflekser er noe annet enn sensorisk prosessering av lyd."
+]);
+feilforklaring("EA-041", [
+  "Pustefrekvens har ingenting med formanter å gjøre.",
+  "",
+  "Varighet er en tidsegenskap, ikke en frekvensegenskap.",
+  "Antall ord per sekund er taletempo."
+]);
+feilforklaring("EA-043", [
+  "",
+  "Grunntonen bestemmes av stemmebåndenes svingninger. Talekanalens lengde påvirker formantene.",
+  "Grunntonen har ingenting med støyreduksjon å gjøre.",
+  "Formantenes amplitude bestemmes av talekanalen, ikke av grunntonen."
+]);
+feilforklaring("EA-044", [
+  "",
+  "Høreterskler ved ulike frekvenser vises i et audiogram.",
+  "Mellomørets egenskaper måles med timpanometri.",
+  "LTASS beskriver tale, ikke vestibulære responser."
+]);
+feilforklaring("EA-046", [
+  "Vokaler har mest energi i lave og mellomhøye frekvenser.",
+  "",
+  "Nasaler har mest energi i bassen.",
+  "Stemte vokaler med lav F0 har mest energi i bassen."
+]);
+feilforklaring("EA-047", [
+  "Vokalene har mye energi i bassen og er ofte fortsatt hørbare.",
+  "",
+  "Varighet oppfattes fint med god basshørsel.",
+  "Egen stemme har mye bassenergi og høres via beinledning, så den er sjelden et problem."
+]);
+feilforklaring("EA-048", [
+  "Forskjell i lydstyrke er ILD.",
+  "",
+  "Forskjell i høreterskel er en asymmetri i hørselen, ikke en lokaliseringsledetråd.",
+  "Øregangens lengde er anatomi, ikke en egenskap ved lyden."
+]);
+feilforklaring("EA-049", [
+  "",
+  "Lyden har samme hastighet til begge ørene.",
+  "Frekvensen er den samme ved begge ørene.",
+  "Fasekobling skjer i hørselsnerven og hjernestammen. ILD er en nivåforskjell i selve lyden."
+]);
+feilforklaring("EA-050", [
+  "ITD er nesten lik for lyder rett foran, over og bak, så den hjelper lite i vertikalplanet.",
+  "ILD varierer lite med høyde og brukes mest i horisontalplanet.",
+  "",
+  "Corpus callosum forbinder hjernehalvdelene og avgjør ikke vertikal lokalisering."
+]);
+feilforklaring("EA-051", [
+  "",
+  "Alle frekvenser har samme lydhastighet.",
+  "Hørselsnerven reagerer godt på lave frekvenser.",
+  "Trommehinnen slipper gjennom lave frekvenser."
+]);
+feilforklaring("EA-052", [
+  "Forskjellen mellom luft- og beinledning er luft-bein-gapet.",
+  "",
+  "BMLD sammenligner lyttebetingelser, ikke to høreapparater.",
+  "Øreplugger demper lyd. BMLD handler om binaurale forskjeller mellom signal og støy."
+]);
+feilforklaring("EA-053", [
+  "",
+  "Mellomøretrykk måles med timpanometri.",
+  "Koinsidensdeteksjon handler om tid, ikke lydstyrke. Lydstyrkeforskjeller behandles i LSO.",
+  "Den cochleære forsterkningen reguleres av de efferente MOC-fibrene, ikke av MSO."
+]);
+feilforklaring("EA-054", [
+  "Cochlea lagrer ikke lyd. Minnet ligger i hjernen.",
+  "",
+  "Stapediusrefleksen er en refleks i hjernestammen.",
+  "Lydens hastighet bestemmes av mediet, ikke av minnet."
+]);
+feilforklaring("EA-055", [
+  "Høreterskelen er den samme uansett kontekst.",
+  "",
+  "Hårceller i cochlea regenererer ikke hos mennesker.",
+  "Bakgrunnsstøyen er den samme. Det er tolkningen som blir lettere."
+]);
+feilforklaring("EA-058", [
+  "Medfødt hørselstap er kongenitalt, ikke presbyakusis.",
+  "",
+  "Plutselig tap er ikke det samme som presbyakusis, som kommer gradvis og er sensorinevralt.",
+  "Hørselstap fra mellomørebetennelse er konduktivt, ikke aldersrelatert."
+]);
+feilforklaring("EA-062", [
+  "Rask problemløsning i nye oppgaver er flytende intelligens.",
+  "",
+  "Å oppfatte høyfrekvent lyd er en sensorisk evne, ikke intelligens.",
+  "Vestibulære reflekser er automatiske, ikke intelligens."
+]);
+feilforklaring("EA-063", [
+  "Å bruke innlært kunnskap er krystallisert intelligens.",
+  "",
+  "Barndomsminner er episodisk (langtids)hukommelse.",
+  "Å høre lave frekvenser er en sensorisk evne."
+]);
+feilforklaring("EA-067", [
+  "Å redusere og prioritere aktiviteter er seleksjon, og det betyr ikke å kutte alt.",
+  "",
+  "Optimalisering handler om å satse på målene, ikke å unngå utfordringer.",
+  "Å lære og øve er en del av optimaliseringen."
+]);
+feilforklaring("EA-068", [
+  "Kompensasjon forutsetter at man erkjenner tapet og finner nye løsninger.",
+  "",
+  "Å velge mål er seleksjon, og i alderdommen handler det ofte om å velge færre.",
+  "Kompensasjon er å håndtere begrensningene aktivt, ikke å ignorere dem."
+]);
+feilforklaring("EA-070", [
+  "Dette er en positiv holdning til egen læring, ikke en generalisering om aldersgruppen.",
+  "",
+  "Dette handler om egen erfaring, ikke en generalisering om eldre.",
+  "Dette er et ønske, ikke en stereotypi."
+]);
+feilforklaring("EA-071", [
+  "Tilrettelegging er ikke diskriminering.",
+  "",
+  "Å undersøke aldersrelaterte sykdommer er forskning eller helsearbeid.",
+  "Helsetjenester for eldre er ikke diskriminering."
+]);
+feilforklaring("EA-072", [
+  "Sosial deltakelse er bredere enn å bo med familie.",
+  "",
+  "Arbeid er én av mange arenaer, ikke den eneste.",
+  "Fysisk aktivitet uten kontakt med andre er ikke sosial deltakelse."
+]);
+feilforklaring("EA-073", [
+  "Hørselstap øker risikoen for depresjon, men gir det ikke alltid.",
+  "",
+  "Eldre kan fortsatt lære. Dette er en stereotypi.",
+  "De fleste eldre med hørselstap bor hjemme."
+]);
+feilforklaring("EA-074", [
+  "Normal aldring kan gi litt tregere hukommelse, men ikke alvorlig hukommelsestap.",
+  "",
+  "Demens er en sykdom, ikke en normal del av aldring.",
+  "Normal aldring gir ikke tap av alle kognitive ferdigheter."
+]);
+feilforklaring("EA-075", [
+  "Cochleær skade kan ikke repareres. Rehabiliteringen gir hjelp til å fungere best mulig.",
+  "",
+  "Rehabilitering kan ikke fjerne alle kognitive utfordringer.",
+  "Biologisk aldring kan ikke forhindres."
+]);
+feilforklaring("EA-076", [
+  "Å være trist én dag er en normal reaksjon, ikke en lidelse.",
+  "",
+  "Stress før eksamen er en normal, forbigående plage.",
+  "Hørselstap er et sansetap, ikke en psykisk lidelse."
+]);
+feilforklaring("EA-078", [
+  "Stigma er en nedvurdering, ikke en fordel.",
+  "",
+  "Stigma forutsetter nettopp at noen får lavere sosial status.",
+  "Stigma kan også gjelde skjulte egenskaper, f.eks. et hørselstap man skjuler."
+]);
+feilforklaring("EA-084", [
+  "Motsatt: plastisitet gjør læring mulig også hos voksne.",
+  "",
+  "Plastisitet hjelper tilpasning, men gjenoppretter ikke normal hørsel.",
+  "Plastisiteten er størst hos barn, men finnes hele livet."
+]);
+feilforklaring("EA-085", [
+  "ICF beskriver funksjon, ikke diagnoser. Diagnoser klassifiseres i ICD.",
+  "",
+  "ICF er et rammeverk, ikke en målemetode.",
+  "ICF gjelder all helse og funksjon, ikke bare psykiske lidelser."
+]);
+feilforklaring("EA-087", [
+  "Arbeidsminne er en kroppsfunksjon (mental funksjon).",
+  "Høreterskel er en kroppsfunksjon.",
+  "",
+  "Alder er en personlig faktor."
+]);
+feilforklaring("EA-088", [
+  "Motsatt: det er høy lytteanstrengelse som gir fatigue.",
+  "",
+  "Bedre frekvensselektivitet gjør lyttingen lettere, ikke tyngre.",
+  "Økt cochleær forsterkning gir bedre hørsel og ikke fatigue."
+]);
+feilforklaring("EA-089", [
+  "Personsentrert betyr at pasienten er med og bestemmer.",
+  "",
+  "Personsentrert betyr at tiltakene tilpasses den enkelte.",
+  "Pasientens opplevelser er kjernen i personsentrert rehabilitering."
+]);
+feilforklaring("EA-090", [
+  "God informasjon gjør det lettere å søke hjelp.",
+  "",
+  "Sosial støtte fremmer rehabilitering.",
+  "God motivasjon fremmer rehabilitering."
+]);
+feilforklaring("EA-091", [
+  "Utriculus og sacculus registrerer lineær akselerasjon og tyngdekraft.",
+  "",
+  "Cochlea er hørselsorganet.",
+  "Cortis organ er sanseorganet for hørsel i cochlea."
+]);
+feilforklaring("EA-092", [
+  "Buegangene registrerer rotasjon.",
+  "",
+  "Cochleariskjernene behandler lyd.",
+  "Auditiv cortex behandler lyd."
+]);
+feilforklaring("EA-093", [
+  "Utriculus måles med oVEMP.",
+  "",
+  "Cochlea er ikke et otolittorgan.",
+  "Den horisontale buegangen er ikke et otolittorgan, og den testes med f.eks. hodeimpulstest."
+]);
+feilforklaring("EA-094", [
+  "",
+  "Sacculus måles med cVEMP.",
+  "Cochlea er ikke et otolittorgan.",
+  "Trommehinnen er en del av mellomøret, ikke et otolittorgan."
+]);
+feilforklaring("EA-095", [
+  "",
+  "Mellomøretrykket reguleres via øretrompeten.",
+  "VOR har ingenting med høreterskelen å gjøre.",
+  "Taleforståelse er en auditiv funksjon."
+]);
+feilforklaring("EA-096", [
+  "Ménière gir anfall, ikke konstant svimmelhet, og har typisk hørselssymptomer.",
+  "",
+  "Ménière gir sensorinevralt (cochleært), ikke mekanisk, hørselstap.",
+  "Vertigo-anfall er et hovedsymptom."
+]);
+feilforklaring("EA-097", [
+  "Hydrops gjelder det indre øret, ikke trykket i mellomøret.",
+  "",
+  "Betennelse i trommehinnen er myringitt.",
+  "Hydrops gjelder det indre øret, ikke øregangen."
+]);
+feilforklaring("EA-099", [
+  "Nystagmus er en øyebevegelse, ikke noe som skjer i cochlea.",
+  "",
+  "Tinnitus er en lydopplevelse, ikke en øyebevegelse.",
+  "Nystagmus er en øyebevegelse, ikke et hørselstap."
+]);
+feilforklaring("EA-100", [
+  "",
+  "GVS stimulerer, den måler ikke lydtrykk.",
+  "Galvanisk betyr elektrisk strøm, ikke lufttrykk.",
+  "OAE måles med en mikrofon i øregangen, ikke med GVS."
+]);
+feilforklaring("EA-101", [
+  "8 er tallet nest lavest, ikke i midten.",
+  "",
+  "12 er tallet nest høyest, ikke i midten.",
+  "16 er den høyeste verdien."
+]);
+feilforklaring("EA-102", [
+  "Summen er 20, og 20 / 4 = 5, ikke 4.",
+  "",
+  "Summen er 20, og 20 / 4 = 5, ikke 6.",
+  "8 er den høyeste verdien."
+]);
+feilforklaring("EA-103", [
+  "Sammenhengen mellom to variabler er korrelasjon.",
+  "",
+  "Antall deltakere er n.",
+  "Den høyeste verdien er maksimum."
+]);
+feilforklaring("EA-104", [
+  "Normalfordelingen er symmetrisk, ikke skjev.",
+  "",
+  "Normalfordelingen har én topp.",
+  "Medianen er lik gjennomsnittet, og den kan ha hvilken som helst verdi."
+]);
+feilforklaring("EA-110", [
+  "Antall nye tilfeller i en periode er insidens.",
+  "",
+  "Risikoen for å dø er mortalitet (dødelighet).",
+  "Varighet er et annet mål enn prevalens."
+]);
