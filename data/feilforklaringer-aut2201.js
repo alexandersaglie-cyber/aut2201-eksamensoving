@@ -1049,3 +1049,294 @@ feilforklaring("EA-110", [
   "Risikoen for å dø er mortalitet (dødelighet).",
   "Varighet er et annet mål enn prevalens."
 ]);
+
+// ---------- Høst 2024 ----------
+
+// O24-003: fasiten er usikker (generert), så de gale alternativene er ikke forklart.
+feilforklaring("O24-003", ["", "", "", ""]);
+feilforklaring("O24-009", [
+  "Å koble ut tanker og følelser er unngåelse, ikke problemfokusert mestring.",
+  "",
+  "Aksept og humor er følelsesfokusert mestring.",
+  "Å stenge ute negative tanker og følelser er unngåelse. Problemfokusert mestring er å gjøre noe med selve problemet."
+]);
+feilforklaring("O24-010", [
+  "Gjenhenting er å hente fram det som er lagret.",
+  "Retensjon er lagringen av informasjonen over tid.",
+  "Profase er et begrep fra celledeling, ikke fra hukommelsesprosessen.",
+  ""
+]);
+feilforklaring("O24-011", [
+  "Angst er vanlig, men PTSD er langt sjeldnere enn depresjon.",
+  "Bipolar lidelse og PTSD er mindre vanlige enn angst og depresjon.",
+  "Depresjon er vanlig, men spiseforstyrrelser er langt sjeldnere enn angst.",
+  ""
+]);
+feilforklaring("O24-014", [
+  "Loven gir ingen rett til å beholde jobben uansett. Tilretteleggingsplikten har en grense.",
+  "Arbeidsgiver har plikt til tilrettelegging så langt det er mulig (§ 4-6).",
+  "",
+  "Arbeidsmiljøloven gir ingen rett til medianlønn ved redusert arbeid."
+]);
+feilforklaring("O24-015", [
+  "Dette stemmer: boksen og værhårene viser spredningen.",
+  "Dette stemmer: medianens plassering i boksen og lengden på værhårene viser skjevhet.",
+  "",
+  "Dette stemmer: et box plot gir et bilde av fordelingens form."
+]);
+feilforklaring("O24-016", [
+  "GVS over mastoidene gir en opplevelse av rulling, ikke translasjon.",
+  "Motsatt: svak støy-GVS kan bedre balansen (stokastisk resonans).",
+  "",
+  "GVS påvirker både buegangene og otolittorganene."
+]);
+feilforklaring("O24-018", [
+  "Å erkjenne hørselstapet er et første steg mot rehabilitering, ikke et hinder.",
+  "Mestring fremmer rehabilitering.",
+  "",
+  "Forventninger om bedring kan heller motivere til rehabilitering."
+]);
+feilforklaring("O24-019", [
+  "",
+  "Hørselsnerven (del av VIII) går gjennom den indre øregangen.",
+  "Ansiktsnerven (VII) går gjennom den indre øregangen.",
+  "Balansenerven (del av VIII) går gjennom den indre øregangen."
+]);
+feilforklaring("O24-020", [
+  "",
+  "Gjennomsnitt er et mål på sentraltendens, ikke spredning.",
+  "Median er et mål på sentraltendens, ikke spredning.",
+  "IQR er et spredningsmål, men brukes helst ved skjeve data sammen med medianen."
+]);
+feilforklaring("O24-021", [
+  "",
+  "Arbeidsdeltakelsen er lavere blant hørselshemmede, ikke omtrent lik.",
+  "Lavere arbeidsdeltakelse gjelder ikke bare dem som ikke bruker hjelpemidler.",
+  "NAV har ingen slik generell anbefaling. Målet er tilrettelegging slik at folk kan stå i arbeid."
+]);
+feilforklaring("O24-024", [
+  "",
+  "",
+  "Dette beskriver kryssmodal reorganisering (plastisitet) etter manglende stimulering, ikke et traume.",
+  "Begrepet handler om å mangle informasjon om en hendelse, ikke om manglende auditiv stimulering av hjernen."
+]);
+feilforklaring("O24-026", [
+  "Motsatt: ved tap av ytre hårceller trengs høyere nivå på primærtonene for å få fram DPOAE.",
+  "",
+  "Hos normalthørende vokser DPOAE med nivået på primærtonene, så kurven er ikke horisontal.",
+  "Vekstfunksjoner måles ved å øke nivået på primærtonene, ikke frekvensen."
+]);
+feilforklaring("O24-030", [
+  "Mestringsmekanismer er psykologiske strategier for å håndtere vansker.",
+  "Funksjonalitet er et generelt ord for hva noe kan gjøre.",
+  "",
+  "Lateralisering er at funksjoner er fordelt på hver hjernehalvdel."
+]);
+// O24-032: fasiten er usikker (generert), så de gale alternativene er ikke forklart.
+feilforklaring("O24-032", ["", "", "", ""]);
+feilforklaring("O24-033", [
+  "Dette stemmer: forsterkningsreglene fordeler hørestyrken der den gir mest taleforståelse.",
+  "Dette stemmer: reglene tar hensyn til at hørbarhet gir mindre nytte ved store diskanttap.",
+  "",
+  "Dette stemmer: targetet viser LTASS (gjennomsnittet), mens taletoppene ligger høyere."
+]);
+feilforklaring("O24-034", [
+  "Å velge hjelpemidler for å opprettholde ytelsen er kompensasjon.",
+  "Å få hjelp fra andre er kompensasjon.",
+  "",
+  "Å utvikle nye ferdigheter for å veie opp for tap er kompensasjon (eventuelt optimalisering)."
+]);
+feilforklaring("O24-036", [
+  "",
+  "ITD krever presis tidskoding, som er svekket ved auditiv nevropati.",
+  "Gap detection måler tidsoppløsning, som er svekket ved auditiv nevropati.",
+  "Deteksjon i støy er typisk svekket ved auditiv nevropati."
+]);
+feilforklaring("O24-039", [
+  "Uventet atferd alene er ikke nok til å si at noen har en psykisk lidelse.",
+  "Å være nedstemt en periode er en vanlig psykisk plage, ikke nødvendigvis en lidelse.",
+  "Det finnes ingen generell «diagnoseskala» der 65 er en grense.",
+  ""
+]);
+feilforklaring("O24-040", [
+  "For lavt. HUNT4 70+ fant ca. 35 %.",
+  "For lavt. HUNT4 70+ fant ca. 35 %.",
+  "",
+  "Litt for høyt. HUNT4 70+ fant ca. 35 %."
+]);
+feilforklaring("O24-042", [
+  "12 er det fjerde tallet av fem i sortert rekkefølge, ikke det midterste.",
+  "",
+  "10 er det laveste tallet (to ganger), ikke det midterste.",
+  "28 er gjennomsnittet, som trekkes opp av ekstremverdien 97."
+]);
+feilforklaring("O24-043", [
+  "",
+  "Fast (lineær) forsterkning i diskanten gjør sterke lyder for sterke ved recruitment.",
+  "Motsatt: svake lyder trenger mest forsterkning, sterke lyder minst.",
+  "Motsatt: det er diskanten som trenger forsterkning når bassen er god."
+]);
+feilforklaring("O24-044", [
+  "Informasjonskontroll handler ikke om høreapparatet, men om å styre hva andre får vite.",
+  "Informasjonskontroll handler om å styre informasjonen om egenskapen, ikke om å hente informasjon.",
+  "",
+  "Å bruke høreapparatet åpent avslører egenskapen. Informasjonskontroll handler ofte om å skjule den."
+]);
+feilforklaring("O24-045", [
+  "",
+  "Ordinalskala har rekkefølge. Kjønn har ingen naturlig rekkefølge.",
+  "Intervallskala krever tall med like avstander.",
+  "Ratioskala krever tall med et absolutt nullpunkt."
+]);
+feilforklaring("O24-046", [
+  "",
+  "Det handler ikke om ønsket forsterkning. Lav MPO kapper sterke lyder og gir dårlig bruk av dynamikkområdet.",
+  "Svake og middels lyder påvirkes lite av MPO. Det er middels og sterke lyder som høres like ut.",
+  "Lav MPO gir mindre dynamikk, ikke mer. Musikk blir heller flatere."
+]);
+feilforklaring("O24-047", [
+  "MSO sender hovedsakelig til samme side (ipsilateralt), ikke motsatt side.",
+  "MSO sender hovedsakelig til samme side, og hovedmålet er inferior colliculus.",
+  "",
+  "MSO sender hovedsakelig til samme side, og hovedmålet er inferior colliculus."
+]);
+feilforklaring("O24-048", [
+  "Habituering er at responsen på en gjentatt, uviktig stimulus avtar. Det er ikke reorganisering etter skade.",
+  "Læringsrelatert plastisitet skyldes trening og erfaring, ikke skade.",
+  "Utviklingsplastisitet skjer under normal modning hos barn.",
+  ""
+]);
+feilforklaring("O24-050", [
+  "",
+  "",
+  "Dette er en vanlig følge: terskelen stiger, men ubehagsgrensen gjør det ikke.",
+  "Dette er en vanlig følge: bredere auditive filtre gir dårligere frekvensoppløsning."
+]);
+feilforklaring("O24-052", [
+  "K er en kort, svak plosiv med lite energi.",
+  "S har lite energi og ligger høyt i frekvens.",
+  "F er en av de svakeste talelydene.",
+  ""
+]);
+feilforklaring("O24-053", [
+  "",
+  "Eldre kan fortsatt lære. Det kan gå litt tregere, men evnen er ikke borte.",
+  "Krystallisert intelligens holder seg godt eller øker med alderen.",
+  "Motivasjon svekkes ikke som en del av kognitiv aldring."
+]);
+feilforklaring("O24-055", [
+  "Kognitive endringer spiller inn, men forklarer mindre enn redusert hørbarhet.",
+  "Alder og kjønn er ikke i seg selv forklaringen. Det er hørbarheten som teller mest.",
+  "Sentrale endringer spiller inn, men forklarer mindre enn redusert hørbarhet.",
+  ""
+]);
+feilforklaring("O24-057", [
+  "N. olfactorius (I) er luktenerven.",
+  "N. vagus (X) styrer bl.a. hjerte, lunger og fordøyelse, ikke stapedius.",
+  "",
+  "N. glossopharyngeus (IX) styrer bl.a. svelg og smak, ikke stapedius."
+]);
+feilforklaring("O24-058", [
+  "Motsatt: ved recruitment vokser hørestyrken raskere enn normalt.",
+  "",
+  "Intensitetsendringer oppfattes, ofte tydeligere enn normalt.",
+  "Ved recruitment er hørestyrkeveksten unormalt rask, ikke normal."
+]);
+feilforklaring("O24-059", [
+  "",
+  "Dette stemmer: miljøfaktorer er en egen komponent i ICF.",
+  "Dette stemmer: ICF skal gi et felles språk for å beskrive helse.",
+  "Dette stemmer: ICF omfatter også helserelaterte forhold som utdanning og arbeid."
+]);
+feilforklaring("O24-060", [
+  "TEN(HL) har ikke 6000 og 8000 Hz, og mangler 750 og 1500 Hz.",
+  "TEN(HL) går ikke ned til 125 og 250 Hz, og går opp til 4000 Hz.",
+  "TEN(HL) har ikke 6000 Hz, og mangler 750 Hz.",
+  ""
+]);
+feilforklaring("O24-061", [
+  "VEMP måles i muskler (myogene potensialer), ikke i vestibularisnerven.",
+  "",
+  "VEMP sier noe om vestibulærorganet, ikke om sensorinevralt hørselstap.",
+  "VEMP er reflekser som utløses av lyd eller vibrasjon, ikke med vilje."
+]);
+feilforklaring("O24-062", [
+  "Dette stemmer: spatial release from masking består av binaural avmaskering og better ear listening.",
+  "",
+  "Dette stemmer: det bedre øret er det med best signal/støy-forhold.",
+  "Dette stemmer: binaural avmaskering krever to fungerende ører."
+]);
+feilforklaring("O24-064", [
+  "Nullhypotesen er det motsatte av forskningshypotesen.",
+  "",
+  "Sannsynligheten er p-verdien, ikke selve nullhypotesen.",
+  "Forventede resultater er forskningshypotesen (den alternative hypotesen)."
+]);
+feilforklaring("O24-069", [
+  "Type I-feil er å finne noe som ikke er der (falsk positiv).",
+  "Prøvetakingsfeil gjelder at utvalget ikke er representativt for populasjonen.",
+  "Falsk positiv er å finne noe som ikke er der. Her ble et tap oversett, altså falsk negativ.",
+  ""
+]);
+feilforklaring("O24-070", [
+  "",
+  "Forståelse av årsak og virkning er bare en liten del av tenkningen.",
+  "",
+  ""
+]);
+feilforklaring("O24-072", [
+  "MS skader myelinet og gir dårligere tidskoding.",
+  "Auditiv nevropati gir svekket faselåsing og dårligere tidskoding.",
+  "Skjult hørselstap (tap av synapser) kan svekke tidskodingen.",
+  ""
+]);
+feilforklaring("O24-073", [
+  "",
+  "Skade i hjernestammen er en sansebanefeil, ikke nedsatt kognisjon.",
+  "Arbeidsminnet holder og bearbeider informasjon. Det prioriterer ikke signaler i auditiv cortex.",
+  "Hjernestammen er ikke en kognitiv funksjon."
+]);
+feilforklaring("O24-080", [
+  "IQ-score er normalfordelt (symmetrisk), ikke skjev.",
+  "Alder på artister er positivt skjev (de fleste er unge), ikke negativt.",
+  "Fødselsdager er omtrent jevnt fordelt på ukedagene, så kurven ville vært flat.",
+  ""
+]);
+feilforklaring("O24-081", [
+  "Når signal og støy kommer til samme øre, er det ingen binaural forskjell å utnytte.",
+  "Uten faseforskyvning (S0N0) er det ingen binaural forskjell, og MLD er null.",
+  "",
+  "360° faseforskyvning er det samme som ingen forskyvning."
+]);
+feilforklaring("O24-083", [
+  "MSO behandler ITD, ikke ILD.",
+  "LSO behandler ILD, ikke ITD.",
+  "Vertikal lokalisering bygger på spektrale signaler fra pinna, ikke ITD.",
+  ""
+]);
+feilforklaring("O24-090", [
+  "",
+  "Mange får psykiske plager, men de fleste får ikke alvorlige psykiske lidelser.",
+  "Risikoen er økt, men de fleste hørselshemmede får ikke en psykisk lidelse.",
+  "Det er omvendt: plager går ofte over av seg selv, mens lidelser oftere trenger behandling."
+]);
+feilforklaring("O24-092", [
+  "Cochleariskjernene er der fibrene ender, ikke der signalet kommer fra.",
+  "",
+  "Basilarmembranen sender ikke signaler selv.",
+  "Indre hårceller innerveres av type I-fibrene."
+]);
+feilforklaring("O24-093", [
+  "Loven gir også rett til individuell tilrettelegging. Universell utforming er ikke alt.",
+  "",
+  "Loven nevner arbeidslivet spesifikt, med rett til tilrettelegging (§ 22).",
+  "Loven gir ingen rett til redusert stilling eller ekstra ferieuke."
+]);
+feilforklaring("O24-098", [
+  "",
+  "Intervallskala mangler absolutt nullpunkt. Volum har et ekte null.",
+  "Volum er tall, ikke kategorier.",
+  "Volum har like intervaller, ikke bare en rangering."
+]);
+// O24-099: fasiten er usikker (generert), så de gale alternativene er ikke forklart.
+feilforklaring("O24-099", ["", "", "", ""]);
