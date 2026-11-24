@@ -340,8 +340,8 @@ feilforklaring("H25-054", [
 ]);
 feilforklaring("H25-055", [
   "Target beregnes for hele talespekteret, ikke bare lavfrekvent taleenergi.",
-  "",
-  "",
+  "Omvendt: LTASS viser gjennomsnittet. Taletoppene ligger 12–15 dB høyere, og det er nettopp derfor target kan ligge under terskel.",
+  "Ikke helt feil: forelesningen nevner døde regioner og lydkvalitet som grunner. D er valgt fordi det er den mest generelle forklaringen.",
   ""
 ]);
 feilforklaring("H25-056", [
@@ -1053,7 +1053,12 @@ feilforklaring("EA-110", [
 // ---------- Høst 2024 ----------
 
 // O24-003: fasiten er usikker (generert), så de gale alternativene er ikke forklart.
-feilforklaring("O24-003", ["", "", "", ""]);
+feilforklaring("O24-003", [
+  "",
+  "Svinndal (2018) fant at sammenhengen mellom hørselstap og deltid var sterkest for kvinner, ikke menn.",
+  "Risikoen er ikke lik. Sammenhengen var sterkere for kvinner.",
+  "Forelesningen viser ikke at kvinner holder seg lenger i arbeidslivet. Hørselshemmede generelt pensjonerer seg tidligere."
+]);
 feilforklaring("O24-009", [
   "Å koble ut tanker og følelser er unngåelse, ikke problemfokusert mestring.",
   "",
@@ -1133,7 +1138,12 @@ feilforklaring("O24-030", [
   "Lateralisering er at funksjoner er fordelt på hver hjernehalvdel."
 ]);
 // O24-032: fasiten er usikker (generert), så de gale alternativene er ikke forklart.
-feilforklaring("O24-032", ["", "", "", ""]);
+feilforklaring("O24-032", [
+  "",
+  "Lederens holdninger betyr noe, men Svinndals modell trekker fram delt ansvar på jobben og lave krav til muntlig kommunikasjon, ikke forutsigbare arbeidstider.",
+  "Bedriftens størrelse er ikke blant faktorene Svinndal fant.",
+  "Hjelpemidler og tilgang på informasjon hjelper, men tidlig identifisering er ikke blant funnene. Svaret som dekker modellen best, er delt ansvar og lave krav til muntlig kommunikasjon."
+]);
 feilforklaring("O24-033", [
   "Dette stemmer: forsterkningsreglene fordeler hørestyrken der den gir mest taleforståelse.",
   "Dette stemmer: reglene tar hensyn til at hørbarhet gir mindre nytte ved store diskanttap.",
@@ -1159,10 +1169,10 @@ feilforklaring("O24-039", [
   ""
 ]);
 feilforklaring("O24-040", [
-  "For lavt. HUNT4 70+ fant ca. 35 %.",
-  "For lavt. HUNT4 70+ fant ca. 35 %.",
   "",
-  "Litt for høyt. HUNT4 70+ fant ca. 35 %."
+  "For lavt. Forelesningen oppgir 20 % for dem over 75 år.",
+  "HUNT4 70+ fant ca. 35 %, men forelesningen oppgir 20 % for dem over 75 år. Svar etter pensum.",
+  "For høyt. Forelesningen oppgir 20 % for dem over 75 år."
 ]);
 feilforklaring("O24-042", [
   "12 er det fjerde tallet av fem i sortert rekkefølge, ikke det midterste.",
@@ -1281,8 +1291,8 @@ feilforklaring("O24-069", [
 feilforklaring("O24-070", [
   "",
   "Forståelse av årsak og virkning er bare en liten del av tenkningen.",
-  "",
-  ""
+  "Mangler bruken av kunnskapen (vurdering og problemløsing), som forelesningen tar med.",
+  "Dette er eksempler på kognitive funksjoner, ikke en beskrivelse av selve begrepet. Forelesningen beskriver kognisjon som prosessen med å hente inn, forstå, huske og bruke kunnskap."
 ]);
 feilforklaring("O24-072", [
   "MS skader myelinet og gir dårligere tidskoding.",
@@ -1339,7 +1349,12 @@ feilforklaring("O24-098", [
   "Volum har like intervaller, ikke bare en rangering."
 ]);
 // O24-099: fasiten er usikker (generert), så de gale alternativene er ikke forklart.
-feilforklaring("O24-099", ["", "", "", ""]);
+feilforklaring("O24-099", [
+  "Munnavlesning og plassering er eksempler på strategier, ikke Dillons tre hovedområder.",
+  "",
+  "Dette er ikke Dillons inndeling. Hans tre områder er observasjon, den sosiale interaksjonen og det fysiske miljøet.",
+  "Tekniske hjelpemidler hører til høreapparatbehandlingen, ikke Dillons inndeling av hørestrategier."
+]);
 
 // ---------- Pensumspørsmål ----------
 

@@ -15,8 +15,8 @@ OPPGAVER.push(
       "Både hørselshemmede menn og hørselshemmede kvinner har lik risiko for å jobbe deltid",
       "Hørselshemmede kvinner holder seg i arbeidslivet lengre enn hørselshemmede menn"
     ],
-    riktig: 0, forklaring: "Norsk forskning på hørselstap og arbeidsliv (bl.a. Svinndal) har vist at hørselshemmede kvinner oftere jobber deltid enn normalthørende kvinner. Fasiten er usikker; sjekk mot forelesningen om hørsel og arbeidsliv.",
-    fasit: "generert", sikkerhet: "lav", kandidatsvar: 0
+    riktig: 0, forklaring: "Svinndal m.fl. (2018) fant at graden av hørselstap henger sammen med lav arbeidsdeltakelse, arbeidsledighet og deltidsarbeid, og at sammenhengen er sterkere for kvinner. Hørselshemmede kvinner har altså større risiko for å jobbe deltid enn normalthørende kvinner (forelesningen «Hørselstap og psyke: Arbeidsliv»).",
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 0
   },
   {
     id: "O24-009", eksamen: "Høst 2024", nr: 9, tema: "Psykisk helse, mestring og stigma", poeng: 1,
@@ -197,8 +197,8 @@ OPPGAVER.push(
       "Små bedrifter og arbeidsplasser med få ansatte",
       "Tidlig identifisering av hørselstap og at man benytter hørselstekniske hjelpemidler"
     ],
-    riktig: 1, forklaring: "Svinndals studier peker på arbeidsmiljøet: lederens holdninger og forutsigbarhet i arbeidshverdagen. Fasiten er usikker, og D kan også forsvares. Sjekk mot forelesningen.",
-    fasit: "generert", sikkerhet: "lav", kandidatsvar: 1
+    riktig: 0, forklaring: "Svinndal m.fl. (2020) intervjuet 21 personer med hørselstap. Forhold som ga varig arbeidsdeltakelse var blant annet delt ansvar på jobben, lave krav til muntlig-auditiv kommunikasjon, mildt hørselstap, god høreapparattilpasning, tilgang til informasjon og hjelpemidler og en konstruktiv arbeidsplass (forelesningen «Hørselstap og psyke: Arbeidsliv»).",
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 1
   },
   {
     id: "O24-033", eksamen: "Høst 2024", nr: 33, tema: "Høreapparat og forsterkning", poeng: 1,
@@ -262,7 +262,7 @@ OPPGAVER.push(
       "35 %",
       "40 %"
     ],
-    riktig: 2, forklaring: "HUNT4 70+ fant at ca. 35 % hadde mild kognitiv svikt og ca. 15 % demens (Gjøra m.fl. 2021).",
+    riktig: 0, forklaring: "Forelesningen «Hørsel og kognisjon» oppgir at 20 % over 75 år har milde kognitive svekkelser, og at tallene varierer mye mellom studier. HUNT4 70+ fant for eksempel ca. 35 % med mild kognitiv svikt (Gjøra m.fl. 2021), men i pensum er svaret 20 %.",
     fasit: "generert", sikkerhet: "middels"
   },
   {
@@ -522,8 +522,8 @@ OPPGAVER.push(
       "Kognisjon er prosessen med å oppta og organisere informasjon",
       "Kognisjon er sansing, minner, tanker og språk"
     ],
-    riktig: 3, forklaring: "Kognisjon er et samlebegrep for mentale prosesser som sansing og persepsjon, hukommelse, tenkning og språk. A kan også forsvares. Sjekk definisjonen i pensum.",
-    fasit: "generert", sikkerhet: "lav", ogsa: [{ eksamen: "Høst 2024", nr: 160 }]
+    riktig: 0, forklaring: "Forelesningen «Hørsel og kognisjon» definerer kognisjon som mentale prosesser: innhenting av kunnskap/informasjon, forståelse, hukommelse, vurdering og problemløsing. Det dekker både å ta opp, organisere og bruke kunnskap, slik A sier. D og C beskriver bare deler av dette.",
+    fasit: "generert", sikkerhet: "middels", ogsa: [{ eksamen: "Høst 2024", nr: 160 }]
   },
   {
     id: "O24-072", eksamen: "Høst 2024", nr: 72, tema: "Psykoakustikk", poeng: 1,
@@ -652,7 +652,7 @@ OPPGAVER.push(
       "Oral tilpasning, teknisk tilpasning og auditiv tilpasning",
       "Mestringsstrategier, tekniske hjelpemidler og assisterende kommunikasjon"
     ],
-    riktig: 3, forklaring: "Fasiten er usikker; jeg fant ikke Dillons inndeling i åpne kilder. Svaret følger det som er markert i PDF-en. Sjekk kapitlet om rehabilitering i «Hearing Aids».",
-    fasit: "generert", sikkerhet: "lav", kandidatsvar: 3
+    riktig: 1, forklaring: "I Dillons kapittel om hørestrategier (hearing strategies/tactics) er de tre områdene: observere den som snakker og omgivelsene, endre (manipulere) den sosiale interaksjonen og endre (manipulere) det fysiske miljøet.",
+    fasit: "generert", sikkerhet: "høy", kandidatsvar: 3
   }
 );

@@ -634,7 +634,7 @@ const OPPGAVER = [
       "For å kompensere for cochleære døde regioner og sikre akseptabel lydkvalitet",
       "Fordi redusert forsterkning i høyfrekvensene gir bedre taleforståelse enn full forsterkning"
     ],
-    riktig: 3, forklaring: "Ved store høyfrekvente tap gir full hørbarhet lite ekstra taleforståelse (redusert «effektiv hørbarhet»). Mindre forsterkning gir like god eller bedre forståelse med akseptabel hørestyrke. NAL-NL2 tar ikke spesifikt hensyn til døde regioner. NB: På eksamen høst 2024 (oppg. 33) regnes døde regioner og at targetet viser LTASS, som riktige forklaringer på det samme fenomenet. Fasiten her er derfor usikker.",
+    riktig: 3, forklaring: "Ved store høyfrekvente tap gir full hørbarhet lite ekstra taleforståelse (redusert «effektiv hørbarhet»). Mindre forsterkning gir like god eller bedre forståelse med akseptabel hørestyrke. Forelesningen «Nedsatt funksjon» sier at økt forsterkning i diskanten «sjelden gir økt taleforståelse, og ofte dårligere». NB: Forelesningen nevner også døde regioner og akseptabel lydkvalitet som grunner, så C kan også forsvares. D er valgt fordi det er den mest generelle forklaringen.",
     fasit: "generert", sikkerhet: "middels", kandidatsvar: 3
   },
   {
