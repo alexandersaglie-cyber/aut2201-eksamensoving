@@ -33,6 +33,7 @@ Fremgang, resultater, skjulte kort og påbegynte flervalgsrunder synkroniseres m
 Kontoen alexandersaglie@gmail.com er admin. Admin får «Adminpanel» i menyen, med fire faner:
 
 - **Brukere:** e-post, registrert, sist aktiv og enkel statistikk. Her kan admin gjøre andre til admin, fjerne admin-rollen, blokkere, oppheve blokkering og slette brukere. Alt ber om bekreftelse først.
+- **Betaling for tilgang:** Øverst under Brukere. Admin setter pris og Vipps-nummer og kan stenge appen for alle som ikke har betalt («Steng for alle som ikke har betalt»), eller åpne den igjen. Brukere som ikke har betalt, ser da bare en side med Vipps-instruksjoner (beløp, nummer og e-posten sin i meldingen). Admin sjekker Vipps og trykker «Gi tilgang (betalt)» på brukeren. Tilgangen varer for alltid. Krever at `supabase/08_betaling.sql` er kjørt.
 - **Innhold:** redigere, legge til og slette flashcards og flervalgsspørsmål. Endringene gjelder for alle brukere, og slettede kan gjenopprettes.
 - **Meldinger:** feil brukerne har meldt fra om og generelle tilbakemeldinger, med knapper for å redigere elementet og merke meldingen som løst.
 - **Fag:** opprette fag, endre navn og rekkefølge, og sette status. Utkast og skjulte fag ser bare admin.

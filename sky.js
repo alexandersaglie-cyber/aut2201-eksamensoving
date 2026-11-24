@@ -80,8 +80,13 @@ async function behandleInnlogging(hendelse, sesjon) {
   if (bruker && bruker.id === sesjon.user.id && hendelse === "TOKEN_REFRESHED") return;
 
   try {
-    const { data, error } = await sky.from("profiler")
-      .select("epost, rolle, blokkert").eq("id", sesjon.user.id).maybeSingle();
+    let { data, error } = await sky.from("profiler")
+      .select("epost, rolle, blokkert, betalt").eq("id", sesjon.user.id).maybeSingle();
+    // Kolonnen «betalt» finnes ikke før supabase/08_betaling.sql er kjørt: hent uten den.
+    if (error?.code === "42703") {
+      ({ data, error } = await sky.from("profiler")
+        .select("epost, rolle, blokkert").eq("id", sesjon.user.id).maybeSingle());
+    }
     if (error) throw error;
     if (!data) {
       // Kontoen er slettet av admin.
@@ -98,6 +103,7 @@ async function behandleInnlogging(hendelse, sesjon) {
     bruker = { id: sesjon.user.id, ...data };
     lagret.profil = bruker; // huskes, så rollen er kjent også uten nett
     sky.rpc("registrer_aktivitet").then(() => {});
+    await hentInnstillinger();
   } catch (feil) {
     // Uten nett: bruk profilen fra forrige gang, og synk når nettet er tilbake.
     bruker = lagret.profil?.id === sesjon.user.id
@@ -505,6 +511,44 @@ async function adminHandling(handling, brukerId) {
   } catch (feil) {
     return oversettFeil(error);
   }
+}
+
+// =====================================================================
+// Betaling for tilgang (se supabase/08_betaling.sql)
+// =====================================================================
+// Innstillingene huskes i lagret.innstillinger, så betalingssiden virker også uten nett.
+
+async function hentInnstillinger() {
+  const { data, error } = await sky.from("innstillinger")
+    .select("betaling_pakrevd, pris, vipps_nummer").eq("id", 1).maybeSingle();
+  if (error) return console.warn("Fikk ikke hentet innstillingene:", error);
+  lagret.innstillinger = data;
+  lagreLokalt();
+}
+
+// Bare admin får lov (sjekkes i databasen). endring er f.eks. { betaling_pakrevd: true }.
+async function lagreInnstillinger(endring) {
+  const { error } = await sky.from("innstillinger").update({ ...endring, oppdatert: naa() }).eq("id", 1);
+  if (error) return oversettFeil(error);
+  await hentInnstillinger();
+  return null;
+}
+
+// Sjekker på nytt om brukeren har fått tilgang (knappen «Jeg har betalt» på betalingssiden).
+async function sjekkBetaling() {
+  const { data, error } = await sky.from("profiler").select("betalt").eq("id", bruker.id).maybeSingle();
+  if (error) return oversettFeil(error);
+  await hentInnstillinger();
+  bruker = { ...bruker, betalt: data?.betalt || null };
+  lagret.profil = bruker;
+  lagreLokalt();
+  return null;
+}
+
+// Admin gir (har_betalt = true) eller fjerner tilgang for en bruker.
+async function settBetalt(brukerId, harBetalt) {
+  const { error } = await sky.rpc("admin_sett_betalt", { bruker: brukerId, har_betalt: harBetalt });
+  return error ? oversettFeil(error) : null;
 }
 
 async function hentFeilmeldinger() {

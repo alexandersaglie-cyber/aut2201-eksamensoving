@@ -41,12 +41,14 @@ const LAGRINGSNOKKEL = "aut2201-eksamensoving";
 // profil:     den innloggede brukerens profil fra sist, så rollen er kjent også uten nett.
 // usynket:    true hvis det finnes endringer som ikke er sendt til skyen ennå.
 // flyttetKort: flashcards som er slått sammen med et annet kort, og der fremgangen er flyttet over.
+// innstillinger: admins innstillinger fra databasen (betaling påkrevd, pris, Vipps-nummer), se sky.js.
 function tomLagring() {
   return {
     bokser: {}, boksTid: {}, innhold: {}, endringer: {}, skjult: {}, resultater: [],
     pagaendeRunde: {}, pagaendeRundeTid: null,
     nullstilt: { fremgang: null, resultater: null }, slettedeResultater: [],
-    valgtFag: null, eier: null, profil: null, usynket: false, flyttetKort: {}
+    valgtFag: null, eier: null, profil: null, usynket: false, flyttetKort: {},
+    innstillinger: null
   };
 }
 
@@ -393,12 +395,20 @@ function melding(tekst) { return dialog(tekst, { avbryt: false }); }
 // Hvilken skjerm som vises nå: "hjem", "kort", "flervalg", "resultat", "liste" eller "rediger".
 let skjerm = "hjem";
 
+// Skjermene man får se selv om man må betale først.
+const SKJERMER_UTEN_BETALING = ["betaling", "logginn", "nyttpassord", "laster", "ingennett"];
+
 function vis(navn, html) {
+  // Betaling påkrevd og ikke betalt: betalingssiden vises uansett hvor man prøver å gå.
+  if (maBetale() && !SKJERMER_UTEN_BETALING.includes(navn)) {
+    navn = "betaling";
+    html = betalingsside();
+  }
   skjerm = navn;
   if (navn !== "hjem") apentFilter = null;
   if (navn !== "muntlig") stoppTidtaker();
   app.innerHTML = html;
-  hjemKnapp.hidden = navn === "hjem" || maLoggeInn();
+  hjemKnapp.hidden = ["hjem", "betaling"].includes(navn) || maLoggeInn();
   menyKnapp.hidden = maLoggeInn();
   // Tegnes siden på nytt (f.eks. etter synk) mens menyen er åpen, oppdateres menyen også.
   if (maLoggeInn()) lukkMeny();
@@ -422,6 +432,11 @@ function lukkMeny() {
 // Profil, fag, innstillinger og utlogging.
 function menyInnhold() {
   const antallSkjulte = Object.values(lagret.skjult).filter(s => s.skjult).length;
+  if (maBetale()) {
+    return `
+      <div class="menydel"><b>${esc(bruker.epost)}</b></div>
+      <div class="menydel"><button class="menyvalg" data-handling="logg-ut">Logg ut</button></div>`;
+  }
   const profil = sky && bruker
     ? `<b>${esc(bruker.epost)}</b>${erAdmin() ? ` <span class="merke">Admin</span>` : ""}<br>
        <span class="dempet" id="synkstatus">${esc(synkStatus)}</span>`
@@ -456,6 +471,47 @@ function maLoggeInn() {
   if (!innloggingSattOpp || bruker) return false;
   if (!sky) return !lagret.profil;
   return true;
+}
+
+// ---------- Betaling for tilgang ----------
+// Når admin har slått på «Krev betaling», må vanlige brukere betale med Vipps før de slipper inn.
+// Admin gir tilgang i adminpanelet (Brukere). Databasen stopper også lagring for dem som ikke
+// har betalt, så det hjelper ikke å omgå siden (se supabase/08_betaling.sql).
+
+function betalingPakrevd() { return Boolean(lagret.innstillinger?.betaling_pakrevd); }
+
+function maBetale() {
+  return Boolean(bruker) && !erAdmin() && betalingPakrevd() && !bruker.betalt;
+}
+
+function betalingsside() {
+  const { pris = 75, vipps_nummer: nummer } = lagret.innstillinger || {};
+  return `
+    <section class="panel betaling">
+      <h2>Tilgang koster ${esc(pris)} kr</h2>
+      <p>Appen er nå bare åpen for dem som har betalt. Én betaling gir tilgang for alltid.</p>
+      <ol>
+        <li>Vipps <b>${esc(pris)} kr</b> til <b>${nummer ? esc(nummer) : "(nummeret kommer snart)"}</b>.</li>
+        <li>Skriv e-postadressen du logger inn med i meldingen: <b>${esc(bruker.epost)}</b></li>
+        <li>Når betalingen er registrert, får du tilgang. Det kan ta litt tid før det skjer.</li>
+      </ol>
+      <p class="dempet">Fremgangen og resultatene dine er tatt vare på og er der når du får tilgang.</p>
+      <div class="knapperad">
+        <button class="hoved" data-handling="sjekk-betaling">Jeg har betalt – sjekk tilgang</button>
+        <button data-handling="logg-ut">Logg ut</button>
+      </div>
+    </section>`;
+}
+
+async function sjekkTilgangPaNytt(el) {
+  el.disabled = true;
+  const feil = await sjekkBetaling();
+  if (feil) { el.disabled = false; return melding(feil); }
+  if (maBetale()) {
+    el.disabled = false;
+    return melding("Betalingen er ikke registrert ennå. Prøv igjen senere.");
+  }
+  visHjem();
 }
 
 function visLaster() {
@@ -1432,11 +1488,15 @@ async function visAdminBrukere() {
     const erMeg = b.id === bruker.id;
     const knapp = (handling, tekst) =>
       `<button data-handling="admin-bruker" data-hva="${handling}" data-id="${b.id}" data-epost="${esc(b.epost)}">${tekst}</button>`;
+    const tilgang = b.rolle === "admin" ? ""
+      : b.betalt ? `<span class="merke">Betalt ${esc(formaterDato(b.betalt))}</span>`
+      : `<span class="merke varsel">Ikke betalt</span>`;
     return `
       <li class="brukerrad">
         <div>
           <b>${esc(b.epost)}</b>
           ${b.rolle === "admin" ? `<span class="merke">Admin</span>` : ""}
+          ${tilgang}
           ${b.blokkert ? `<span class="merke varsel">Blokkert</span>` : ""}
           ${erMeg ? `<span class="merke">Deg</span>` : ""}
         </div>
@@ -1445,6 +1505,7 @@ async function visAdminBrukere() {
           · ${b.kort_ovd} kort øvd · ${b.antall_feilmeldinger} meldinger</div>
         ${erMeg ? "" : `
           <div class="knapperad liten">
+            ${b.rolle === "admin" ? "" : b.betalt ? knapp("fjern-tilgang", "Fjern betalt tilgang") : knapp("gi-tilgang", "Gi tilgang (betalt)")}
             ${b.rolle === "admin" ? knapp("fjern-admin", "Fjern admin") : knapp("gjor-admin", "Gjør til admin")}
             ${b.blokkert ? knapp("opphev-blokkering", "Opphev blokkering") : knapp("blokker", "Blokker")}
             ${knapp("slett", "Slett bruker")}
@@ -1452,7 +1513,9 @@ async function visAdminBrukere() {
       </li>`;
   };
 
-  vis("admin-brukere", adminFaner("brukere") + `
+  const vanlige = brukere.filter(b => b.rolle !== "admin");
+  const antallBetalt = vanlige.filter(b => b.betalt).length;
+  vis("admin-brukere", adminFaner("brukere") + betalingspanel(antallBetalt, vanlige.length) + `
     <section class="panel">
       <p class="dempet">${brukere.length} brukere.</p>
       <ul class="liste">${brukere.map(rad).join("")}</ul>
@@ -1464,15 +1527,67 @@ const ADMIN_SPORSMAL = {
   "fjern-admin": e => `Fjerne admin-rollen fra ${e}?`,
   "blokker": e => `Blokkere ${e}?\n\nBrukeren blir logget ut og kan ikke logge inn eller lagre noe før blokkeringen oppheves.`,
   "opphev-blokkering": e => `Oppheve blokkeringen av ${e}?`,
-  "slett": e => `SLETTE kontoen ${e}?\n\nAll fremgang, alle resultater og feilmeldinger fra brukeren slettes for godt. Dette kan ikke angres.`
+  "slett": e => `SLETTE kontoen ${e}?\n\nAll fremgang, alle resultater og feilmeldinger fra brukeren slettes for godt. Dette kan ikke angres.`,
+  "gi-tilgang": e => `Gi ${e} tilgang?\n\nSjekk i Vipps at betalingen med denne e-posten i meldingen har kommet.`,
+  "fjern-tilgang": e => `Fjerne den betalte tilgangen til ${e}?\n\nNår betaling er påkrevd, kommer brukeren da bare til betalingssiden.`
 };
 
 async function utforAdminHandling(el) {
   const { hva, id, epost } = el.dataset;
   if (!await bekreft(ADMIN_SPORSMAL[hva](epost))) return;
   el.disabled = true;
-  const feil = await adminHandling(hva, id);
+  const feil = ["gi-tilgang", "fjern-tilgang"].includes(hva)
+    ? await settBetalt(id, hva === "gi-tilgang")
+    : await adminHandling(hva, id);
   if (feil) melding(feil);
+  visAdminBrukere();
+}
+
+// Øverst under «Brukere»: om appen krever betaling, og pris og Vipps-nummer på betalingssiden.
+function betalingspanel(antallBetalt, antallBrukere) {
+  const inn = lagret.innstillinger;
+  if (!inn) {
+    return `<section class="panel"><h3>Betaling</h3>
+      <p class="feiltekst">Fant ikke innstillingene. Er supabase/08_betaling.sql kjørt i Supabase?</p></section>`;
+  }
+  return `
+    <section class="panel">
+      <h3>Betaling for tilgang</h3>
+      <p>${inn.betaling_pakrevd
+        ? `<span class="merke varsel">Krever betaling</span> Bare admin og de som har betalt, slipper inn.`
+        : `<span class="merke">Åpen for alle</span> Alle innloggede brukere kan bruke appen.`}</p>
+      <p class="dempet">${antallBetalt} av ${antallBrukere} vanlige brukere har betalt.</p>
+      <form id="betalingsskjema" class="knapperad">
+        <label>Pris (kr) <input name="pris" type="number" min="0" value="${esc(inn.pris)}" style="width:6em"></label>
+        <label>Vipps-nummer <input name="vipps_nummer" inputmode="tel" value="${esc(inn.vipps_nummer || "")}" style="width:9em"></label>
+        <button type="submit">Lagre</button>
+      </form>
+      <div class="knapperad">
+        ${inn.betaling_pakrevd
+          ? `<button data-handling="betaling-av">Åpne appen for alle igjen</button>`
+          : `<button class="hoved" data-handling="betaling-pa">Steng for alle som ikke har betalt</button>`}
+      </div>
+    </section>`;
+}
+
+async function settBetalingPakrevd(pa) {
+  const inn = lagret.innstillinger || {};
+  const tekst = pa
+    ? `Stenge appen for alle som ikke har betalt?\n\nVanlige brukere uten betalt tilgang kommer da bare til betalingssiden (Vipps ${inn.pris} kr til ${inn.vipps_nummer || "– nummeret mangler!"}). Fremgangen deres slettes ikke.`
+    : "Åpne appen for alle innloggede brukere igjen?";
+  if (!await bekreft(tekst)) return;
+  const feil = await lagreInnstillinger({ betaling_pakrevd: pa });
+  if (feil) melding(feil);
+  visAdminBrukere();
+}
+
+async function lagreBetalingsskjema(skjema) {
+  const data = new FormData(skjema);
+  const pris = Number(data.get("pris"));
+  if (!Number.isInteger(pris) || pris < 0) return melding("Prisen må være et helt tall.");
+  const feil = await lagreInnstillinger({ pris, vipps_nummer: data.get("vipps_nummer").trim() || null });
+  if (feil) return melding(feil);
+  melding("Lagret.");
   visAdminBrukere();
 }
 
@@ -1933,7 +2048,7 @@ function vedInnloggingEndret() {
     return;
   }
   const paAdminside = ["admin-brukere", "admin-feil", "admin-fag", "liste", "rediger"].includes(skjerm);
-  if (["hjem", "laster", "logginn"].includes(skjerm) || (paAdminside && !erAdmin())) visHjem();
+  if (["hjem", "laster", "logginn"].includes(skjerm) || (paAdminside && !erAdmin()) || maBetale()) visHjem();
   publiserLokaleEndringer();
 }
 
@@ -2207,6 +2322,9 @@ const HANDLINGER = {
   },
   "lagre-fag": el => lagreFagrad(el.dataset.kode),
   "admin-bruker": el => utforAdminHandling(el),
+  "betaling-pa": () => settBetalingPakrevd(true),
+  "betaling-av": () => settBetalingPakrevd(false),
+  "sjekk-betaling": el => sjekkTilgangPaNytt(el),
   "fane": el => { listeValg.type = el.dataset.type; listeValg.slettede = false; visRedigerListe(); },
   "vis-slettede": () => { listeValg.slettede = !listeValg.slettede; visRedigerListe(); },
   "nytt-element": el => { etterRedigering = visRedigerListe; visRediger(el.dataset.type, null); },
@@ -2321,6 +2439,7 @@ app.addEventListener("submit", hendelse => {
   else if (skjema.id === "tilbakemeldingskjema") sendTilbakemelding(skjema);
   else if (skjema.id === "vurderingskjema") sendVurdering(skjema);
   else if (skjema.id === "nyttfagskjema") opprettFag(skjema);
+  else if (skjema.id === "betalingsskjema") lagreBetalingsskjema(skjema);
   else sendKontoskjema(skjema);
 });
 
